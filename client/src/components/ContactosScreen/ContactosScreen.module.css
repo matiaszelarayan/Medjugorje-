@@ -1,23 +1,20 @@
-/* ContactosScreen.css */
-
-.contactos-container {
+.contactosContainer {
   padding: 2rem;
 }
 
-.contactos-title {
+.contactosTitle {
   font-size: 2rem;
   font-weight: 800;
   color: var(--primary-color);
 }
 
-.contactos-subtitle {
+.contactosSubtitle {
   margin-top: 0.5rem;
   font-size: 1.125rem;
   color: var(--text-muted);
 }
 
-/* Lista de contactos */
-.contactos-list {
+.contactosList {
   margin-top: 2rem;
   display: grid;
   grid-template-columns: repeat(1, 1fr);
@@ -25,18 +22,18 @@
 }
 
 @media (min-width: 768px) {
-  .contactos-list {
+  .contactosList {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (min-width: 1024px) {
-  .contactos-list {
+  .contactosList {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-.contacto-card {
+.contactoCard {
   background-color: #ffffff;
   border-radius: var(--card-radius);
   box-shadow: var(--card-shadow);
@@ -47,15 +44,30 @@
   border-left: 4px solid var(--accent-color);
 }
 
-.contacto-nombre {
+.contactoNombre {
   font-size: 1.125rem;
   font-weight: 600;
   color: var(--text-main);
 }
 
-.contacto-email,
-.contacto-telefono,
-.contacto-tipo {
+.contactoEmail,
+.contactoTelefono,
+.contactoTipo {
   font-size: 0.95rem;
   color: var(--text-muted);
+}
+
+.modoOscuro .contactosContainer {
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+}
+
+.modoOscuro .contactosContainer h2 {
+  color: #f0f0f0;
+}
+
+.modoOscuro .contactoCard {
+  border-color: #444;
+  background-color: #2a2a2a;
+  color: #eee;
 }

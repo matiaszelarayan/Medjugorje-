@@ -1,5 +1,5 @@
 import React from "react";
-import "./Dashboard.css";
+import styles from "./Dashboard.module.css";
 import { Users, Calendar, Mail, BookOpen } from "lucide-react";
 
 const Card = ({ icon: Icon, title, value, color }) => {
@@ -20,13 +20,13 @@ const Card = ({ icon: Icon, title, value, color }) => {
   const iconColor = borderColor;
 
   return (
-    <div className="card" style={{ "--card-border-color": borderColor }}>
-      <div className="card-text">
-        <p className="card-title">{title}</p>
-        <p className="card-value">{value}</p>
+    <div className={styles.card} style={{ "--card-border-color": borderColor }}>
+      <div className={styles.cardText}>
+        <p className={styles.cardTitle}>{title}</p>
+        <p className={styles.cardValue}>{value}</p>
       </div>
       <div
-        className="card-icon"
+        className={styles.cardIcon}
         style={{
           "--card-bg-color": bgColor,
           "--card-icon-color": iconColor,
@@ -45,12 +45,12 @@ const initialContacts = [
 ];
 
 const Dashboard = ({ user }) => (
-  <div className="dashboard-container">
-    <h1 className="dashboard-title">Dashboard Principal</h1>
-    <p className="dashboard-subtitle">
+  <div className={styles.dashboardContainer}>
+    <h1 className={styles.dashboardTitle}>Dashboard Principal</h1>
+    <p className={styles.dashboardSubtitle}>
       Bienvenido, <strong>{user.name}</strong>. Empieza a gestionar la información de la Fundación.
     </p>
-    <div className="card-grid">
+    <div className={styles.cardGrid}>
       <Card icon={Users} title="Contactos Totales" value={initialContacts.length} color="blue" />
       <Card icon={Calendar} title="Próximos Eventos" value={3} color="green" />
       <Card icon={Mail} title="Campañas Enviadas" value={12} color="purple" />

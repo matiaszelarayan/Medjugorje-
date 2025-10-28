@@ -1,0 +1,69 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.card {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  max-width: 320px;
+  width: 100%;
+}
+
+.message {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: #333;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.cancelBtn,
+.confirmBtn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.cancelBtn {
+  background-color: #ccc;
+  color: #333;
+}
+
+.confirmBtn {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+/* 🌙 Modo oscuro */
+.modoOscuro .card {
+  background-color: #2a2a2a;
+  color: #eee;
+}
+
+.modoOscuro .message {
+  color: #ccc;
+}
+
+.modoOscuro .cancelBtn {
+  background-color: #444;
+  color: #eee;
+}

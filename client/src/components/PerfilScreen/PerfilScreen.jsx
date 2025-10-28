@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import "./PerfilScreen.css";
+import styles from "./PerfilScreen.module.css";
 
 const PerfilScreen = ({ user }) => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [imagePreview, setImagePreview] = useState(null);
+  const [imagePreview, setImagePreview] = useState(user.foto_perfil || null);
   const [successMessage, setSuccessMessage] = useState("");
 
   const validatePassword = (password) => {
@@ -21,7 +21,7 @@ const PerfilScreen = ({ user }) => {
       setImagePreview(URL.createObjectURL(file));
       setPasswordError("");
     } else {
-      setImagePreview(null);
+      setImagePreview(user.foto_perfil || null);
       setSuccessMessage("");
       setPasswordError("La imagen debe ser .jpg o .png");
     }
@@ -43,33 +43,32 @@ const PerfilScreen = ({ user }) => {
       return;
     }
 
-    // Simulación de guardado
     setSuccessMessage("Cambios guardados correctamente (simulado)");
     setNewPassword("");
     setConfirmPassword("");
   };
 
   return (
-    <div className="perfil-container">
+    <div className={styles.perfilContainer}>
       <h2>Mi Perfil</h2>
 
-      <div className="perfil-info">
-        <p><strong>Nombre:</strong> {user.name}</p>
+      <div className={styles.perfilInfo}>
+        <p><strong>Nombre:</strong> {user.nombre} {user.apellido}</p>
         <p><strong>Email:</strong> {user.email}</p>
         <p><strong>Rol:</strong> {user.role}</p>
       </div>
 
-      <div className="perfil-section">
+      <div className={styles.perfilSection}>
         <label>Foto de perfil (.jpg o .png):</label>
         <input type="file" accept=".jpg,.png" onChange={handleImageChange} />
         {imagePreview && (
-          <div className="image-preview">
+          <div className={styles.imagePreview}>
             <img src={imagePreview} alt="Preview" />
           </div>
         )}
       </div>
 
-      <div className="perfil-section">
+      <div className={styles.perfilSection}>
         <label>Nueva contraseña:</label>
         <input
           type="password"
@@ -78,7 +77,7 @@ const PerfilScreen = ({ user }) => {
         />
       </div>
 
-      <div className="perfil-section">
+      <div className={styles.perfilSection}>
         <label>Confirmar contraseña:</label>
         <input
           type="password"
@@ -87,10 +86,10 @@ const PerfilScreen = ({ user }) => {
         />
       </div>
 
-      {passwordError && <p className="error-message">{passwordError}</p>}
-      {successMessage && <p className="success-message">{successMessage}</p>}
+      {passwordError && <p className={styles.errorMessage}>{passwordError}</p>}
+      {successMessage && <p className={styles.successMessage}>{successMessage}</p>}
 
-      <button className="save-button" onClick={handleSave}>
+      <button className={styles.saveButton} onClick={handleSave}>
         Guardar cambios
       </button>
     </div>

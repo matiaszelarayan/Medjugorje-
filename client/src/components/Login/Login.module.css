@@ -1,4 +1,4 @@
-/* Login.css */
+/* Login.module.css */
 
 .login-wrapper {
   min-height: 100vh;
@@ -79,4 +79,20 @@
   display: block;
   margin-left: auto;
   margin-right: auto;
+}
+
+.modoOscuro .loginContainer {
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+}
+
+.modoOscuro .loginContainer input {
+  background-color: #2a2a2a;
+  color: #f0f0f0;
+  border: 1px solid #555;
+}
+
+.modoOscuro .loginButton {
+  background-color: #444;
+  color: #eee;
 }

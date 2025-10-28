@@ -1,28 +1,33 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import "./App.css";
-import Dashboard from "./components/Dashboard";
-import ContactosScreen from "./components/ContactosScreen";
-import PerfilScreen from "./components/PerfilScreen";
-import Login from "./components/Login";
-import MainLayout from "./components/MainLayout";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// Simulación de usuarios válidos
+import Dashboard from "./components/Dashboard/Dashboard";
+import ContactosScreen from "./components/ContactosScreen/ContactosScreen";
+import PerfilScreen from "./components/PerfilScreen/PerfilScreen";
+import Login from "./components/Login/Login";
+import MainLayout from "./components/MainLayout/MainLayout";
+import AdminPerfiles from "./components/AdminPerfiles/AdminPerfiles";
+
 const USERS = [
   {
     email: "admin@fm.org",
     password: "123456",
-    name: "Rubén Aragón",
+    nombre: "Rubén",
+    apellido: "Aragón",
     role: "Admin",
     id: "user-001",
+    foto_perfil: null,
   },
   {
     email: "colaborador@fm.org",
     password: "654321",
-    name: "Gustavo",
+    nombre: "Gustavo",
+    apellido: "",
     role: "Colaborador",
     id: "user-002",
+    foto_perfil: null,
   },
 ];
 
@@ -30,6 +35,17 @@ export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [currentScreen, setScreen] = useState("dashboard");
+  const [darkMode, setDarkMode] = useState(false);
+
+  // Persistencia del modo oscuro
+  useEffect(() => {
+    const saved = localStorage.getItem("darkMode");
+    if (saved) setDarkMode(JSON.parse(saved));
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("darkMode", JSON.stringify(darkMode));
+  }, [darkMode]);
 
   const handleLogin = ({ email, password }) => {
     const user = USERS.find(
@@ -50,6 +66,18 @@ export default function App() {
   };
 
   const renderScreen = useCallback(() => {
+    const titleStyle = {
+      fontSize: "2rem",
+      fontWeight: "800",
+      color: "var(--primary-color)",
+    };
+
+    const subtitleStyle = {
+      marginTop: "0.5rem",
+      fontSize: "1.125rem",
+      color: "var(--text-muted)",
+    };
+
     switch (currentScreen) {
       case "dashboard":
         return <Dashboard user={currentUser} />;
@@ -58,8 +86,8 @@ export default function App() {
       case "agenda":
         return (
           <div>
-            <h1 className="section-title">Agenda de Actividades (RF2)</h1>
-            <p className="section-subtitle">
+            <h1 style={titleStyle}>Agenda de Actividades (RF2)</h1>
+            <p style={subtitleStyle}>
               Área de planificación y seguimiento de eventos. ¡En desarrollo!
             </p>
           </div>
@@ -67,8 +95,8 @@ export default function App() {
       case "emailing":
         return (
           <div>
-            <h1 className="section-title">Módulo de Emailing (RF4)</h1>
-            <p className="section-subtitle">
+            <h1 style={titleStyle}>Módulo de Emailing (RF4)</h1>
+            <p style={subtitleStyle}>
               Área de gestión de campañas de correo. (Solo visible para Admin).
               ¡En desarrollo!
             </p>
@@ -77,14 +105,7 @@ export default function App() {
       case "perfil":
         return <PerfilScreen user={currentUser} />;
       case "admin-perfiles":
-        return (
-          <div>
-            <h1 className="section-title">Administrar Perfiles</h1>
-            <p className="section-subtitle">
-              Módulo exclusivo para el administrador. ¡En desarrollo!
-            </p>
-          </div>
-        );
+        return <AdminPerfiles />;
       default:
         return <Dashboard user={currentUser} />;
     }
@@ -101,11 +122,13 @@ export default function App() {
         currentScreen={currentScreen}
         setScreen={setScreen}
         onLogout={handleLogout}
+        darkMode={darkMode}
+        toggleDarkMode={() => setDarkMode((prev) => !prev)}
       >
         {renderScreen()}
       </MainLayout>
+
       <ToastContainer position="bottom-right" />
     </>
   );
 }
-

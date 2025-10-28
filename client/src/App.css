@@ -1,41 +1,6 @@
-/* App.css */
 @import "./colors.css";
 
-.app-wrapper {
-  min-height: 100vh;
-  display: flex;
-  background-color: var(--background-light);
-  font-family: "Segoe UI", sans-serif;
-}
-
-.app-main {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  transition: margin-left 0.3s ease;
-}
-
-.app-content {
-  flex-grow: 1;
-  overflow-y: auto;
-  padding: 2rem;
-  animation: fadeIn 0.3s ease;
-}
-
-.section-title {
-  font-size: 2rem;
-  font-weight: 800;
-  color: var(--primary-color);
-}
-
-.section-subtitle {
-  margin-top: 0.5rem;
-  font-size: 1.125rem;
-  color: var(--text-muted);
-}
-
-/* Animación de entrada */
+/* Animación global */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -45,4 +10,9 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Tipografía base */
+body {
+  font-family: "Segoe UI", sans-serif;
 }

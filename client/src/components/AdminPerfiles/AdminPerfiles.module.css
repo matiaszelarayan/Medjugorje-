@@ -1,0 +1,188 @@
+.adminContainer {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: var(--primary-color);
+}
+
+.adminTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.adminTable th,
+.adminTable td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.adminAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.noFoto {
+  font-size: 0.875rem;
+  color: #888;
+}
+
+.editButton {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  margin-right: 0.5rem;
+}
+
+.editButton:hover {
+  background-color: var(--primary-color);
+}
+
+.createButton {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.createButton:hover {
+  background-color: var(--primary-color);
+}
+
+.filtrosContainer {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.filtrosContainer select,
+.filtrosContainer input {
+  padding: 0.5rem;
+  font-size: 0.875rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.successAlert {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  border: 1px solid #c3e6cb;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.paginacion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.paginacion button {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.875rem;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--accent-color);
+  color: white;
+  cursor: pointer;
+}
+
+.paginacion button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.deleteButton {
+  background-color: #d9534f;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.deleteButton:hover {
+  background-color: #c9302c;
+}
+
+/* 🌙 MODO OSCURO */
+.modoOscuro .adminContainer {
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.05);
+}
+
+.modoOscuro .title {
+  color: #f0f0f0;
+}
+
+.modoOscuro .adminTable th,
+.modoOscuro .adminTable td {
+  border-bottom: 1px solid #444;
+  color: #ddd;
+}
+
+.modoOscuro .noFoto {
+  color: #aaa;
+}
+
+.modoOscuro .filtrosContainer select,
+.modoOscuro .filtrosContainer input {
+  background-color: #2a2a2a;
+  color: #f0f0f0;
+  border: 1px solid #555;
+}
+
+.modoOscuro .successAlert {
+  background-color: #2d4f2d;
+  color: #c3e6cb;
+  border: 1px solid #3c6e3c;
+}
+
+.modoOscuro .paginacion button {
+  background-color: #444;
+  color: #f0f0f0;
+}
+
+.modoOscuro .paginacion button:disabled {
+  background-color: #666;
+  color: #ccc;
+}
+
+.modoOscuro .editButton:hover,
+.modoOscuro .createButton:hover {
+  background-color: #666;
+}
+
+.modoOscuro .deleteButton {
+  background-color: #a94442;
+}
+
+.modoOscuro .deleteButton:hover {
+  background-color: #922d2b;
+}
