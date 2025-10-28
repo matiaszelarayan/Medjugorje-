@@ -16,3 +16,51 @@
 body {
   font-family: "Segoe UI", sans-serif;
 }
+
+/* Estilos para impresión */
+@media print {
+  body {
+    background: white;
+    color: black;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Ocultar elementos no relevantes (usando clases globales) */
+  .sidebarGlobal,
+  .navbarGlobal,
+  .logoutModal,
+  .printButtonGlobal,
+  .createButtonGlobal,
+  .filtrosContainerGlobal,
+  .paginacionGlobal,
+  .successAlertGlobal {
+    display: none !important;
+  }
+
+  /* Tabla optimizada para impresión */
+  table {
+    width: 100%;
+    font-size: 12pt;
+    border-collapse: collapse;
+    margin-top: 1rem;
+  }
+
+  th,
+  td {
+    border: 1px solid #ccc;
+    padding: 0.5rem;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f0f0f0;
+  }
+
+  /* Eliminar márgenes innecesarios */
+  h2,
+  .adminContainerGlobal {
+    margin: 0;
+    padding: 0;
+  }
+}

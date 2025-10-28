@@ -4,7 +4,7 @@ import { Home, Users, Calendar, Settings, UserCog } from "lucide-react";
 
 const Sidebar = ({ active, setScreen, user }) => {
   return (
-    <aside className={styles.sidebar}>
+    <aside className={`${styles.sidebar} sidebarGlobal`}>
       <div className={styles.sidebarTitle}>Menú Principal</div>
 
       <div

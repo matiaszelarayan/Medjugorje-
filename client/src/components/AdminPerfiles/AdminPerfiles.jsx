@@ -3,6 +3,7 @@ import styles from "./AdminPerfiles.module.css";
 import CreateUserModal from "../CreateUserModal/CreateUserModal";
 import EditUserModal from "../EditUserModal/EditUserModal";
 import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
+import PrintButton from "./PrintButton";
 
 const usuariosSimulados = [
   {
@@ -64,16 +65,26 @@ const AdminPerfiles = () => {
 
   const totalPaginas = Math.ceil(usuariosFiltrados.length / usuariosPorPagina);
   const indiceInicio = (paginaActual - 1) * usuariosPorPagina;
-  const usuariosPagina = usuariosFiltrados.slice(indiceInicio, indiceInicio + usuariosPorPagina);
+  const usuariosPagina = usuariosFiltrados.slice(
+    indiceInicio,
+    indiceInicio + usuariosPorPagina
+  );
 
   return (
-    <div className={styles.adminContainer}>
+    <div className={`${styles.adminContainer} adminContainerGlobal`}>
       <h2 className={styles.title}>Administrar Perfiles</h2>
 
-      {mensajeExito && <p className={styles.successAlert}>{mensajeExito}</p>}
+      {mensajeExito && (
+        <p className={`${styles.successAlert} successAlertGlobal`}>
+          {mensajeExito}
+        </p>
+      )}
 
-      <div className={styles.filtrosContainer}>
-        <select value={filtroRol} onChange={(e) => setFiltroRol(e.target.value)}>
+      <div className={`${styles.filtrosContainer} filtrosContainerGlobal`}>
+        <select
+          value={filtroRol}
+          onChange={(e) => setFiltroRol(e.target.value)}
+        >
           <option value="Todos">Todos</option>
           <option value="Admin">Admin</option>
           <option value="Colaborador">Colaborador</option>
@@ -87,9 +98,15 @@ const AdminPerfiles = () => {
         />
       </div>
 
-      <button className={styles.createButton} onClick={() => setShowCreateModal(true)}>
-        Crear nuevo usuario
-      </button>
+      <div className={styles.botonesContainer}>
+        <button
+          className={`${styles.createButton} createButtonGlobal`}
+          onClick={() => setShowCreateModal(true)}
+        >
+          Crear nuevo usuario
+        </button>
+        <PrintButton />
+      </div>
 
       <table className={styles.adminTable}>
         <thead>
@@ -106,19 +123,31 @@ const AdminPerfiles = () => {
             <tr key={u.id}>
               <td>
                 {u.foto_perfil ? (
-                  <img src={u.foto_perfil} alt="Foto" className={styles.adminAvatar} />
+                  <img
+                    src={u.foto_perfil}
+                    alt="Foto"
+                    className={styles.adminAvatar}
+                  />
                 ) : (
                   <span className={styles.noFoto}>Sin foto</span>
                 )}
               </td>
-              <td>{u.nombre} {u.apellido}</td>
+              <td>
+                {u.nombre} {u.apellido}
+              </td>
               <td>{u.email}</td>
               <td>{u.role}</td>
               <td>
-                <button className={styles.editButton} onClick={() => setUsuarioEditando(u)}>
+                <button
+                  className={styles.editButton}
+                  onClick={() => setUsuarioEditando(u)}
+                >
                   Editar
                 </button>
-                <button className={styles.deleteButton} onClick={() => setUsuarioAEliminar(u)}>
+                <button
+                  className={styles.deleteButton}
+                  onClick={() => setUsuarioAEliminar(u)}
+                >
                   Eliminar
                 </button>
               </td>
@@ -128,16 +157,20 @@ const AdminPerfiles = () => {
       </table>
 
       {totalPaginas > 1 && (
-        <div className={styles.paginacion}>
+        <div className={`${styles.paginacion} paginacionGlobal`}>
           <button
             onClick={() => setPaginaActual((prev) => Math.max(prev - 1, 1))}
             disabled={paginaActual === 1}
           >
             Anterior
           </button>
-          <span>Página {paginaActual} de {totalPaginas}</span>
+          <span>
+            Página {paginaActual} de {totalPaginas}
+          </span>
           <button
-            onClick={() => setPaginaActual((prev) => Math.min(prev + 1, totalPaginas))}
+            onClick={() =>
+              setPaginaActual((prev) => Math.min(prev + 1, totalPaginas))
+            }
             disabled={paginaActual === totalPaginas}
           >
             Siguiente

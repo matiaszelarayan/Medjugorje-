@@ -13,7 +13,7 @@ const Navbar = ({ user, onLogout, darkMode, toggleDarkMode }) => {
   };
 
   return (
-    <nav className={styles.navbar}>
+    <nav className={`${styles.navbar} navbarGlobal`}>
       <div className={styles.navbarLogo}>
         <img src={logo} alt="FM Logo" />
         <span>Fundación Medjugorje - Plataforma</span>
