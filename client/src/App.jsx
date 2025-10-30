@@ -82,7 +82,7 @@ export default function App() {
       case "dashboard":
         return <Dashboard user={currentUser} />;
       case "contactos":
-        return <ContactosScreen />;
+        return <ContactosScreen user={currentUser} />;
       case "agenda":
         return (
           <div>

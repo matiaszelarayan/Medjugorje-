@@ -1,0 +1,14 @@
+.printBtn {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.printBtn:hover {
+  background-color: var(--primary-color);
+}

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import styles from "./PerfilScreen.module.css";
 
 const PerfilScreen = ({ user }) => {
+  const [nombre, setNombre] = useState(user.nombre || "");
+  const [apellido, setApellido] = useState(user.apellido || "");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -31,17 +33,29 @@ const PerfilScreen = ({ user }) => {
     setPasswordError("");
     setSuccessMessage("");
 
-    if (newPassword !== confirmPassword) {
-      setPasswordError("Las contraseñas no coinciden");
-      return;
+    const quiereCambiarPassword = newPassword || confirmPassword;
+
+    if (quiereCambiarPassword) {
+      if (newPassword !== confirmPassword) {
+        setPasswordError("Las contraseñas no coinciden");
+        return;
+      }
+
+      if (!validatePassword(newPassword)) {
+        setPasswordError(
+          "La contraseña debe tener al menos 6 caracteres, una letra y una mayúscula"
+        );
+        return;
+      }
     }
 
-    if (!validatePassword(newPassword)) {
-      setPasswordError(
-        "La contraseña debe tener al menos 6 caracteres, una letra y una mayúscula"
-      );
-      return;
-    }
+    // Simulación de guardado
+    console.log("Datos actualizados:", {
+      nombre,
+      apellido,
+      nuevaPassword: quiereCambiarPassword ? newPassword : "(sin cambios)",
+      foto: imagePreview,
+    });
 
     setSuccessMessage("Cambios guardados correctamente (simulado)");
     setNewPassword("");
@@ -52,8 +66,25 @@ const PerfilScreen = ({ user }) => {
     <div className={styles.perfilContainer}>
       <h2>Mi Perfil</h2>
 
+      <div className={styles.perfilSection}>
+        <label>Nombre:</label>
+        <input
+          type="text"
+          value={nombre}
+          onChange={(e) => setNombre(e.target.value)}
+        />
+      </div>
+
+      <div className={styles.perfilSection}>
+        <label>Apellido:</label>
+        <input
+          type="text"
+          value={apellido}
+          onChange={(e) => setApellido(e.target.value)}
+        />
+      </div>
+
       <div className={styles.perfilInfo}>
-        <p><strong>Nombre:</strong> {user.nombre} {user.apellido}</p>
         <p><strong>Email:</strong> {user.email}</p>
         <p><strong>Rol:</strong> {user.role}</p>
       </div>

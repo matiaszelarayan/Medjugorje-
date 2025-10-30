@@ -3,17 +3,27 @@ import styles from "./ContactFormModal.module.css";
 
 const ContactFormModal = ({ contact, onClose, onSave }) => {
   const [formData, setFormData] = useState({
-    name: contact?.name || "",
+    nombre: contact?.nombre || "",
+    apellido: contact?.apellido || "",
     email: contact?.email || "",
-    phone: contact?.phone || "",
-    type: contact?.type || "Fiel",
+    sexo: contact?.sexo || "",
+    pais: contact?.pais || "",
+    provincia: contact?.provincia || "",
+    ciudad: contact?.ciudad || "",
+    celular: contact?.celular || "",
+    instagram: contact?.instagram || "",
+    parroquia: contact?.parroquia || "",
+    participa_grupo: contact?.participa_grupo || false,
+    fecha_nacimiento: contact?.fecha_nacimiento || "",
+    grupo_oracion: contact?.grupo_oracion || "",
   });
 
   const isEdit = !!contact;
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    const val = type === "checkbox" ? checked : value;
+    setFormData((prev) => ({ ...prev, [name]: val }));
   };
 
   const handleSubmit = (e) => {
@@ -33,15 +43,13 @@ const ContactFormModal = ({ contact, onClose, onSave }) => {
         </h2>
 
         <form onSubmit={handleSubmit}>
+          {/* Campos obligatorios */}
           <div className={styles.formGroup}>
-            <label htmlFor="name" className={styles.label}>
-              Nombre Completo
-            </label>
+            <label className={styles.label}>Nombre</label>
             <input
               type="text"
-              id="name"
-              name="name"
-              value={formData.name}
+              name="nombre"
+              value={formData.nombre}
               onChange={handleChange}
               required
               className={styles.input}
@@ -49,12 +57,21 @@ const ContactFormModal = ({ contact, onClose, onSave }) => {
           </div>
 
           <div className={styles.formGroup}>
-            <label htmlFor="email" className={styles.label}>
-              Email
-            </label>
+            <label className={styles.label}>Apellido</label>
+            <input
+              type="text"
+              name="apellido"
+              value={formData.apellido}
+              onChange={handleChange}
+              required
+              className={styles.input}
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Email</label>
             <input
               type="email"
-              id="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
@@ -64,35 +81,126 @@ const ContactFormModal = ({ contact, onClose, onSave }) => {
           </div>
 
           <div className={styles.formGroup}>
-            <label htmlFor="phone" className={styles.label}>
-              Teléfono
-            </label>
+            <label className={styles.label}>Sexo</label>
+            <select
+              name="sexo"
+              value={formData.sexo}
+              onChange={handleChange}
+              required
+              className={styles.select}
+            >
+              <option value="">Seleccionar</option>
+              <option value="Femenino">Femenino</option>
+              <option value="Masculino">Masculino</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </div>
+
+          <div className={styles.formGroup}>
+            <label className={styles.label}>País</label>
             <input
               type="text"
-              id="phone"
-              name="phone"
-              value={formData.phone}
+              name="pais"
+              value={formData.pais}
+              onChange={handleChange}
+              required
+              className={styles.input}
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Provincia</label>
+            <input
+              type="text"
+              name="provincia"
+              value={formData.provincia}
+              onChange={handleChange}
+              required
+              className={styles.input}
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Ciudad / Localidad</label>
+            <input
+              type="text"
+              name="ciudad"
+              value={formData.ciudad}
+              onChange={handleChange}
+              required
+              className={styles.input}
+            />
+          </div>
+
+          {/* Campos opcionales */}
+          <hr className={styles.separator} />
+
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Celular</label>
+            <input
+              type="text"
+              name="celular"
+              value={formData.celular}
               onChange={handleChange}
               className={styles.input}
             />
           </div>
 
           <div className={styles.formGroup}>
-            <label htmlFor="type" className={styles.label}>
-              Tipo de Contacto
-            </label>
-            <select
-              id="type"
-              name="type"
-              value={formData.type}
+            <label className={styles.label}>Instagram</label>
+            <input
+              type="text"
+              name="instagram"
+              value={formData.instagram}
               onChange={handleChange}
-              required
-              className={styles.select}
-            >
-              <option value="Fiel">Fiel</option>
-              <option value="Colaborador">Colaborador</option>
-              <option value="Externo">Externo</option>
-            </select>
+              className={styles.input}
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Parroquia</label>
+            <input
+              type="text"
+              name="parroquia"
+              value={formData.parroquia}
+              onChange={handleChange}
+              className={styles.input}
+            />
+          </div>
+
+          <div className={styles.formGroupCheckbox}>
+            <label className={styles.label}>
+              ¿Participa en un grupo de oración?
+            </label>
+            <input
+              type="checkbox"
+              name="participa_grupo"
+              checked={formData.participa_grupo}
+              onChange={handleChange}
+              className={styles.checkbox}
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Fecha de Nacimiento</label>
+            <input
+              type="date"
+              name="fecha_nacimiento"
+              value={formData.fecha_nacimiento}
+              onChange={handleChange}
+              className={styles.input}
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Grupo de Oración</label>
+            <input
+              type="text"
+              name="grupo_oracion"
+              value={formData.grupo_oracion}
+              onChange={handleChange}
+              className={styles.input}
+            />
           </div>
 
           <div className={styles.actions}>
