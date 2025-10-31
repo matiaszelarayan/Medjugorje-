@@ -17,3 +17,17 @@
   --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   --card-radius: 1rem;
 }
+/* 🌙 MODO OSCURO */
+.modoOscuro {
+  --primary-color: #f0f0f0;
+  --secondary-color: #5dade2;
+  --accent-color: #50c878;
+  --warning-color: #f5a623;
+  --danger-color: #ff4d4d;
+
+  --background-light: #1e1e1e;
+  --text-main: #f0f0f0;
+  --text-muted: #aaaaaa;
+
+  --card-shadow: 0 4px 12px rgba(255, 255, 255, 0.05);
+}

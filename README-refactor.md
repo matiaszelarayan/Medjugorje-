@@ -40,3 +40,12 @@ Adaptar el módulo de contactos a los requisitos funcionales detallados en la Fa
 
 ---
 
+### Estandarización de botones
+
+Todos los botones de acción principal ahora usan la clase global `actionButtonGlobal` definida en `app.css`. Esto garantiza:
+
+- Coherencia visual entre módulos
+- Compatibilidad automática con modo oscuro
+- Mantenimiento más simple
+
+Se recomienda usar variantes como `actionButtonDanger` o `actionButtonSecondary` si se requiere diferenciación visual (ej. eliminar, cancelar, etc.).

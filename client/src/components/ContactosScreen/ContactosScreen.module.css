@@ -22,23 +22,6 @@
   gap: 1rem;
 }
 
-.newButton,
-.toggleButton {
-  background-color: var(--accent-color);
-  color: white;
-  border: none;
-  padding: 0.6rem 1rem;
-  font-size: 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.newButton:hover,
-.toggleButton:hover {
-  background-color: var(--primary-color);
-}
-
 /* Vista tabla */
 .contactTable {
   width: 100%;
@@ -196,4 +179,11 @@
   font-size: 0.95rem;
   border: 1px solid #ccc;
   border-radius: 4px;
+}
+
+.screenWrapper {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: var(--shadow-light);
 }

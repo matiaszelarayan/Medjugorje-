@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./Sidebar.module.css";
-import { Home, Users, Calendar, Settings, UserCog } from "lucide-react";
+import { Home, Users, Calendar, Settings, UserCog, HeartHandshake } from "lucide-react";
 
 const Sidebar = ({ active, setScreen, user }) => {
   return (
@@ -22,6 +22,16 @@ const Sidebar = ({ active, setScreen, user }) => {
         <Users size={20} className={styles.sidebarIcon} />
         <span>Contactos</span>
       </div>
+
+      {user.role === "Admin" && (
+        <div
+          className={`${styles.sidebarItem} ${active === "grupos-oracion" ? styles.active : ""}`}
+          onClick={() => setScreen("grupos-oracion")}
+        >
+          <HeartHandshake size={20} className={styles.sidebarIcon} />
+          <span>Grupos de Oración</span>
+        </div>
+      )}
 
       <div
         className={`${styles.sidebarItem} ${active === "agenda" ? styles.active : ""}`}

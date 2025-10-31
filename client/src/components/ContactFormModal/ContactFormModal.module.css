@@ -123,3 +123,17 @@
 .modoOscuro .separator {
   border-top: 1px solid #555;
 }
+
+.select {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.helpText {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+  display: block;
+}

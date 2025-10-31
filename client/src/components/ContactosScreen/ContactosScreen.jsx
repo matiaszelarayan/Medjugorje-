@@ -118,6 +118,12 @@ const initialContacts = [
   },
 ];
 
+const grupos = [
+  { id: 1, nombre_grupo: "Grupo Esperanza" },
+  { id: 2, nombre_grupo: "Renacer" },
+  { id: 3, nombre_grupo: "Camino de Fe" },
+];
+
 const ContactosScreen = ({ user }) => {
   const [contacts, setContacts] = useState(initialContacts);
   const [showModal, setShowModal] = useState(false);
@@ -171,76 +177,115 @@ const ContactosScreen = ({ user }) => {
   };
 
   return (
-    <div className={styles.contactosContainer}>
-      <h1 className={styles.contactosTitle}>Contactos</h1>
-      <p className={styles.contactosSubtitle}>
-        Gestión de personas vinculadas a la Fundación
-      </p>
+    <div className={`${styles.screenWrapper} screenWrapperGlobal`}>
+      <div className={styles.contactosContainer}>
+        <h1 className={styles.contactosTitle}>Contactos</h1>
+        <p className={styles.contactosSubtitle}>
+          Gestión de personas vinculadas a la Fundación
+        </p>
 
-      <div className={styles.filtersBar}>
-        <input
-          type="text"
-          placeholder="Buscar por nombre, apellido o email"
-          value={filters.texto}
-          onChange={(e) =>
-            setFilters({ ...filters, texto: e.target.value })}
-          className={styles.filterInput}
-        />
-        <select
-          value={filters.provincia}
-          onChange={(e) =>
-            setFilters({ ...filters, provincia: e.target.value })}
-          className={styles.filterSelect}
-        >
-          <option value="">Todas las provincias</option>
-          <option value="Buenos Aires">Buenos Aires</option>
-          <option value="Córdoba">Córdoba</option>
-          <option value="Santa Fe">Santa Fe</option>
-          <option value="Mendoza">Mendoza</option>
-          <option value="Salta">Salta</option>
-          <option value="Tucumán">Tucumán</option>
-        </select>
-        <PrintButton data={filteredContacts} title="Listado de Contactos" />
-      </div>
+        <div className={styles.filtersBar}>
+          <input
+            type="text"
+            placeholder="Buscar por nombre, apellido o email"
+            value={filters.texto}
+            onChange={(e) => setFilters({ ...filters, texto: e.target.value })}
+            className={styles.filterInput}
+          />
+          <select
+            value={filters.provincia}
+            onChange={(e) =>
+              setFilters({ ...filters, provincia: e.target.value })
+            }
+            className={styles.filterSelect}
+          >
+            <option value="">Todas las provincias</option>
+            <option value="Buenos Aires">Buenos Aires</option>
+            <option value="Córdoba">Córdoba</option>
+            <option value="Santa Fe">Santa Fe</option>
+            <option value="Mendoza">Mendoza</option>
+            <option value="Salta">Salta</option>
+            <option value="Tucumán">Tucumán</option>
+          </select>
+          <PrintButton data={filteredContacts} title="Listado de Contactos" />
+        </div>
 
-      <div className={styles.actionsBar}>
-        <button onClick={openNewContact} className={styles.newButton}>
-          ➕ Nuevo Contacto
-        </button>
-        <button
-          onClick={() =>
-            setViewMode(viewMode === "tabla" ? "tarjetas" : "tabla")}
-          className={styles.toggleButton}
-        >
-          Cambiar a vista {viewMode === "tabla" ? "tarjetas" : "tabla"}
-        </button>
-      </div>
+        <div className={styles.actionsBar}>
+          <button onClick={openNewContact} className="actionButtonGlobal">
+            ➕ Nuevo Contacto
+          </button>
+          <button
+            onClick={() =>
+              setViewMode(viewMode === "tabla" ? "tarjetas" : "tabla")
+            }
+            className={styles.toggleButton}
+          >
+            Cambiar a vista {viewMode === "tabla" ? "tarjetas" : "tabla"}
+          </button>
+        </div>
 
-      {viewMode === "tabla" ? (
-        <table className={styles.contactTable}>
-          <thead>
-            <tr>
-              <th>Apellido</th>
-              <th>Nombre</th>
-              <th>Email</th>
-              <th>Provincia</th>
-              <th>Ciudad</th>
-              <th>Grupo</th>
-              <th>Participa</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
+        {viewMode === "tabla" ? (
+          <table className={styles.contactTable}>
+            <thead>
+              <tr>
+                <th>Apellido</th>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Provincia</th>
+                <th>Ciudad</th>
+                <th>Grupo</th>
+                <th>Participa</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentContacts.map((contact) => (
+                <tr key={contact.id}>
+                  <td>{contact.apellido}</td>
+                  <td>{contact.nombre}</td>
+                  <td>{contact.email}</td>
+                  <td>{contact.provincia}</td>
+                  <td>{contact.ciudad}</td>
+                  <td>{contact.grupo_oracion || "—"}</td>
+                  <td>{contact.participa_grupo ? "✅" : "❌"}</td>
+                  <td>
+                    <button
+                      onClick={() => openEditContact(contact)}
+                      className={styles.editBtn}
+                    >
+                      ✏️
+                    </button>
+                    {user.role === "Admin" && (
+                      <button
+                        onClick={() => handleDelete(contact.id)}
+                        className={styles.deleteBtn}
+                      >
+                        🗑️
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <div className={styles.contactosList}>
             {currentContacts.map((contact) => (
-              <tr key={contact.id}>
-                <td>{contact.apellido}</td>
-                <td>{contact.nombre}</td>
-                <td>{contact.email}</td>
-                <td>{contact.provincia}</td>
-                <td>{contact.ciudad}</td>
-                <td>{contact.grupo_oracion || "—"}</td>
-                <td>{contact.participa_grupo ? "✅" : "❌"}</td>
-                <td>
+              <div key={contact.id} className={styles.contactoCard}>
+                <div className={styles.contactoNombre}>
+                  {contact.apellido}, {contact.nombre}
+                </div>
+                <div className={styles.contactoEmail}>📧 {contact.email}</div>
+                <div className={styles.contactoProvincia}>
+                  📍 {contact.provincia}, {contact.ciudad}
+                </div>
+                <div className={styles.contactoGrupo}>
+                  🙏 {contact.grupo_oracion || "Sin grupo"}
+                </div>
+                <div className={styles.contactoParticipa}>
+                  {contact.participa_grupo ? "✅ Participa" : "❌ No participa"}
+                </div>
+                <div className={styles.cardActions}>
                   <button
                     onClick={() => openEditContact(contact)}
                     className={styles.editBtn}
@@ -255,74 +300,35 @@ const ContactosScreen = ({ user }) => {
                       🗑️
                     </button>
                   )}
-                </td>
-              </tr>
+                </div>
+              </div>
             ))}
-          </tbody>
-        </table>
-      ) : (
-        <div className={styles.contactosList}>
-          {currentContacts.map((contact) => (
-            <div key={contact.id} className={styles.contactoCard}>
-              <div className={styles.contactoNombre}>
-                {contact.apellido}, {contact.nombre}
-              </div>
-              <div className={styles.contactoEmail}>📧 {contact.email}</div>
-              <div className={styles.contactoProvincia}>
-                📍 {contact.provincia}, {contact.ciudad}
-              </div>
-              <div className={styles.contactoGrupo}>
-                🙏 {contact.grupo_oracion || "Sin grupo"}
-              </div>
-              <div className={styles.contactoParticipa}>
-                {contact.participa_grupo
-                  ? "✅ Participa"
-                  : "❌ No participa"}
-              </div>
-              <div className={styles.cardActions}>
-                <button
-                  onClick={() => openEditContact(contact)}
-                  className={styles.editBtn}
-                >
-                  ✏️
-                </button>
-                {user.role === "Admin" && (
-                  <button
-                    onClick={() => handleDelete(contact.id)}
-                    className={styles.deleteBtn}
-                  >
-                    🗑️
-                  </button>
-                )}
-              </div>
-            </div>
+          </div>
+        )}
+
+        <div className={styles.pagination}>
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentPage(i + 1)}
+              className={
+                currentPage === i + 1 ? styles.pageActive : styles.pageBtn
+              }
+            >
+              {i + 1}
+            </button>
           ))}
         </div>
-      )}
 
-      <div className={styles.pagination}>
-        {Array.from({ length: totalPages }, (_, i) => (
-          <button
-            key={i}
-            onClick={() => setCurrentPage(i + 1)}
-            className={
-              currentPage === i + 1
-                ? styles.pageActive
-                : styles.pageBtn
-            }
-          >
-            {i + 1}
-          </button>
-        ))}
+        {showModal && (
+          <ContactFormModal
+            contact={selectedContact}
+            onClose={() => setShowModal(false)}
+            onSave={handleSave}
+            grupos={grupos}
+          />
+        )}
       </div>
-
-      {showModal && (
-        <ContactFormModal
-          contact={selectedContact}
-          onClose={() => setShowModal(false)}
-          onSave={handleSave}
-        />
-      )}
     </div>
   );
 };

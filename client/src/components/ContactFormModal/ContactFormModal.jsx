@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "./ContactFormModal.module.css";
 
-const ContactFormModal = ({ contact, onClose, onSave }) => {
+const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
   const [formData, setFormData] = useState({
     nombre: contact?.nombre || "",
     apellido: contact?.apellido || "",
@@ -191,16 +191,25 @@ const ContactFormModal = ({ contact, onClose, onSave }) => {
               className={styles.input}
             />
           </div>
-
           <div className={styles.formGroup}>
             <label className={styles.label}>Grupo de Oración</label>
-            <input
-              type="text"
+            <select
               name="grupo_oracion"
-              value={formData.grupo_oracion}
+              value={formData.grupo_oracion || ""}
               onChange={handleChange}
-              className={styles.input}
-            />
+              className={styles.select}
+            >
+              <option value="">-- Seleccionar grupo --</option>
+              {grupos.map((g) => (
+                <option key={g.id} value={g.id}>
+                  {g.nombre_grupo}
+                </option>
+              ))}
+            </select>
+            <small className={styles.helpText}>
+              Si el grupo aún no está disponible, dejá este campo vacío. El
+              administrador lo cargará y podrás actualizarlo luego.
+            </small>
           </div>
 
           <div className={styles.actions}>

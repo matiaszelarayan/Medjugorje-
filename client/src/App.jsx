@@ -9,6 +9,7 @@ import PerfilScreen from "./components/PerfilScreen/PerfilScreen";
 import Login from "./components/Login/Login";
 import MainLayout from "./components/MainLayout/MainLayout";
 import AdminPerfiles from "./components/AdminPerfiles/AdminPerfiles";
+import GruposScreen from "./components/GruposOracion/GruposScreen";
 
 const USERS = [
   {
@@ -83,8 +84,10 @@ export default function App() {
         return <Dashboard user={currentUser} />;
       case "contactos":
         return <ContactosScreen user={currentUser} />;
-      case "agenda":
-        return (
+      case "grupos-oracion":
+        return <GruposScreen user={currentUser} />;
+
+      case "agenda":        return (
           <div>
             <h1 style={titleStyle}>Agenda de Actividades (RF2)</h1>
             <p style={subtitleStyle}>
