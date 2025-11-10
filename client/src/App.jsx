@@ -10,6 +10,7 @@ import Login from "./components/Login/Login";
 import MainLayout from "./components/MainLayout/MainLayout";
 import AdminPerfiles from "./components/AdminPerfiles/AdminPerfiles";
 import GruposScreen from "./components/GruposOracion/GruposScreen";
+import CorreosScreen from "./components/Correos/CorreosScreen";
 
 const USERS = [
   {
@@ -87,7 +88,8 @@ export default function App() {
       case "grupos-oracion":
         return <GruposScreen user={currentUser} />;
 
-      case "agenda":        return (
+      case "agenda":
+        return (
           <div>
             <h1 style={titleStyle}>Agenda de Actividades (RF2)</h1>
             <p style={subtitleStyle}>
@@ -95,16 +97,8 @@ export default function App() {
             </p>
           </div>
         );
-      case "emailing":
-        return (
-          <div>
-            <h1 style={titleStyle}>Módulo de Emailing (RF4)</h1>
-            <p style={subtitleStyle}>
-              Área de gestión de campañas de correo. (Solo visible para Admin).
-              ¡En desarrollo!
-            </p>
-          </div>
-        );
+      case "correos":
+        return <CorreosScreen user={currentUser} />;
       case "perfil":
         return <PerfilScreen user={currentUser} />;
       case "admin-perfiles":

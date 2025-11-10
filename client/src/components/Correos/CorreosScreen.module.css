@@ -1,0 +1,126 @@
+.correosContainer {
+  padding: 2rem;
+}
+
+.correosTitle {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--primary-color);
+}
+
+.correosSubtitle {
+  margin-top: 0.5rem;
+  font-size: 1.125rem;
+  color: var(--text-muted);
+}
+
+.actionsBar {
+  display: flex;
+  justify-content: space-between;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.correosTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+}
+
+.correosTable th,
+.correosTable td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  font-size: 0.95rem;
+}
+
+.correosTable th {
+  background-color: #f5f5f5;
+  color: var(--text-main);
+}
+
+/* Íconos de acción */
+.editBtn {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  color: var(--accent-color);
+  transition: color 0.2s ease;
+}
+
+.editBtn:hover {
+  color: var(--accent-hover);
+}
+
+.sendBtn {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  color: #28a745;
+  transition: color 0.2s ease;
+}
+
+.sendBtn:hover {
+  color: #218838;
+}
+
+.deleteBtn {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  color: #d9534f;
+  transition: color 0.2s ease;
+}
+
+.deleteBtn:hover {
+  color: #c9302c;
+}
+
+/* Botón nuevo correo */
+.newCorreoBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.newCorreoBtn:hover {
+  background-color: var(--accent-hover);
+  color: white; /* Asegura que el texto no se vuelva invisible */
+}
+
+/* 🌙 Modo oscuro */
+.modoOscuro .correosContainer {
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+}
+
+.modoOscuro .correosContainer h2 {
+  color: #f0f0f0;
+}
+
+.modoOscuro .correosTable th {
+  background-color: #2a2a2a;
+  color: #eee;
+}
+
+.modoOscuro .correosTable td {
+  border-color: #444;
+  color: #ccc;
+}

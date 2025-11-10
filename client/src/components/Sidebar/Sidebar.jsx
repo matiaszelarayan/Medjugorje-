@@ -1,6 +1,13 @@
 import React from "react";
 import styles from "./Sidebar.module.css";
-import { Home, Users, Calendar, Settings, UserCog, HeartHandshake } from "lucide-react";
+import {
+  Home,
+  Users,
+  Calendar,
+  Settings,
+  UserCog,
+  HeartHandshake,
+} from "lucide-react";
 
 const Sidebar = ({ active, setScreen, user }) => {
   return (
@@ -8,7 +15,9 @@ const Sidebar = ({ active, setScreen, user }) => {
       <div className={styles.sidebarTitle}>Menú Principal</div>
 
       <div
-        className={`${styles.sidebarItem} ${active === "dashboard" ? styles.active : ""}`}
+        className={`${styles.sidebarItem} ${
+          active === "dashboard" ? styles.active : ""
+        }`}
         onClick={() => setScreen("dashboard")}
       >
         <Home size={20} className={styles.sidebarIcon} />
@@ -16,7 +25,9 @@ const Sidebar = ({ active, setScreen, user }) => {
       </div>
 
       <div
-        className={`${styles.sidebarItem} ${active === "contactos" ? styles.active : ""}`}
+        className={`${styles.sidebarItem} ${
+          active === "contactos" ? styles.active : ""
+        }`}
         onClick={() => setScreen("contactos")}
       >
         <Users size={20} className={styles.sidebarIcon} />
@@ -25,7 +36,9 @@ const Sidebar = ({ active, setScreen, user }) => {
 
       {user.role === "Admin" && (
         <div
-          className={`${styles.sidebarItem} ${active === "grupos-oracion" ? styles.active : ""}`}
+          className={`${styles.sidebarItem} ${
+            active === "grupos-oracion" ? styles.active : ""
+          }`}
           onClick={() => setScreen("grupos-oracion")}
         >
           <HeartHandshake size={20} className={styles.sidebarIcon} />
@@ -34,16 +47,32 @@ const Sidebar = ({ active, setScreen, user }) => {
       )}
 
       <div
-        className={`${styles.sidebarItem} ${active === "agenda" ? styles.active : ""}`}
+        className={`${styles.sidebarItem} ${
+          active === "agenda" ? styles.active : ""
+        }`}
         onClick={() => setScreen("agenda")}
       >
         <Calendar size={20} className={styles.sidebarIcon} />
         <span>Eventos</span>
       </div>
 
+      {(user.role === "Admin" || user.role === "Colaborador") && (
+        <div
+          className={`${styles.sidebarItem} ${
+            active === "correos" ? styles.active : ""
+          }`}
+          onClick={() => setScreen("correos")}
+        >
+          <Calendar size={20} className={styles.sidebarIcon} />
+          <span>Correos</span>
+        </div>
+      )}
+
       {user.role === "Colaborador" && (
         <div
-          className={`${styles.sidebarItem} ${active === "perfil" ? styles.active : ""}`}
+          className={`${styles.sidebarItem} ${
+            active === "perfil" ? styles.active : ""
+          }`}
           onClick={() => setScreen("perfil")}
         >
           <UserCog size={20} className={styles.sidebarIcon} />
@@ -53,7 +82,9 @@ const Sidebar = ({ active, setScreen, user }) => {
 
       {user.role === "Admin" && (
         <div
-          className={`${styles.sidebarItem} ${active === "admin-perfiles" ? styles.active : ""}`}
+          className={`${styles.sidebarItem} ${
+            active === "admin-perfiles" ? styles.active : ""
+          }`}
           onClick={() => setScreen("admin-perfiles")}
         >
           <UserCog size={20} className={styles.sidebarIcon} />
@@ -62,7 +93,9 @@ const Sidebar = ({ active, setScreen, user }) => {
       )}
 
       <div
-        className={`${styles.sidebarItem} ${active === "configuracion" ? styles.active : ""}`}
+        className={`${styles.sidebarItem} ${
+          active === "configuracion" ? styles.active : ""
+        }`}
         onClick={() => setScreen("configuracion")}
       >
         <Settings size={20} className={styles.sidebarIcon} />
