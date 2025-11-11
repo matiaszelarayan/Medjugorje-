@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import ModalBase from "../common/ModalBase/ModalBase"; // 👈 usamos la base
 import styles from "./GrupoFormModal.module.css";
 
 const GrupoFormModal = ({ grupo, onClose, onSave }) => {
@@ -23,45 +24,43 @@ const GrupoFormModal = ({ grupo, onClose, onSave }) => {
       return;
     }
     onSave({ ...form, id: grupo?.id || Date.now() });
+    onClose();
   };
 
   return (
-    <div className={styles.modalOverlay}>
-      <div className={styles.modalContent}>
-        <h3>{grupo ? "Editar Grupo" : "Nuevo Grupo"}</h3>
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <label>Nombre del Grupo</label>
-          <input
-            type="text"
-            name="nombre_grupo"
-            value={form.nombre_grupo}
-            onChange={handleChange}
-          />
-          <label>Localidad</label>
-          <input
-            type="text"
-            name="localidad"
-            value={form.localidad}
-            onChange={handleChange}
-          />
-          <label>Responsable</label>
-          <input
-            type="text"
-            name="responsable"
-            value={form.responsable}
-            onChange={handleChange}
-          />
-          <div className={styles.actions}>
-            <button type="submit" className={styles.saveBtn}>
-              Guardar
-            </button>
-            <button type="button" onClick={onClose} className={styles.cancelBtn}>
-              Cancelar
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+    <ModalBase onClose={onClose}>
+      <h3 className={styles.title}>{grupo ? "Editar Grupo" : "Nuevo Grupo"}</h3>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <label>Nombre del Grupo</label>
+        <input
+          type="text"
+          name="nombre_grupo"
+          value={form.nombre_grupo}
+          onChange={handleChange}
+        />
+
+        <label>Localidad</label>
+        <input
+          type="text"
+          name="localidad"
+          value={form.localidad}
+          onChange={handleChange}
+        />
+
+        <label>Responsable</label>
+        <input
+          type="text"
+          name="responsable"
+          value={form.responsable}
+          onChange={handleChange}
+        />
+
+        <div className={styles.actions}>
+          <button type="submit" className={styles.saveBtn}>Guardar</button>
+          <button type="button" onClick={onClose} className={styles.cancelBtn}>Cancelar</button>
+        </div>
+      </form>
+    </ModalBase>
   );
 };
 

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import styles from "./GruposScreen.module.css";
 import GrupoFormModal from "./GrupoFormModal";
 import GrupoPrintButton from "./GrupoPrintButton";
+import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
+import { Pencil, Trash2 } from "lucide-react";
 
 const initialGrupos = [
   {
@@ -23,10 +25,12 @@ const initialGrupos = [
     responsable: "Sofía Martínez",
   },
 ];
+
 const GruposScreen = ({ user }) => {
   const [grupos, setGrupos] = useState(initialGrupos);
   const [showModal, setShowModal] = useState(false);
   const [selectedGrupo, setSelectedGrupo] = useState(null);
+  const [deleteTarget, setDeleteTarget] = useState(null);
 
   const handleSave = (grupo) => {
     setGrupos((prev) => {
@@ -43,11 +47,17 @@ const GruposScreen = ({ user }) => {
     setShowModal(true);
   };
 
-  const handleDelete = (id) => {
-    if (window.confirm("¿Eliminar este grupo de oración?")) {
-      setGrupos((prev) => prev.filter((g) => g.id !== id));
-    }
+  // Solo abre el modal de confirmación, no borra todavía
+  const openDeleteModal = (grupo) => {
+    setDeleteTarget(grupo);
   };
+
+  const confirmDelete = (id) => {
+    setGrupos((prev) => prev.filter((g) => g.id !== id));
+    setDeleteTarget(null);
+  };
+
+  const closeDeleteModal = () => setDeleteTarget(null);
 
   const openNewGrupo = () => {
     setSelectedGrupo(null);
@@ -91,15 +101,18 @@ const GruposScreen = ({ user }) => {
                   <button
                     onClick={() => handleEdit(grupo)}
                     className={styles.editBtn}
+                    title="Editar"
                   >
-                    ✏️
+                    <Pencil size={16} />
                   </button>
+
                   {user.role === "Admin" && (
                     <button
-                      onClick={() => handleDelete(grupo.id)}
+                      onClick={() => openDeleteModal(grupo)}
                       className={styles.deleteBtn}
+                      title="Eliminar"
                     >
-                      🗑️
+                      <Trash2 size={16} />
                     </button>
                   )}
                 </td>
@@ -113,6 +126,14 @@ const GruposScreen = ({ user }) => {
             grupo={selectedGrupo}
             onClose={() => setShowModal(false)}
             onSave={handleSave}
+          />
+        )}
+
+        {deleteTarget && (
+          <ConfirmDeleteModal
+            user={deleteTarget}
+            onConfirm={confirmDelete}
+            onCancel={closeDeleteModal}
           />
         )}
       </div>

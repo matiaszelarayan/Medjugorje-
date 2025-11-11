@@ -1,5 +1,8 @@
 .gruposContainer {
+  background-color: #fff;
+  border-radius: 8px;
   padding: 2rem;
+  box-shadow: var(--shadow-light);
 }
 
 .gruposTitle {
@@ -15,11 +18,11 @@
   margin-bottom: 1.5rem;
 }
 
+/* Tabla de grupos */
 .gruposTable {
   width: 100%;
   border-collapse: collapse;
 }
-
 .gruposTable th,
 .gruposTable td {
   padding: 0.75rem;
@@ -27,26 +30,82 @@
   text-align: left;
 }
 
-.editBtn,
-.deleteBtn {
-  background: none;
+/* --- Botones de acción uniformados --- */
+.editBtn, .deleteBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.32rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 5px;
   border: none;
-  font-size: 1rem;
   cursor: pointer;
-  margin-right: 0.5rem;
+  outline: none;
+  margin-right: 0.18rem;
+  font-size: 1rem;
+  transition: background 0.2s, color 0.2s, box-shadow 0.16s;
+  background-clip: padding-box;
+}
+.editBtn svg, .deleteBtn svg {
+  display: block;
+  margin: 0 auto;
+}
+/* Editar */
+.editBtn {
+  background: var(--accent-color, #199871);
+  color: #fff;
+}
+.editBtn:hover,
+.editBtn:focus-visible {
+  background: var(--primary-color, #136252);
+  color: #fff;
+  box-shadow: 0 0 0 2px #e0f8ee;
+}
+/* Eliminar */
+.deleteBtn {
+  background: #d9534f;
+  color: #fff;
+}
+.deleteBtn:hover,
+.deleteBtn:focus-visible {
+  background: #c9302c;
+  color: #fff;
+  box-shadow: 0 0 0 2px #f8dfdf;
 }
 
-.editBtn:hover {
-  color: var(--accent-color);
-}
-
-.deleteBtn:hover {
-  color: #d9534f;
-}
-
+/* Vista general */
 .screenWrapper {
   background-color: white;
   padding: 2rem;
   border-radius: 8px;
   box-shadow: var(--shadow-light);
+}
+
+/* 🌙 Modo oscuro de grupos */
+.modoOscuro .gruposContainer {
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+}
+.modoOscuro .gruposTitle {
+  color: #f0f0f0;
+}
+.modoOscuro .gruposTable th,
+.modoOscuro .gruposTable td {
+  border-bottom: 1px solid #444;
+  color: #ddd;
+}
+.modoOscuro .editBtn {
+  background: #249871;
+  color: #eee;
+}
+.modoOscuro .editBtn:hover {
+  background: #1a6f54;
+}
+.modoOscuro .deleteBtn {
+  background: #a94442;
+  color: #f0f0f0;
+}
+.modoOscuro .deleteBtn:hover {
+  background: #922d2b;
 }

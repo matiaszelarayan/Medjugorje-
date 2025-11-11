@@ -1,0 +1,25 @@
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(40, 46, 60, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+
+.modalContent {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(44, 61, 93, 0.28);
+  width: 100%;
+  max-width: 520px;
+  padding: 2rem 1.8rem 1.3rem 1.8rem;
+  position: relative;
+  font-family: 'Segoe UI', sans-serif;
+
+  /* 👇 nuevas reglas para scroll */
+  max-height: 90vh;       /* no excede el alto de la ventana */
+  overflow-y: auto;       /* activa scroll vertical si se necesita */
+}

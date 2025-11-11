@@ -1,112 +1,116 @@
-.modalOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.modalBox {
-  background-color: white;
-  padding: 2rem;
-  border-radius: 8px;
-  width: 100%;
-  max-width: 400px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.modalBox h3 {
+/* 🔹 Título */
+.title {
+  font-size: 1.3rem;
+  font-weight: 700;
   margin-bottom: 1rem;
   color: var(--primary-color);
   text-align: center;
 }
 
-.modalBox label {
+/* 🔹 Labels */
+label {
   display: block;
   margin-top: 1rem;
   font-weight: 600;
   color: #444;
 }
 
-.modalBox input,
-.modalBox select {
+/* 🔹 Inputs y selects */
+input,
+select {
   width: 100%;
-  padding: 0.5rem;
+  padding: 0.55rem 0.8rem;
   margin-top: 0.3rem;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(68, 187, 119, 0.2);
+}
+
+/* 🔹 Errores */
+.modalError {
+  color: #d9534f;
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
+}
+
+/* 🔹 Preview de imagen */
 .modalImagePreview {
   margin-top: 1rem;
   text-align: center;
 }
 
 .modalImagePreview img {
-  width: 80px;
-  height: 80px;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
   object-fit: cover;
+  border: 2px solid #e1e8ee;
 }
 
+/* 🔹 Acciones */
 .modalActions {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
+  gap: 1rem;
   margin-top: 1.5rem;
 }
 
-.modalActions button {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  font-size: 0.875rem;
-  cursor: pointer;
-}
-
-.modalActions button:first-child {
+.saveBtn {
   background-color: var(--accent-color);
   color: white;
+  border: none;
+  padding: 0.55rem 1.25rem;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
-.modalActions button:last-child {
+.saveBtn:hover {
+  background-color: var(--accent-hover);
+}
+
+.cancelBtn {
   background-color: #ccc;
   color: #333;
+  border: none;
+  padding: 0.55rem 1.1rem;
+  border-radius: 5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
-.modalError {
-  color: #d9534f;
-  font-size: 0.8rem;
-  margin-top: 0.3rem;
+.cancelBtn:hover {
+  background-color: #b5b5b5;
 }
 
-/* Modo oscuro */
-.modoOscuro .modalBox {
-  background-color: #1e1e1e;
-  color: #f0f0f0;
-  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.05);
-}
-
-.modoOscuro .modalBox h3 {
+/* 🌙 Modo oscuro */
+.modoOscuro {
   color: #f0f0f0;
 }
 
-.modoOscuro .modalBox label {
+.modoOscuro label {
   color: #ccc;
 }
 
-.modoOscuro .modalBox input,
-.modoOscuro .modalBox select {
+.modoOscuro input,
+.modoOscuro select {
   background-color: #2a2a2a;
   color: #f0f0f0;
   border: 1px solid #555;
 }
 
-.modoOscuro .modalActions button:last-child {
+.modoOscuro .cancelBtn {
   background-color: #444;
   color: #eee;
 }

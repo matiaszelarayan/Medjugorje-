@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styles from "./AdminPerfiles.module.css";
+import { Pencil, Trash2 } from "lucide-react";
 import CreateUserModal from "../CreateUserModal/CreateUserModal";
 import EditUserModal from "../EditUserModal/EditUserModal";
 import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
@@ -141,14 +142,18 @@ const AdminPerfiles = () => {
                 <button
                   className={styles.editButton}
                   onClick={() => setUsuarioEditando(u)}
+                  title="Editar"
+                  aria-label="Editar"
                 >
-                  Editar
+                  <Pencil size={16} />
                 </button>
                 <button
                   className={styles.deleteButton}
                   onClick={() => setUsuarioAEliminar(u)}
+                  title="Eliminar"
+                  aria-label="Eliminar"
                 >
-                  Eliminar
+                  <Trash2 size={16} />
                 </button>
               </td>
             </tr>

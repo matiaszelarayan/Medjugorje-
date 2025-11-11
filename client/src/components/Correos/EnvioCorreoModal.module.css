@@ -1,0 +1,160 @@
+.title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.55rem;
+  color: #1d3f72;
+}
+.subtitle {
+  font-size: 1rem;
+  color: #60708a;
+  margin-bottom: 1.2rem;
+}
+/* Bloque blanco resumen */
+.summaryCard {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 5px rgba(50,90,130,0.04);
+  padding: 1.1rem 1.1rem 1.1rem 1.1rem;
+  margin-bottom: 1.05rem;
+  border: 1px solid #e7edf5;
+}
+.summaryLabel {
+  display: block;
+  color: #888fa2;
+  font-size: 0.93rem;
+  margin-bottom: 0.1em;
+}
+.summaryValue {
+  color: #23406d;
+  font-size: 1.08em;
+  font-weight: 600;
+  display: block;
+}
+/* Tarjetas de cifras en línea */
+.infoRow {
+  margin: 0.3rem 0 1.05rem 0;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+.infoCard {
+  border-radius: 10px;
+  background: #f3f5fb;
+  flex: 1;
+  padding: 0.9rem 0.7rem 0.8rem 0.9rem;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.67rem;
+}
+.infoIcon {
+  font-size: 1.38rem;
+  display: flex;
+  align-items: center;
+}
+.infoValue {
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: #1f5176;
+}
+.infoLabel {
+  font-size: 0.89rem;
+  color: #7e92af;
+  font-weight: 500;
+}
+/* Cuadro azul informativo */
+.simulacionBox {
+  display: flex;
+  align-items: flex-start;
+  background: #e7f3fc;
+  color: #23588c;
+  font-size: 0.99rem;
+  border-radius: 7px;
+  padding: 0.85rem 1rem;
+  margin: 0.75rem 0 0.95rem 0;
+  border: 1px solid #b1d6f4;
+  gap: 0.6em;
+}
+.simulacionIcon {
+  font-weight: bold;
+  color: #398ad0;
+  margin-top: 1px;
+}
+.simulacionTitle {
+  font-weight: 600;
+  color: #2570ac;
+  margin-right: 0.4em;
+}
+.simulacionText {
+  color: #2b5385;
+}
+/* Filtro badge */
+.filtros {
+  margin-bottom: 1.2rem;
+  font-size: 0.96rem;
+  color: #199871;
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+}
+.newsletterBadge {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  background: linear-gradient(120deg,#d7f5ed 70%,#f3dfef 100%);
+  border-radius: 4px;
+  margin-right: 1px;
+  border: 1px solid #c4eee4;
+  vertical-align: middle;
+}
+/* Botones */
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.cancelBtn {
+  background: #e1e8ee;
+  color: #324164;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.cancelBtn:hover {
+  background: #c2ccda;
+}
+.sendBtn {
+  background: #44bb77;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.4rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  box-shadow: 0 2px 6px rgba(68,187,119,0.25);
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+}
+.sendBtn:hover {
+  background: #36a166;
+}
+/* Loader centrado (opcional, ya lo tienes definido) */
+.loader {
+  border: 2.6px solid #f3f3f3;
+  border-top: 2.6px solid #349e6f;
+  border-radius: 50%;
+  width: 17px;
+  height: 17px;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }

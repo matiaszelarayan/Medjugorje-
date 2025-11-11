@@ -15,3 +15,28 @@
 
 ### Impresión
 - Se mantuvieron los estilos de impresión en `app.css`, ocultando elementos no relevantes y optimizando la tabla para salida en papel.
+# Changelog
+
+## [Unreleased]
+
+### Added
+- Nuevo componente `InfoCard` para mostrar métricas con íconos y colores semánticos.
+- `summaryCard` y `simulacionBox` como patrones visuales reutilizables en modales.
+- `newsletterBadge` para indicar filtros activos en correos masivos.
+
+### Changed
+- Todos los modales migrados a `ModalBase` para unificar estructura y estilos:
+  - `ContactFormModal`
+  - `CreateUserModal`
+  - `EditUserModal`
+  - `GrupoFormModal`
+  - `NuevoCorreoModal`
+  - `EnvioCorreoModal`
+  - `ConfirmationModal`
+  - `ConfirmDeleteModal`
+- Estilos actualizados con tipografía jerarquizada, iconografía SVG y botones con sombra.
+- Reemplazo de `window.confirm` por `ConfirmDeleteModal` en `ContactosScreen`.
+
+### Fixed
+- Consistencia visual entre modo claro y modo oscuro en todos los modales.
+- Corrección de paddings y alineación de íconos en botones de acción.

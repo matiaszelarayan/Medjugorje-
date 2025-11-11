@@ -25,33 +25,62 @@
   text-align: left;
 }
 
+/* FOTO PERFIL */
 .adminAvatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
 }
-
 .noFoto {
   font-size: 0.875rem;
   color: #888;
 }
 
-.editButton {
-  background-color: var(--accent-color);
-  color: white;
+/* === BOTONES ACCION CON ICONO === */
+.editButton, .deleteButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.32rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 5px;
   border: none;
-  padding: 0.4rem 0.8rem;
-  border-radius: 4px;
+  font-size: 1rem;
   cursor: pointer;
-  font-size: 0.875rem;
-  margin-right: 0.5rem;
+  margin-right: 0.2rem;
+  outline: none;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.editButton svg, .deleteButton svg {
+  display: block;
+  margin: 0 auto;
 }
 
-.editButton:hover {
-  background-color: var(--primary-color);
+/* EDITAR */
+.editButton {
+  background-color: var(--accent-color, #199871);
+  color: #fff;
+}
+.editButton:hover,
+.editButton:focus-visible {
+  background-color: var(--primary-color, #136252);
+  box-shadow: 0 0 0 2px #e0f8ee;
 }
 
+/* ELIMINAR */
+.deleteButton {
+  background-color: #d9534f;
+  color: #fff;
+}
+.deleteButton:hover,
+.deleteButton:focus-visible {
+  background-color: #c9302c;
+  box-shadow: 0 0 0 2px #f8dfdf;
+}
+
+/* BARRAS Y BOTONES EXTRA */
 .botonesContainer {
   display: flex;
   gap: 1rem;
@@ -60,7 +89,7 @@
 }
 
 .createButton {
-  background-color: var(--accent-color);
+  background-color: var(--accent-color, #199871);
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -68,19 +97,17 @@
   font-size: 0.875rem;
   cursor: pointer;
   margin-bottom: 1rem;
+  transition: background 0.23s;
 }
-
 .createButton:hover {
-  background-color: var(--primary-color);
+  background-color: var(--primary-color, #136252);
 }
-
 .filtrosContainer {
   display: flex;
   gap: 1rem;
   margin-bottom: 1rem;
   align-items: center;
 }
-
 .filtrosContainer select,
 .filtrosContainer input {
   padding: 0.5rem;
@@ -100,6 +127,7 @@
   text-align: center;
 }
 
+/* Paginación */
 .paginacion {
   display: flex;
   justify-content: center;
@@ -107,89 +135,72 @@
   gap: 1rem;
   margin-top: 1.5rem;
 }
-
 .paginacion button {
   padding: 0.4rem 0.8rem;
   font-size: 0.875rem;
   border: none;
   border-radius: 4px;
-  background-color: var(--accent-color);
+  background-color: var(--accent-color, #199871);
   color: white;
   cursor: pointer;
 }
-
 .paginacion button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
 }
 
-.deleteButton {
-  background-color: #d9534f;
-  color: white;
-  border: none;
-  padding: 0.4rem 0.8rem;
-  border-radius: 4px;
-  font-size: 0.875rem;
-  cursor: pointer;
-}
+/* ============================= */
+/*         🌙 MODO OSCURO         */
+/* ============================= */
 
-.deleteButton:hover {
-  background-color: #c9302c;
-}
-
-/* 🌙 MODO OSCURO */
 .modoOscuro .adminContainer {
   background-color: #1e1e1e;
   color: #f0f0f0;
   box-shadow: 0 4px 12px rgba(255, 255, 255, 0.05);
 }
-
 .modoOscuro .title {
   color: #f0f0f0;
 }
-
 .modoOscuro .adminTable th,
 .modoOscuro .adminTable td {
   border-bottom: 1px solid #444;
   color: #ddd;
 }
-
 .modoOscuro .noFoto {
   color: #aaa;
 }
-
 .modoOscuro .filtrosContainer select,
 .modoOscuro .filtrosContainer input {
   background-color: #2a2a2a;
   color: #f0f0f0;
   border: 1px solid #555;
 }
-
 .modoOscuro .successAlert {
   background-color: #2d4f2d;
   color: #c3e6cb;
   border: 1px solid #3c6e3c;
 }
-
 .modoOscuro .paginacion button {
   background-color: #444;
   color: #f0f0f0;
 }
-
 .modoOscuro .paginacion button:disabled {
   background-color: #666;
   color: #ccc;
 }
-
+.modoOscuro .editButton,
+.modoOscuro .createButton {
+  background-color: #444 !important;
+  color: #f0f0f0 !important;
+}
 .modoOscuro .editButton:hover,
 .modoOscuro .createButton:hover {
-  background-color: #666;
+  background-color: #666 !important;
 }
-
 .modoOscuro .deleteButton {
   background-color: #a94442;
+  color: #fff;
 }
-
 .modoOscuro .deleteButton:hover {
   background-color: #922d2b;
 }

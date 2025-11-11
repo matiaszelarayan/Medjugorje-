@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ModalBase from "../common/ModalBase/ModalBase"; // 👈 importa la base
 import styles from "./CreateUserModal.module.css";
 
 const CreateUserModal = ({ onClose, onCreate }) => {
@@ -50,47 +51,45 @@ const CreateUserModal = ({ onClose, onCreate }) => {
   };
 
   return (
-    <div className={styles.modalOverlay}>
-      <div className={styles.modalBox}>
-        <h3>Crear Nuevo Usuario</h3>
+    <ModalBase onClose={onClose}>
+      <h3 className={styles.title}>Crear Nuevo Usuario</h3>
 
-        <label>Nombre:</label>
-        <input value={nombre} onChange={(e) => setNombre(e.target.value)} />
-        {errors.nombre && <p className={styles.modalError}>{errors.nombre}</p>}
+      <label>Nombre:</label>
+      <input value={nombre} onChange={(e) => setNombre(e.target.value)} />
+      {errors.nombre && <p className={styles.modalError}>{errors.nombre}</p>}
 
-        <label>Apellido:</label>
-        <input value={apellido} onChange={(e) => setApellido(e.target.value)} />
-        {errors.apellido && <p className={styles.modalError}>{errors.apellido}</p>}
+      <label>Apellido:</label>
+      <input value={apellido} onChange={(e) => setApellido(e.target.value)} />
+      {errors.apellido && <p className={styles.modalError}>{errors.apellido}</p>}
 
-        <label>Email:</label>
-        <input value={email} onChange={(e) => setEmail(e.target.value)} />
-        {errors.email && <p className={styles.modalError}>{errors.email}</p>}
+      <label>Email:</label>
+      <input value={email} onChange={(e) => setEmail(e.target.value)} />
+      {errors.email && <p className={styles.modalError}>{errors.email}</p>}
 
-        <label>Rol:</label>
-        <select value={role} onChange={(e) => setRole(e.target.value)}>
-          <option value="Admin">Admin</option>
-          <option value="Colaborador">Colaborador</option>
-        </select>
-        {errors.role && <p className={styles.modalError}>{errors.role}</p>}
+      <label>Rol:</label>
+      <select value={role} onChange={(e) => setRole(e.target.value)}>
+        <option value="Admin">Admin</option>
+        <option value="Colaborador">Colaborador</option>
+      </select>
+      {errors.role && <p className={styles.modalError}>{errors.role}</p>}
 
-        <label>Contraseña inicial:</label>
-        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        {errors.password && <p className={styles.modalError}>{errors.password}</p>}
+      <label>Contraseña inicial:</label>
+      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+      {errors.password && <p className={styles.modalError}>{errors.password}</p>}
 
-        <label>Foto de perfil:</label>
-        <input type="file" accept=".jpg,.png" onChange={handleImageChange} />
-        {fotoPreview && (
-          <div className={styles.modalImagePreview}>
-            <img src={fotoPreview} alt="Preview" />
-          </div>
-        )}
-
-        <div className={styles.modalActions}>
-          <button onClick={handleCreate}>Crear</button>
-          <button onClick={onClose}>Cancelar</button>
+      <label>Foto de perfil:</label>
+      <input type="file" accept=".jpg,.png" onChange={handleImageChange} />
+      {fotoPreview && (
+        <div className={styles.modalImagePreview}>
+          <img src={fotoPreview} alt="Preview" />
         </div>
+      )}
+
+      <div className={styles.modalActions}>
+        <button onClick={handleCreate} className={styles.createBtn}>Crear</button>
+        <button onClick={onClose} className={styles.cancelBtn}>Cancelar</button>
       </div>
-    </div>
+    </ModalBase>
   );
 };
 

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import styles from "./ContactosScreen.module.css";
 import ContactFormModal from "../ContactFormModal/ContactFormModal";
 import PrintButton from "../ContactFormModal/PrintButton";
+import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
+import { Pencil, Trash2 } from "lucide-react";
 
 const initialContacts = [
   {
@@ -134,6 +136,7 @@ const ContactosScreen = ({ user }) => {
     provincia: "",
     texto: "",
   });
+  const [deleteTarget, setDeleteTarget] = useState(null);
 
   const filteredContacts = contacts.filter((c) => {
     return (
@@ -160,11 +163,18 @@ const ContactosScreen = ({ user }) => {
     });
   };
 
-  const handleDelete = (id) => {
-    if (window.confirm("¿Estás seguro de eliminar este contacto?")) {
-      setContacts((prev) => prev.filter((c) => c.id !== id));
-    }
+  // abrir modal de confirmación para borrar
+  const openDeleteModal = (contact) => {
+    setDeleteTarget(contact);
   };
+
+  // confirma y borra el contacto seleccionado
+  const confirmDelete = (id) => {
+    setContacts((prev) => prev.filter((c) => c.id !== id));
+    setDeleteTarget(null);
+  };
+
+  const closeDeleteModal = () => setDeleteTarget(null);
 
   const openNewContact = () => {
     setSelectedContact(null);
@@ -252,15 +262,18 @@ const ContactosScreen = ({ user }) => {
                     <button
                       onClick={() => openEditContact(contact)}
                       className={styles.editBtn}
+                      title="Editar"
                     >
-                      ✏️
+                      <Pencil size={16} />
                     </button>
+
                     {user.role === "Admin" && (
                       <button
-                        onClick={() => handleDelete(contact.id)}
+                        onClick={() => openDeleteModal(contact)}
                         className={styles.deleteBtn}
+                        title="Eliminar"
                       >
-                        🗑️
+                        <Trash2 size={16} />
                       </button>
                     )}
                   </td>
@@ -289,15 +302,18 @@ const ContactosScreen = ({ user }) => {
                   <button
                     onClick={() => openEditContact(contact)}
                     className={styles.editBtn}
+                    title="Editar"
                   >
-                    ✏️
+                    <Pencil size={16} />
                   </button>
+
                   {user.role === "Admin" && (
                     <button
-                      onClick={() => handleDelete(contact.id)}
+                      onClick={() => openDeleteModal(contact)}
                       className={styles.deleteBtn}
+                      title="Eliminar"
                     >
-                      🗑️
+                      <Trash2 size={16} />
                     </button>
                   )}
                 </div>
@@ -326,6 +342,14 @@ const ContactosScreen = ({ user }) => {
             onClose={() => setShowModal(false)}
             onSave={handleSave}
             grupos={grupos}
+          />
+        )}
+
+        {deleteTarget && (
+          <ConfirmDeleteModal
+            user={deleteTarget}
+            onConfirm={confirmDelete}
+            onCancel={closeDeleteModal}
           />
         )}
       </div>
