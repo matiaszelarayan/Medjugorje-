@@ -3,10 +3,38 @@
 Este documento registra los cambios significativos realizados en el frontend de la plataforma, desarrollado con React + Vite.
 
 Metodología: Basado en el estándar Keep a Changelog  
-Última Actualización: 2025-11-14  
+Última Actualización: 2025-11-14  20:00 horas
 Tecnología: React, Vite, CSS Modules, Django (Integración Backend)
 
 ---
+## [0.2.1] - 2025-11-14
+
+### 🎉 Added (Nuevas Funcionalidades)
+
+- **Módulo de Formularios Dinámicos**  
+  - Nuevo módulo completo `FormularioBuilderScreen` para crear, editar y previsualizar formularios personalizados de contacto y newsletter.  
+  - Campos base sugeridos (Nombre, Apellido, Fecha de Nacimiento, Email, País, Provincia/Estado, Localidad, "Acepta newsletter"), editables y extensibles por el usuario administrador/colaborador.  
+  - Funcionalidad de agregar y eliminar campos, y definición del orden y requisitos.  
+  - Vista previa embebida del formulario construido antes de publicación.  
+  - Generación automática de slug y enlace público para compartir el formulario.  
+  - Restricción de acceso al "constructor de formularios" por perfil (solo roles Admin y Colaborador).  
+  - Adaptación de permisos y acceso desde el Sidebar (nueva opción “Formularios”).  
+
+### 📝 Changed (Modificaciones y Reestructuración)
+
+- **Iconografía Sidebar Diferenciada**  
+  - Ícono de sobre (Mail) en "Correos".  
+  - Ícono de formulario (FileText) en "Formularios".  
+  - Ícono de calendario en "Eventos".  
+  - Mejora la identificación visual y usabilidad del menú lateral.  
+
+- **Estilos de Inputs Uniformes**  
+  - Extensión del CSS modular para unificar estilo de campos tipo texto, número, email y fecha dentro de los nuevos módulos de formularios.  
+
+### 🐛 Fixed
+
+- Manejo de props `user` indefinidas en componentes `Sidebar` y `Navbar` para evitar errores de ejecución al renderizar antes del login.  
+
 
 ## [0.2.0] - 2025-11-14
 

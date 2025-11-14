@@ -12,6 +12,8 @@ import AdminPerfiles from "./components/AdminPerfiles/AdminPerfiles";
 import GruposScreen from "./components/GruposOracion/GruposScreen";
 import CorreosScreen from "./components/Correos/CorreosScreen";
 import EventosScreen from "./components/Eventos/EventosScreen";
+import FormularioBuilderScreen from "./components/Formularios/FormularioBuilderScreen";
+
 
 const USERS = [
   {
@@ -68,26 +70,28 @@ export default function App() {
     setScreen("dashboard");
   };
 
-  const renderScreen = useCallback(() => {
-    switch (currentScreen) {
-      case "dashboard":
-        return <Dashboard user={currentUser} setScreen={setScreen} />;
-      case "contactos":
-        return <ContactosScreen user={currentUser} />;
-      case "grupos-oracion":
-        return <GruposScreen user={currentUser} />;
-      case "agenda":
-        return <EventosScreen user={currentUser} />;
-      case "correos":
-        return <CorreosScreen user={currentUser} />;
-      case "perfil":
-        return <PerfilScreen user={currentUser} />;
-      case "admin-perfiles":
-        return <AdminPerfiles />;
-      default:
-        return <Dashboard user={currentUser} />;
-    }
-  }, [currentScreen, currentUser]);
+const renderScreen = useCallback(() => {
+  switch (currentScreen) {
+    case "dashboard":
+      return <Dashboard user={currentUser} setScreen={setScreen} />;
+    case "contactos":
+      return <ContactosScreen user={currentUser} />;
+    case "grupos-oracion":
+      return <GruposScreen user={currentUser} />;
+    case "agenda":
+      return <EventosScreen user={currentUser} />;
+    case "correos":
+      return <CorreosScreen user={currentUser} />;
+    case "perfil":
+      return <PerfilScreen user={currentUser} />;
+    case "admin-perfiles":
+      return <AdminPerfiles />;
+    case "formularios":
+      return <FormularioBuilderScreen user={currentUser} />;
+    default:
+      return <Dashboard user={currentUser} />;
+  }
+}, [currentScreen, currentUser]);
 
   if (!isAuthenticated) {
     return <Login onLogin={handleLogin} />;

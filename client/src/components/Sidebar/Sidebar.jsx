@@ -1,14 +1,11 @@
 import React from "react";
 import styles from "./Sidebar.module.css";
-import {
-  Home,
-  Users,
-  Calendar,
-  HeartHandshake,
-  UserCog,
-} from "lucide-react";
+import { Home, Users, Calendar, HeartHandshake, UserCog, Mail, FileText } from "lucide-react";
 
 const Sidebar = ({ active, setScreen, user }) => {
+  // Solución defensiva contra user undefined/null:
+  if (!user) return null; // o puedes usar: return <></>; o un loader si prefieres
+
   return (
     <aside className={`${styles.sidebar} sidebarGlobal`}>
       <div className={styles.sidebarTitle}>Menú Principal</div>
@@ -56,8 +53,21 @@ const Sidebar = ({ active, setScreen, user }) => {
           onClick={() => setScreen("correos")}
           title="Correos masivos y newsletter"
         >
-          <Calendar size={20} className={styles.sidebarIcon} />
+          <Mail size={20} className={styles.sidebarIcon} />
           <span>Correos</span>
+        </div>
+      )}
+
+      {(user.role === "Admin" || user.role === "Colaborador") && (
+        <div
+          className={`${styles.sidebarItem} ${
+            active === "formularios" ? styles.active : ""
+          }`}
+          onClick={() => setScreen("formularios")}
+          title="Crear y administrar formularios"
+        >
+          <FileText size={20} className={styles.sidebarIcon} />
+          <span>Formularios</span>
         </div>
       )}
 
