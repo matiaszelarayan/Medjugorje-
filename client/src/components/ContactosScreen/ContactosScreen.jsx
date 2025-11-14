@@ -138,22 +138,32 @@ const ContactosScreen = ({ user }) => {
   });
   const [deleteTarget, setDeleteTarget] = useState(null);
 
+  // 1. Filtrar
   const filteredContacts = contacts.filter((c) => {
     return (
       (!filters.provincia || c.provincia === filters.provincia) &&
       (!filters.texto ||
-        `${c.nombre} ${c.apellido} ${c.email}`
-          .toLowerCase()
-          .includes(filters.texto.toLowerCase()))
+        `${c.nombre} ${c.apellido} ${c.email}`.toLowerCase().includes(filters.texto.toLowerCase()))
     );
   });
 
+  // 2. Ordenar filtrados: Apellido, luego Nombre
+  const sortedFilteredContacts = filteredContacts.slice().sort((a, b) => {
+    const ap1 = (a.apellido || "").toLowerCase();
+    const ap2 = (b.apellido || "").toLowerCase();
+    if (ap1 < ap2) return -1;
+    if (ap1 > ap2) return 1;
+    return (a.nombre || "").toLowerCase().localeCompare((b.nombre || "").toLowerCase());
+  });
+
+  // 3. Paginación sobre la lista ordenada
   const contactsPerPage = 5;
   const indexOfLast = currentPage * contactsPerPage;
   const indexOfFirst = indexOfLast - contactsPerPage;
-  const currentContacts = filteredContacts.slice(indexOfFirst, indexOfLast);
-  const totalPages = Math.ceil(filteredContacts.length / contactsPerPage);
+  const currentContacts = sortedFilteredContacts.slice(indexOfFirst, indexOfLast);
+  const totalPages = Math.ceil(sortedFilteredContacts.length / contactsPerPage);
 
+  // HANDLERS (sin cambios)
   const handleSave = (newContact) => {
     setContacts((prev) => {
       const exists = prev.find((c) => c.id === newContact.id);
@@ -162,30 +172,22 @@ const ContactosScreen = ({ user }) => {
         : [...prev, newContact];
     });
   };
-
-  // abrir modal de confirmación para borrar
-  const openDeleteModal = (contact) => {
-    setDeleteTarget(contact);
-  };
-
-  // confirma y borra el contacto seleccionado
+  const openDeleteModal = (contact) => setDeleteTarget(contact);
   const confirmDelete = (id) => {
     setContacts((prev) => prev.filter((c) => c.id !== id));
     setDeleteTarget(null);
   };
-
   const closeDeleteModal = () => setDeleteTarget(null);
-
   const openNewContact = () => {
     setSelectedContact(null);
     setShowModal(true);
   };
-
   const openEditContact = (contact) => {
     setSelectedContact(contact);
     setShowModal(true);
   };
 
+  // RENDER
   return (
     <div className={`${styles.screenWrapper} screenWrapperGlobal`}>
       <div className={styles.contactosContainer}>
@@ -266,7 +268,6 @@ const ContactosScreen = ({ user }) => {
                     >
                       <Pencil size={16} />
                     </button>
-
                     {user.role === "Admin" && (
                       <button
                         onClick={() => openDeleteModal(contact)}
@@ -306,7 +307,6 @@ const ContactosScreen = ({ user }) => {
                   >
                     <Pencil size={16} />
                   </button>
-
                   {user.role === "Admin" && (
                     <button
                       onClick={() => openDeleteModal(contact)}

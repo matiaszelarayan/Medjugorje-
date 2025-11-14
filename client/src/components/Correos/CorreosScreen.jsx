@@ -16,6 +16,9 @@ const CorreosScreen = ({ user }) => {
       asunto: "Correo de prueba",
       contenido: "Aquí va el cuerpo del correo",
       soloNewsletter: true,
+      provincia: "",
+      ciudad: "",
+      grupo: "todos",
     },
     {
       id: 2,
@@ -26,9 +29,13 @@ const CorreosScreen = ({ user }) => {
       asunto: "Viaje a Medjugorje",
       contenido: "Detalles del viaje",
       soloNewsletter: false,
+      provincia: "",
+      ciudad: "",
+      grupo: "todos",
     },
   ]);
   const [modalAbierto, setModalAbierto] = useState(false);
+  const [correoEditando, setCorreoEditando] = useState(null);
   const [modalEnvioAbierto, setModalEnvioAbierto] = useState(false);
   const [correoSeleccionado, setCorreoSeleccionado] = useState(null);
   const [correoAEliminar, setCorreoAEliminar] = useState(null);
@@ -36,24 +43,44 @@ const CorreosScreen = ({ user }) => {
   const puedeEnviar = user.role === "Admin";
   const puedeEditar = user.role === "Admin" || user.role === "Colaborador";
 
+  // Ordenar por título
+  const sortedCorreos = correos.slice().sort((a, b) =>
+    (a.titulo || "").toLowerCase().localeCompare((b.titulo || "").toLowerCase())
+  );
+
+  // Guardar correo editado o nuevo
   const handleGuardarCorreo = (nuevoCorreo) => {
-    const nuevo = {
-      id: correos.length + 1,
-      titulo: nuevoCorreo.asunto,
-      estado: "Borrador",
-      destinatarios: nuevoCorreo.destinatarios || 3,
-      fecha: new Date().toLocaleString("es-AR", {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      asunto: nuevoCorreo.asunto,
-      contenido: nuevoCorreo.contenido,
-      soloNewsletter: nuevoCorreo.soloNewsletter,
-    };
-    setCorreos([nuevo, ...correos]);
+    if (correoEditando) {
+      setCorreos(prev =>
+        prev.map(c => c.id === correoEditando.id
+          ? { ...c, ...nuevoCorreo, id: correoEditando.id, titulo: nuevoCorreo.asunto }
+          : c
+        )
+      );
+    } else {
+      const nuevo = {
+        id: correos.length ? Math.max(...correos.map(c => c.id)) + 1 : 1,
+        titulo: nuevoCorreo.asunto,
+        estado: "Borrador",
+        destinatarios: nuevoCorreo.destinatarios || 3,
+        fecha: new Date().toLocaleString("es-AR", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        asunto: nuevoCorreo.asunto,
+        contenido: nuevoCorreo.contenido,
+        soloNewsletter: nuevoCorreo.soloNewsletter,
+        provincia: nuevoCorreo.provincia,
+        ciudad: nuevoCorreo.ciudad,
+        grupo: nuevoCorreo.grupo,
+      };
+      setCorreos([nuevo, ...correos]);
+    }
+    setCorreoEditando(null);
+    setModalAbierto(false);
   };
 
   const handleAbrirEnvio = (correo) => {
@@ -68,6 +95,7 @@ const CorreosScreen = ({ user }) => {
       )
     );
     setModalEnvioAbierto(false);
+    setCorreoSeleccionado(null);
   };
 
   // ---- ELIMINACIÓN ----
@@ -89,16 +117,14 @@ const CorreosScreen = ({ user }) => {
         <p className={styles.correosSubtitle}>
           Gestiona y envía correos masivos
         </p>
-
         <div className={styles.actionsBar}>
           <button
-            onClick={() => setModalAbierto(true)}
+            onClick={() => { setCorreoEditando(null); setModalAbierto(true); }}
             className="actionButtonGlobal"
           >
             ➕ Nuevo Correo
           </button>
         </div>
-
         <table className={styles.correosTable}>
           <thead>
             <tr>
@@ -110,7 +136,7 @@ const CorreosScreen = ({ user }) => {
             </tr>
           </thead>
           <tbody>
-            {correos.map((correo) => (
+            {sortedCorreos.map((correo) => (
               <tr key={correo.id}>
                 <td>{correo.titulo}</td>
                 <td>{correo.estado}</td>
@@ -118,7 +144,14 @@ const CorreosScreen = ({ user }) => {
                 <td>{correo.fecha}</td>
                 <td>
                   {puedeEditar && (
-                    <button className={styles.editBtn}>
+                    <button
+                      className={styles.editBtn}
+                      onClick={() => {
+                        setCorreoEditando(correo);
+                        setModalAbierto(true);
+                      }}
+                      title="Editar"
+                    >
                       <Pencil size={16} />
                     </button>
                   )}
@@ -141,23 +174,21 @@ const CorreosScreen = ({ user }) => {
             ))}
           </tbody>
         </table>
-
         {modalAbierto && (
           <NuevoCorreoModal
-            onClose={() => setModalAbierto(false)}
+            correo={correoEditando}
+            onClose={() => { setModalAbierto(false); setCorreoEditando(null); }}
             onSave={handleGuardarCorreo}
           />
         )}
-
         {modalEnvioAbierto && correoSeleccionado && (
           <EnvioCorreoModal
             correo={correoSeleccionado}
             destinatarios={correoSeleccionado.destinatarios}
-            onClose={() => setModalEnvioAbierto(false)}
+            onClose={() => { setModalEnvioAbierto(false); setCorreoSeleccionado(null); }}
             onSend={handleConfirmarEnvio}
           />
         )}
-
         {correoAEliminar && (
           <ConfirmDeleteModal
             user={correoAEliminar}

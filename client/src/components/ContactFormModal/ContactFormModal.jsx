@@ -1,6 +1,9 @@
-import React, { useState } from "react";
-import ModalBase from "../common/ModalBase/ModalBase"; // 👈 tu base global
+import React, { useState, useEffect } from "react";
+import ModalBase from "../common/ModalBase/ModalBase";
 import styles from "./ContactFormModal.module.css";
+import { useGeoArgentina } from "../../hooks/useGeoArgentina";
+
+const API_COUNTRIES = "https://restcountries.com/v3.1/all?fields=name";
 
 const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
   const [formData, setFormData] = useState({
@@ -8,7 +11,7 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
     apellido: contact?.apellido || "",
     email: contact?.email || "",
     sexo: contact?.sexo || "",
-    pais: contact?.pais || "",
+    pais: contact?.pais || "Argentina",
     provincia: contact?.provincia || "",
     ciudad: contact?.ciudad || "",
     celular: contact?.celular || "",
@@ -19,12 +22,60 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
     grupo_oracion: contact?.grupo_oracion || "",
   });
 
+  // --- Países ---
+  const [countries, setCountries] = useState([]);
+  const [loadingCountries, setLoadingCountries] = useState(true);
+  const [errorCountries, setErrorCountries] = useState(null);
+
+  useEffect(() => {
+    fetch(API_COUNTRIES)
+      .then((res) => res.json())
+      .then((data) => {
+        let countryList = data.map((c) => c.name.common).filter(Boolean);
+        countryList = [
+          "Argentina",
+          ...countryList.filter((p) => p !== "Argentina").sort((a, b) => a.localeCompare(b)),
+        ];
+        setCountries(countryList);
+        setLoadingCountries(false);
+      })
+      .catch(() => {
+        setErrorCountries("Error cargando países");
+        setLoadingCountries(false);
+      });
+  }, []);
+
+  // --- Hook provincias/localidades centralizado ---
+  const {
+    provincias,
+    localidades,
+    loadingProv,
+    loadingLoc,
+    errorProv,
+    errorLoc,
+  } = useGeoArgentina(formData.provincia);
+
   const isEdit = !!contact;
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     const val = type === "checkbox" ? checked : value;
-    setFormData((prev) => ({ ...prev, [name]: val }));
+    if (name === "pais") {
+      setFormData((prev) => ({
+        ...prev,
+        pais: val,
+        provincia: "",
+        ciudad: "",
+      }));
+    } else if (name === "provincia") {
+      setFormData((prev) => ({
+        ...prev,
+        provincia: value,
+        ciudad: "",
+      }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: val }));
+    }
   };
 
   const handleSubmit = (e) => {
@@ -41,9 +92,8 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
       <h2 className={styles.title}>
         {isEdit ? "Editar Contacto" : "Crear Nuevo Contacto"}
       </h2>
-
       <form onSubmit={handleSubmit}>
-        {/* Campos obligatorios */}
+        {/* Datos personales primero */}
         <div className={styles.formGroup}>
           <label className={styles.label}>Nombre</label>
           <input
@@ -55,7 +105,6 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
             className={styles.input}
           />
         </div>
-
         <div className={styles.formGroup}>
           <label className={styles.label}>Apellido</label>
           <input
@@ -67,7 +116,6 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
             className={styles.input}
           />
         </div>
-
         <div className={styles.formGroup}>
           <label className={styles.label}>Email</label>
           <input
@@ -79,7 +127,6 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
             className={styles.input}
           />
         </div>
-
         <div className={styles.formGroup}>
           <label className={styles.label}>Sexo</label>
           <select
@@ -95,46 +142,119 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
             <option value="Otro">Otro</option>
           </select>
         </div>
+        <hr className={styles.separator} />
 
         <div className={styles.formGroup}>
           <label className={styles.label}>País</label>
-          <input
-            type="text"
-            name="pais"
-            value={formData.pais}
-            onChange={handleChange}
-            required
-            className={styles.input}
-          />
+          {loadingCountries ? (
+            <select className={styles.select} disabled>
+              <option>Cargando países...</option>
+            </select>
+          ) : errorCountries ? (
+            <select className={styles.select} disabled>
+              <option>{errorCountries}</option>
+            </select>
+          ) : (
+            <select
+              name="pais"
+              value={formData.pais}
+              onChange={handleChange}
+              required
+              className={styles.select}
+            >
+              <option value="">Seleccione país...</option>
+              {countries.map((p) => (
+                <option key={p} value={p}>{p}</option>
+              ))}
+            </select>
+          )}
         </div>
 
-        <div className={styles.formGroup}>
-          <label className={styles.label}>Provincia</label>
-          <input
-            type="text"
-            name="provincia"
-            value={formData.provincia}
-            onChange={handleChange}
-            required
-            className={styles.input}
-          />
-        </div>
+        {/* Provincias y localidades SOLO si país Argentina */}
+        {formData.pais === "Argentina" ? (
+          <>
+            <div className={styles.formGroup}>
+              <label className={styles.label}>Provincia</label>
+              {loadingProv ? (
+                <select className={styles.select} disabled>
+                  <option>Cargando provincias...</option>
+                </select>
+              ) : errorProv ? (
+                <select className={styles.select} disabled>
+                  <option>{errorProv}</option>
+                </select>
+              ) : (
+                <select
+                  name="provincia"
+                  value={formData.provincia}
+                  onChange={handleChange}
+                  required
+                  className={styles.select}
+                >
+                  <option value="">Seleccione provincia...</option>
+                  {provincias.map((p) => (
+                    <option key={p.id} value={p.nombre}>{p.nombre}</option>
+                  ))}
+                </select>
+              )}
+            </div>
+            <div className={styles.formGroup}>
+              <label className={styles.label}>Ciudad / Localidad</label>
+              {formData.provincia && loadingLoc ? (
+                <select className={styles.select} disabled>
+                  <option>Cargando localidades...</option>
+                </select>
+              ) : errorLoc ? (
+                <select className={styles.select} disabled>
+                  <option>{errorLoc}</option>
+                </select>
+              ) : (
+                <select
+                  name="ciudad"
+                  value={formData.ciudad}
+                  onChange={handleChange}
+                  required
+                  className={styles.select}
+                  disabled={!formData.provincia}
+                >
+                  <option value="">Seleccione localidad...</option>
+                  {localidades.map((l) => (
+                    <option key={l.id} value={l.nombre}>{l.nombre}</option>
+                  ))}
+                </select>
+              )}
+            </div>
+          </>
+        ) : (
+          <>
+            <div className={styles.formGroup}>
+              <label className={styles.label}>Provincia/Estado</label>
+              <input
+                type="text"
+                name="provincia"
+                value={formData.provincia}
+                onChange={handleChange}
+                required
+                className={styles.input}
+                placeholder="Ingrese provincia o estado"
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label className={styles.label}>Ciudad / Localidad</label>
+              <input
+                type="text"
+                name="ciudad"
+                value={formData.ciudad}
+                onChange={handleChange}
+                required
+                className={styles.input}
+                placeholder="Ingrese ciudad/localidad"
+              />
+            </div>
+          </>
+        )}
 
-        <div className={styles.formGroup}>
-          <label className={styles.label}>Ciudad / Localidad</label>
-          <input
-            type="text"
-            name="ciudad"
-            value={formData.ciudad}
-            onChange={handleChange}
-            required
-            className={styles.input}
-          />
-        </div>
-
-        {/* Campos opcionales */}
-        <hr className={styles.separator} />
-
+        {/* ... El resto de tus campos opcionales igual ... */}
         <div className={styles.formGroup}>
           <label className={styles.label}>Celular</label>
           <input
@@ -145,7 +265,6 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
             className={styles.input}
           />
         </div>
-
         <div className={styles.formGroup}>
           <label className={styles.label}>Instagram</label>
           <input
@@ -156,7 +275,6 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
             className={styles.input}
           />
         </div>
-
         <div className={styles.formGroup}>
           <label className={styles.label}>Parroquia</label>
           <input
@@ -167,7 +285,6 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
             className={styles.input}
           />
         </div>
-
         <div className={styles.formGroupCheckbox}>
           <label className={styles.label}>
             ¿Participa en un grupo de oración?
@@ -180,7 +297,6 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
             className={styles.checkbox}
           />
         </div>
-
         <div className={styles.formGroup}>
           <label className={styles.label}>Fecha de Nacimiento</label>
           <input
@@ -191,7 +307,6 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
             className={styles.input}
           />
         </div>
-
         <div className={styles.formGroup}>
           <label className={styles.label}>Grupo de Oración</label>
           <select
@@ -208,17 +323,11 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
             ))}
           </select>
           <small className={styles.helpText}>
-            Si el grupo aún no está disponible, dejá este campo vacío. El
-            administrador lo cargará y podrás actualizarlo luego.
+            Si el grupo aún no está disponible, dejá este campo vacío. El administrador lo cargará y podrás actualizarlo luego.
           </small>
         </div>
-
         <div className={styles.actions}>
-          <button
-            type="button"
-            onClick={onClose}
-            className={styles.cancelBtn}
-          >
+          <button type="button" onClick={onClose} className={styles.cancelBtn}>
             Cancelar
           </button>
           <button type="submit" className={styles.submitBtn}>

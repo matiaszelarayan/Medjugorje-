@@ -4,7 +4,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0,0,0,0.6); /* un poco más oscuro */
+  background-color: rgba(0,0,0,0.65); /* más oscuro */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -16,11 +16,11 @@
   background: #fff;
   border-radius: 8px;
   padding: 2rem;
-  max-width: 700px; /* un poco más ancho */
+  max-width: 700px; /* ancho cómodo */
   width: 95%;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.22);
   animation: fadeIn 0.3s ease;
 }
 
@@ -34,12 +34,14 @@
   font-weight: 700;
   margin-bottom: 1rem;
   color: var(--primary-color);
+  text-align: center;
 }
 
 .subtitle {
   font-size: 0.95rem;
   color: var(--text-muted);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.3rem;
+  text-align: center;
 }
 
 .formGroup {
@@ -57,27 +59,33 @@
 .textarea,
 .select {
   width: 100%;
-  padding: 0.6rem 0.8rem; /* más aire a izquierda y derecha */
+  padding: 0.6rem 0.8rem;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 0.95rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   box-sizing: border-box;
+  background: #fafbfc;
 }
 
 .input:focus,
 .textarea:focus,
 .select:focus {
   border-color: var(--accent-color);
-  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.18);
   outline: none;
 }
 
-/* 🔹 Checkbox alineado */
+.select[disabled] {
+  background: #eee !important;
+  color: #aaa;
+  cursor: not-allowed;
+}
+
 .formGroupCheckbox {
   display: flex;
   align-items: center;
-  gap: 0.5rem; /* espacio entre checkbox y texto */
+  gap: 0.5rem;
   margin: 1rem 0;
 }
 
@@ -85,13 +93,43 @@
   width: 16px;
   height: 16px;
   cursor: pointer;
-  accent-color: var(--accent-color); /* color del check */
+  accent-color: var(--accent-color);
+}
+
+.exportWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.4rem;
 }
 
 .destinatarios {
   font-weight: 600;
   margin-top: 1rem;
   color: var(--primary-color);
+  font-size: 1.05rem;
+}
+
+.exportBtn {
+  background: var(--accent-color, #1c8962);
+  color: white;
+  padding: 0.49rem 1.18rem;
+  border-radius: 4px;
+  font-weight: 540;
+  border: none;
+  font-size: 0.97rem;
+  cursor: pointer;
+  transition: background 0.16s;
+}
+
+.exportBtn[disabled] {
+  background: #b3b3b3 !important;
+  color: #eee;
+  cursor: not-allowed;
+}
+
+.exportBtn:hover:not([disabled]) {
+  background: var(--accent-hover, #157052);
 }
 
 .actions {
@@ -127,4 +165,12 @@
 
 .submitBtn:hover {
   background: var(--accent-hover);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .modal { padding: 1rem; max-width: 98vw; }
+  .title { font-size: 1.18rem; }
+  .actions { flex-direction: column; gap: 0.7rem; }
+  .exportWrapper { flex-direction: column; gap: 0.7rem;}
 }

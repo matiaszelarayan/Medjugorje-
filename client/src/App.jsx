@@ -11,6 +11,7 @@ import MainLayout from "./components/MainLayout/MainLayout";
 import AdminPerfiles from "./components/AdminPerfiles/AdminPerfiles";
 import GruposScreen from "./components/GruposOracion/GruposScreen";
 import CorreosScreen from "./components/Correos/CorreosScreen";
+import EventosScreen from "./components/Eventos/EventosScreen";
 
 const USERS = [
   {
@@ -68,35 +69,15 @@ export default function App() {
   };
 
   const renderScreen = useCallback(() => {
-    const titleStyle = {
-      fontSize: "2rem",
-      fontWeight: "800",
-      color: "var(--primary-color)",
-    };
-
-    const subtitleStyle = {
-      marginTop: "0.5rem",
-      fontSize: "1.125rem",
-      color: "var(--text-muted)",
-    };
-
     switch (currentScreen) {
       case "dashboard":
-        return <Dashboard user={currentUser} />;
+        return <Dashboard user={currentUser} setScreen={setScreen} />;
       case "contactos":
         return <ContactosScreen user={currentUser} />;
       case "grupos-oracion":
         return <GruposScreen user={currentUser} />;
-
       case "agenda":
-        return (
-          <div>
-            <h1 style={titleStyle}>Agenda de Actividades (RF2)</h1>
-            <p style={subtitleStyle}>
-              Área de planificación y seguimiento de eventos. ¡En desarrollo!
-            </p>
-          </div>
-        );
+        return <EventosScreen user={currentUser} />;
       case "correos":
         return <CorreosScreen user={currentUser} />;
       case "perfil":

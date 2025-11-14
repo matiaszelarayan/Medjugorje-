@@ -9,18 +9,21 @@ const initialGrupos = [
   {
     id: 1,
     nombre_grupo: "Grupo Esperanza",
+    provincia: "Buenos Aires",
     localidad: "Junín",
     responsable: "María López",
   },
   {
     id: 2,
     nombre_grupo: "Renacer",
+    provincia: "Córdoba",
     localidad: "Villa María",
     responsable: "Laura Gómez",
   },
   {
     id: 3,
     nombre_grupo: "Camino de Fe",
+    provincia: "Tucumán",
     localidad: "Yerba Buena",
     responsable: "Sofía Martínez",
   },
@@ -31,6 +34,11 @@ const GruposScreen = ({ user }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedGrupo, setSelectedGrupo] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
+
+  // ORDENAR grupos por nombre_grupo alfabéticamente antes del render
+  const sortedGrupos = grupos.slice().sort((a, b) =>
+    (a.nombre_grupo || "").toLowerCase().localeCompare((b.nombre_grupo || "").toLowerCase())
+  );
 
   const handleSave = (grupo) => {
     setGrupos((prev) => {
@@ -46,19 +54,12 @@ const GruposScreen = ({ user }) => {
     setSelectedGrupo(grupo);
     setShowModal(true);
   };
-
-  // Solo abre el modal de confirmación, no borra todavía
-  const openDeleteModal = (grupo) => {
-    setDeleteTarget(grupo);
-  };
-
+  const openDeleteModal = (grupo) => setDeleteTarget(grupo);
   const confirmDelete = (id) => {
     setGrupos((prev) => prev.filter((g) => g.id !== id));
     setDeleteTarget(null);
   };
-
   const closeDeleteModal = () => setDeleteTarget(null);
-
   const openNewGrupo = () => {
     setSelectedGrupo(null);
     setShowModal(true);
@@ -76,7 +77,7 @@ const GruposScreen = ({ user }) => {
           )}
           {user.role === "Admin" && (
             <GrupoPrintButton
-              data={grupos}
+              data={sortedGrupos}
               title="Listado de Grupos de Oración"
               className="actionButtonGlobal"
             />
@@ -86,15 +87,17 @@ const GruposScreen = ({ user }) => {
           <thead>
             <tr>
               <th>Nombre</th>
+              <th>Provincia</th>
               <th>Localidad</th>
               <th>Responsable</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {grupos.map((grupo) => (
+            {sortedGrupos.map((grupo) => (
               <tr key={grupo.id}>
                 <td>{grupo.nombre_grupo}</td>
+                <td>{grupo.provincia}</td>
                 <td>{grupo.localidad}</td>
                 <td>{grupo.responsable}</td>
                 <td>
@@ -105,7 +108,6 @@ const GruposScreen = ({ user }) => {
                   >
                     <Pencil size={16} />
                   </button>
-
                   {user.role === "Admin" && (
                     <button
                       onClick={() => openDeleteModal(grupo)}
@@ -120,7 +122,6 @@ const GruposScreen = ({ user }) => {
             ))}
           </tbody>
         </table>
-
         {showModal && (
           <GrupoFormModal
             grupo={selectedGrupo}
@@ -128,7 +129,6 @@ const GruposScreen = ({ user }) => {
             onSave={handleSave}
           />
         )}
-
         {deleteTarget && (
           <ConfirmDeleteModal
             user={deleteTarget}

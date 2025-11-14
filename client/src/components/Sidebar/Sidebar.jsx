@@ -4,9 +4,8 @@ import {
   Home,
   Users,
   Calendar,
-  Settings,
-  UserCog,
   HeartHandshake,
+  UserCog,
 } from "lucide-react";
 
 const Sidebar = ({ active, setScreen, user }) => {
@@ -19,6 +18,7 @@ const Sidebar = ({ active, setScreen, user }) => {
           active === "dashboard" ? styles.active : ""
         }`}
         onClick={() => setScreen("dashboard")}
+        title="Ir al panel principal"
       >
         <Home size={20} className={styles.sidebarIcon} />
         <span>Dashboard</span>
@@ -29,6 +29,7 @@ const Sidebar = ({ active, setScreen, user }) => {
           active === "contactos" ? styles.active : ""
         }`}
         onClick={() => setScreen("contactos")}
+        title="Gestionar personas vinculadas"
       >
         <Users size={20} className={styles.sidebarIcon} />
         <span>Contactos</span>
@@ -40,9 +41,23 @@ const Sidebar = ({ active, setScreen, user }) => {
             active === "grupos-oracion" ? styles.active : ""
           }`}
           onClick={() => setScreen("grupos-oracion")}
+          title="Administrar grupos de oración"
         >
           <HeartHandshake size={20} className={styles.sidebarIcon} />
           <span>Grupos de Oración</span>
+        </div>
+      )}
+
+      {(user.role === "Admin" || user.role === "Colaborador") && (
+        <div
+          className={`${styles.sidebarItem} ${
+            active === "correos" ? styles.active : ""
+          }`}
+          onClick={() => setScreen("correos")}
+          title="Correos masivos y newsletter"
+        >
+          <Calendar size={20} className={styles.sidebarIcon} />
+          <span>Correos</span>
         </div>
       )}
 
@@ -51,22 +66,11 @@ const Sidebar = ({ active, setScreen, user }) => {
           active === "agenda" ? styles.active : ""
         }`}
         onClick={() => setScreen("agenda")}
+        title="Gestión de eventos y actividades"
       >
         <Calendar size={20} className={styles.sidebarIcon} />
         <span>Eventos</span>
       </div>
-
-      {(user.role === "Admin" || user.role === "Colaborador") && (
-        <div
-          className={`${styles.sidebarItem} ${
-            active === "correos" ? styles.active : ""
-          }`}
-          onClick={() => setScreen("correos")}
-        >
-          <Calendar size={20} className={styles.sidebarIcon} />
-          <span>Correos</span>
-        </div>
-      )}
 
       {user.role === "Colaborador" && (
         <div
@@ -74,6 +78,7 @@ const Sidebar = ({ active, setScreen, user }) => {
             active === "perfil" ? styles.active : ""
           }`}
           onClick={() => setScreen("perfil")}
+          title="Ver o editar mi perfil"
         >
           <UserCog size={20} className={styles.sidebarIcon} />
           <span>Mi Perfil</span>
@@ -86,21 +91,12 @@ const Sidebar = ({ active, setScreen, user }) => {
             active === "admin-perfiles" ? styles.active : ""
           }`}
           onClick={() => setScreen("admin-perfiles")}
+          title="Administrar perfiles de usuario"
         >
           <UserCog size={20} className={styles.sidebarIcon} />
           <span>Administrar Perfiles</span>
         </div>
       )}
-
-      <div
-        className={`${styles.sidebarItem} ${
-          active === "configuracion" ? styles.active : ""
-        }`}
-        onClick={() => setScreen("configuracion")}
-      >
-        <Settings size={20} className={styles.sidebarIcon} />
-        <span>Configuración</span>
-      </div>
     </aside>
   );
 };

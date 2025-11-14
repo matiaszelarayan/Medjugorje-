@@ -1,69 +1,107 @@
-import React, { useState } from "react";
-import ModalBase from "../common/ModalBase/ModalBase"; // 👈 importa la base
+import React, { useEffect, useState } from "react";
+import ModalBase from "../common/ModalBase/ModalBase";
 import styles from "./NuevoCorreoModal.module.css";
+import { useGeoArgentina } from "../../hooks/useGeoArgentina";
 
-// Ejemplo de datos simulados (en tu proyecto vendrán de la BD)
-const provincias = [
-  { id: 1, nombre: "Buenos Aires" },
-  { id: 2, nombre: "Córdoba" },
-  { id: 3, nombre: "Santa Fe" },
-];
-
-const ciudades = [
-  { id: 1, nombre: "Junín", provincia_id: 1 },
-  { id: 2, nombre: "Pergamino", provincia_id: 1 },
-  { id: 3, nombre: "Villa María", provincia_id: 2 },
-  { id: 4, nombre: "Rosario", provincia_id: 3 },
-];
-
+// Simulados (en real vendrán de la API BD)
 const gruposOracion = [
   { id: 1, nombre_grupo: "Grupo Esperanza" },
   { id: 2, nombre_grupo: "Renacer" },
   { id: 3, nombre_grupo: "Camino de Fe" },
 ];
-
 const contactos = [
-  { id: 1, provincia_id: 1, ciudad_id: 1, grupo_id: 1, acepta_newsletter: true },
-  { id: 2, provincia_id: 1, ciudad_id: 2, grupo_id: 2, acepta_newsletter: false },
-  { id: 3, provincia_id: 2, ciudad_id: 3, grupo_id: 1, acepta_newsletter: true },
-  { id: 4, provincia_id: 3, ciudad_id: 4, grupo_id: 3, acepta_newsletter: true },
+  { id: 1, provincia: "Buenos Aires", ciudad: "Junín", grupo_id: 1, acepta_newsletter: true },
+  { id: 2, provincia: "Buenos Aires", ciudad: "Pergamino", grupo_id: 2, acepta_newsletter: false },
+  { id: 3, provincia: "Córdoba", ciudad: "Villa María", grupo_id: 1, acepta_newsletter: true },
+  { id: 4, provincia: "Santa Fe", ciudad: "Rosario", grupo_id: 3, acepta_newsletter: true },
 ];
 
-const NuevoCorreoModal = ({ onClose, onSave }) => {
+const NuevoCorreoModal = ({ correo, onClose, onSave }) => {
   const [formData, setFormData] = useState({
     asunto: "",
     contenido: "",
     provincia: "",
     ciudad: "",
-    grupo: "",
+    grupo: "todos",
     soloNewsletter: false,
   });
 
+  // Carga inicial para edición
+  useEffect(() => {
+    if (correo) {
+      setFormData({
+        asunto: correo.asunto || "",
+        contenido: correo.contenido || "",
+        provincia: correo.provincia || "",
+        ciudad: correo.ciudad || "",
+        grupo: correo.grupo || "todos",
+        soloNewsletter: correo.soloNewsletter || false
+      });
+    }
+  }, [correo]);
+
+  // Hook de provincias/localidades
+  const {
+    provincias,
+    localidades,
+    loadingProv,
+    loadingLoc,
+    errorProv,
+    errorLoc,
+  } = useGeoArgentina(formData.provincia);
+
+  // Manejo de cambios en el formulario
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    if (name === "provincia") {
+      setFormData((prev) => ({
+        ...prev,
+        provincia: value,
+        ciudad: "",
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: type === "checkbox" ? checked : value,
+      }));
+    }
   };
 
-  // Filtrar ciudades según provincia seleccionada
-  const ciudadesFiltradas = formData.provincia
-    ? ciudades.filter((c) => c.provincia_id === parseInt(formData.provincia))
-    : ciudades;
-
-  // Calcular destinatarios
-  const destinatarios = contactos.filter((c) => {
-    const matchProvincia =
-      !formData.provincia || c.provincia_id === parseInt(formData.provincia);
-    const matchCiudad =
-      !formData.ciudad || c.ciudad_id === parseInt(formData.ciudad);
-    const matchGrupo =
-      !formData.grupo || c.grupo_id === parseInt(formData.grupo);
-    const matchNewsletter =
-      !formData.soloNewsletter || c.acepta_newsletter;
+  // Lista de destinatarios filtrados
+  const destinatariosList = contactos.filter((c) => {
+    const matchProvincia = !formData.provincia || c.provincia === formData.provincia;
+    const matchCiudad = !formData.ciudad || c.ciudad === formData.ciudad;
+    const matchGrupo = formData.grupo === "todos" || c.grupo_id === parseInt(formData.grupo);
+    const matchNewsletter = !formData.soloNewsletter || c.acepta_newsletter;
     return matchProvincia && matchCiudad && matchGrupo && matchNewsletter;
-  }).length;
+  });
+  const destinatarios = destinatariosList.length;
+
+  // Contactos por grupo (con filtros activos)
+  const grupoContactCount = gruposOracion.map(grupo => ({
+    ...grupo,
+    count: contactos.filter(c =>
+      (!formData.provincia || c.provincia === formData.provincia) &&
+      (!formData.ciudad || c.ciudad === formData.ciudad) &&
+      (!formData.soloNewsletter || c.acepta_newsletter) &&
+      c.grupo_id === grupo.id
+    ).length
+  }));
+
+  // Exportar destinatarios actuales a CSV
+  const handleExport = () => {
+    const header = "ID,Provincia,Ciudad,Grupo,Newsletter\n";
+    const rows = destinatariosList
+      .map(c =>
+        `${c.id},"${c.provincia}","${c.ciudad}","${gruposOracion.find(g => g.id === c.grupo_id)?.nombre_grupo ?? ""}","${c.acepta_newsletter ? "Sí" : "No"}"`
+      ).join("\n");
+    const csv = header + rows;
+    const blob = new Blob([csv], { type: "text/csv" });
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.download = "destinatarios.csv";
+    link.click();
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -77,7 +115,6 @@ const NuevoCorreoModal = ({ onClose, onSave }) => {
       <p className={styles.subtitle}>
         Crea un nuevo correo masivo con filtros de segmentación
       </p>
-
       <form onSubmit={handleSubmit}>
         <div className={styles.formGroup}>
           <label className={styles.label}>Asunto *</label>
@@ -90,7 +127,6 @@ const NuevoCorreoModal = ({ onClose, onSave }) => {
             className={styles.input}
           />
         </div>
-
         <div className={styles.formGroup}>
           <label className={styles.label}>Mensaje *</label>
           <textarea
@@ -102,7 +138,6 @@ const NuevoCorreoModal = ({ onClose, onSave }) => {
             rows={6}
           />
         </div>
-
         <div className={styles.formGroupCheckbox}>
           <label>
             <input
@@ -114,41 +149,59 @@ const NuevoCorreoModal = ({ onClose, onSave }) => {
             Solo contactos que aceptan newsletter
           </label>
         </div>
-
         <div className={styles.formGroup}>
           <label className={styles.label}>Provincia</label>
-          <select
-            name="provincia"
-            value={formData.provincia}
-            onChange={handleChange}
-            className={styles.select}
-          >
-            <option value="">Todas</option>
-            {provincias.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.nombre}
-              </option>
-            ))}
-          </select>
+          {loadingProv ? (
+            <select className={styles.select} disabled>
+              <option>Cargando provincias...</option>
+            </select>
+          ) : errorProv ? (
+            <select className={styles.select} disabled>
+              <option>{errorProv}</option>
+            </select>
+          ) : (
+            <select
+              name="provincia"
+              value={formData.provincia}
+              onChange={handleChange}
+              className={styles.select}
+            >
+              <option value="">Todas</option>
+              {provincias.map((p) => (
+                <option key={p.id} value={p.nombre}>
+                  {p.nombre}
+                </option>
+              ))}
+            </select>
+          )}
         </div>
-
         <div className={styles.formGroup}>
-          <label className={styles.label}>Ciudad</label>
-          <select
-            name="ciudad"
-            value={formData.ciudad}
-            onChange={handleChange}
-            className={styles.select}
-          >
-            <option value="">Todas</option>
-            {ciudadesFiltradas.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.nombre}
-              </option>
-            ))}
-          </select>
+          <label className={styles.label}>Ciudad / Localidad</label>
+          {formData.provincia && loadingLoc ? (
+            <select className={styles.select} disabled>
+              <option>Cargando localidades...</option>
+            </select>
+          ) : errorLoc ? (
+            <select className={styles.select} disabled>
+              <option>{errorLoc}</option>
+            </select>
+          ) : (
+            <select
+              name="ciudad"
+              value={formData.ciudad}
+              onChange={handleChange}
+              className={styles.select}
+              disabled={!formData.provincia}
+            >
+              <option value="">Todas</option>
+              {localidades.map((l) => (
+                <option key={l.id} value={l.nombre}>
+                  {l.nombre}
+                </option>
+              ))}
+            </select>
+          )}
         </div>
-
         <div className={styles.formGroup}>
           <label className={styles.label}>Grupo de Oración</label>
           <select
@@ -158,19 +211,27 @@ const NuevoCorreoModal = ({ onClose, onSave }) => {
             className={styles.select}
             required
           >
-            <option value="">-- Seleccionar grupo --</option>
-            {gruposOracion.map((g) => (
+            <option value="todos">Todos los grupos</option>
+            {grupoContactCount.map((g) => (
               <option key={g.id} value={g.id}>
-                {g.nombre_grupo}
+                {g.nombre_grupo} ({g.count})
               </option>
             ))}
           </select>
         </div>
-
-        <p className={styles.destinatarios}>
-          Destinatarios: {destinatarios} contactos
-        </p>
-
+        <div className={styles.exportWrapper}>
+          <p className={styles.destinatarios}>
+            Destinatarios: {destinatarios} contactos
+          </p>
+          <button
+            type="button"
+            className={styles.exportBtn}
+            onClick={handleExport}
+            disabled={destinatarios === 0}
+          >
+            Exportar contactos
+          </button>
+        </div>
         <div className={styles.actions}>
           <button
             type="button"

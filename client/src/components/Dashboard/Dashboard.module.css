@@ -42,6 +42,12 @@
   border-radius: var(--card-radius);
   box-shadow: var(--card-shadow);
   border-left: 4px solid var(--card-border-color, var(--primary-color));
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 .cardText {
@@ -72,17 +78,66 @@
   opacity: 0.8;
 }
 
+/* --- NUEVAS SECCIONES --- */
+.infoSection {
+  margin-top: 2.5rem;
+  padding: 1.5rem;
+  background: #f7f9fb;
+  border-radius: 8px;
+  border-left: 4px solid var(--primary-color);
+}
+
+.sectionTitle {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.sectionText {
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+
+/* MODO OSCURO */
 .modoOscuro .dashboardContainer {
   background-color: #1e1e1e;
   color: #f0f0f0;
 }
 
-.modoOscuro .dashboardContainer h2 {
+.modoOscuro .dashboardTitle {
   color: #f0f0f0;
+}
+
+.modoOscuro .dashboardSubtitle {
+  color: #aaa;
 }
 
 .modoOscuro .card {
   background-color: #2a2a2a;
   color: #eee;
   border-color: #444;
+}
+
+.modoOscuro .infoSection {
+  background: #252525;
+  border-left-color: var(--accent-color);
+}
+
+.modoOscuro .sectionTitle {
+  color: #f0f0f0;
+}
+
+.modoOscuro .sectionText {
+  color: #bbb;
+}
+
+/* ACCESIBILIDAD: Las tarjetas son clickeables */
+.card[role="button"] {
+  cursor: pointer;
+}
+
+.card[role="button"]:focus {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
 }
