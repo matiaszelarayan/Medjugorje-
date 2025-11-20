@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 
 const Navbar = ({ user, onLogout, darkMode, toggleDarkMode }) => {
   const [showModal, setShowModal] = useState(false);
-
   // Solución: Retornar navbar vacío si no hay user
   if (!user) return null;
 

@@ -12,9 +12,9 @@ const Login = ({ onLogin }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const success = onLogin(formData);
+    const success = await onLogin(formData);
     if (!success) {
       setError("Credenciales inválidas. Intenta nuevamente.");
     }

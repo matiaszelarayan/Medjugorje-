@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = User
-        fields = ["id", "nombre", "apellido", "email", "rol"]
+        fields = ["id", "nombre", "apellido", "email", "role"]
 
 
 class CreateUserSerializer(serializers.ModelSerializer):
@@ -22,7 +22,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["nombre", "apellido", "email", "rol", "password"]
+        fields = ["nombre", "apellido", "email", "role", "password"]
 
     def validate_email(self, value):
         """

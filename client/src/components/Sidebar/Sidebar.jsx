@@ -32,7 +32,7 @@ const Sidebar = ({ active, setScreen, user }) => {
         <span>Contactos</span>
       </div>
 
-      {user.role === "Admin" && (
+      {user.role === "administrador" && (
         <div
           className={`${styles.sidebarItem} ${
             active === "grupos-oracion" ? styles.active : ""
@@ -45,7 +45,7 @@ const Sidebar = ({ active, setScreen, user }) => {
         </div>
       )}
 
-      {(user.role === "Admin" || user.role === "Colaborador") && (
+      {(user.role === "administrador" || user.role === "colaborador") && (
         <div
           className={`${styles.sidebarItem} ${
             active === "correos" ? styles.active : ""
@@ -58,7 +58,7 @@ const Sidebar = ({ active, setScreen, user }) => {
         </div>
       )}
 
-      {(user.role === "Admin" || user.role === "Colaborador") && (
+      {(user.role === "administrador" || user.role === "colaborador") && (
         <div
           className={`${styles.sidebarItem} ${
             active === "formularios" ? styles.active : ""
@@ -82,7 +82,7 @@ const Sidebar = ({ active, setScreen, user }) => {
         <span>Eventos</span>
       </div>
 
-      {user.role === "Colaborador" && (
+      {user.role === "colaborador" && (
         <div
           className={`${styles.sidebarItem} ${
             active === "perfil" ? styles.active : ""
@@ -95,7 +95,7 @@ const Sidebar = ({ active, setScreen, user }) => {
         </div>
       )}
 
-      {user.role === "Admin" && (
+      {user.role === "administrador" && (
         <div
           className={`${styles.sidebarItem} ${
             active === "admin-perfiles" ? styles.active : ""

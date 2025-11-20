@@ -14,27 +14,9 @@ import CorreosScreen from "./components/Correos/CorreosScreen";
 import EventosScreen from "./components/Eventos/EventosScreen";
 import FormularioBuilderScreen from "./components/Formularios/FormularioBuilderScreen";
 
+import { login as loginAPI, logout as logoutAPI } from "./api/authService";
+import { getPerfil } from "./api/userService";
 
-const USERS = [
-  {
-    email: "admin@fm.org",
-    password: "123456",
-    nombre: "Rubén",
-    apellido: "Aragón",
-    role: "Admin",
-    id: "user-001",
-    foto_perfil: null,
-  },
-  {
-    email: "colaborador@fm.org",
-    password: "654321",
-    nombre: "Gustavo",
-    apellido: "",
-    role: "Colaborador",
-    id: "user-002",
-    foto_perfil: null,
-  },
-];
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -52,46 +34,70 @@ export default function App() {
     localStorage.setItem("darkMode", JSON.stringify(darkMode));
   }, [darkMode]);
 
-  const handleLogin = ({ email, password }) => {
-    const user = USERS.find(
-      (u) => u.email === email && u.password === password
-    );
-    if (user) {
+
+  // Cargar la  sesión si hay tokens
+  useEffect(() => {
+    const access = localStorage.getItem("access");
+    if (!access) return;
+
+    // obtiene perfil
+    getPerfil()
+      .then((user) => {
+        setCurrentUser(user);
+        setIsAuthenticated(true);
+      })
+      .catch(() => {
+        handleLogout();
+      });
+  }, []);
+
+
+
+  const handleLogin = async ({ email, password }) => {
+    try {
+      const data = await loginAPI(email, password);
+      console.log(data);
+
+      // Con token válido obtener perfil
+      const user = await getPerfil();
       setCurrentUser(user);
       setIsAuthenticated(true);
       return true;
+    } catch (err) {
+      console.error(err);
+      return false;
     }
-    return false;
   };
 
   const handleLogout = () => {
+    logoutAPI();
     setIsAuthenticated(false);
     setCurrentUser(null);
     setScreen("dashboard");
   };
 
-const renderScreen = useCallback(() => {
-  switch (currentScreen) {
-    case "dashboard":
-      return <Dashboard user={currentUser} setScreen={setScreen} />;
-    case "contactos":
-      return <ContactosScreen user={currentUser} />;
-    case "grupos-oracion":
-      return <GruposScreen user={currentUser} />;
-    case "agenda":
-      return <EventosScreen user={currentUser} />;
-    case "correos":
-      return <CorreosScreen user={currentUser} />;
-    case "perfil":
-      return <PerfilScreen user={currentUser} />;
-    case "admin-perfiles":
-      return <AdminPerfiles />;
-    case "formularios":
-      return <FormularioBuilderScreen user={currentUser} />;
-    default:
-      return <Dashboard user={currentUser} />;
-  }
-}, [currentScreen, currentUser]);
+  const renderScreen = useCallback(() => {
+    switch (currentScreen) {
+      case "dashboard":
+        return <Dashboard user={currentUser} setScreen={setScreen} />;
+      case "contactos":
+        return <ContactosScreen user={currentUser} />;
+      case "grupos-oracion":
+        return <GruposScreen user={currentUser} />;
+      case "agenda":
+        return <EventosScreen user={currentUser} />;
+      case "correos":
+        return <CorreosScreen user={currentUser} />;
+      case "perfil":
+        return <PerfilScreen user={currentUser} />;
+      case "admin-perfiles":
+        return <AdminPerfiles />;
+      case "formularios":
+        return <FormularioBuilderScreen user={currentUser} />;
+      default:
+        return <Dashboard user={currentUser} />;
+    }
+  }, [currentScreen, currentUser]);
 
   if (!isAuthenticated) {
     return <Login onLogin={handleLogin} />;

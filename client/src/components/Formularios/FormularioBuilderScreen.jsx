@@ -52,7 +52,7 @@ const FormularioBuilderScreen = ({ user }) => {
   };
 
   // Solo Admin/Colaborador
-  if (!["Admin", "Colaborador"].includes(user?.role)) {
+  if (!["administrador", "colaborador"].includes(user?.role)) {
     return (
       <div className={`${styles.screenWrapper} screenWrapperGlobal`}>
         Acceso no autorizado

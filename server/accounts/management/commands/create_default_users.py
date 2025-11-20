@@ -17,7 +17,7 @@ class Command(BaseCommand):
             self.stdout.write("Admin ya existe.")
 
         if not User.objects.filter(email=colab_email).exists():
-            User.objects.create_user(email=colab_email, password=colab_pass, nombre="Colab", apellido="Default", rol="colaborador")
+            User.objects.create_user(email=colab_email, password=colab_pass, nombre="Colab", apellido="Default", role="colaborador")
             self.stdout.write(self.style.SUCCESS(f"Colaborador creado: {colab_email} / {colab_pass}"))
         else:
             self.stdout.write("Colaborador ya existe.")
