@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styles from "./PerfilScreen.module.css";
+import { editarColaborador } from "../../api/userService"
 
 const PerfilScreen = ({ user }) => {
   const [nombre, setNombre] = useState(user.nombre || "");
@@ -49,15 +50,22 @@ const PerfilScreen = ({ user }) => {
       }
     }
 
-    // Simulación de guardado
-    console.log("Datos actualizados:", {
+    const data = {
       nombre,
       apellido,
-      nuevaPassword: quiereCambiarPassword ? newPassword : "(sin cambios)",
-      foto: imagePreview,
-    });
+    };
 
-    setSuccessMessage("Cambios guardados correctamente (simulado)");
+    if (quiereCambiarPassword) {
+      data.password = newPassword;
+    }
+
+    try {
+      editarColaborador(data);
+    } catch (error) {
+      console.error(error);
+    }
+
+    setSuccessMessage("Cambios guardados correctamente");
     setNewPassword("");
     setConfirmPassword("");
   };

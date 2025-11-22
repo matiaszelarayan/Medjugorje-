@@ -6,7 +6,7 @@ const CreateUserModal = ({ onClose, onCreate }) => {
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState("Colaborador");
+  const [role, setRole] = useState("colaborador");
   const [password, setPassword] = useState("");
   const [fotoPreview, setFotoPreview] = useState(null);
   const [errors, setErrors] = useState({});
@@ -28,7 +28,7 @@ const CreateUserModal = ({ onClose, onCreate }) => {
     if (!nombre || nombre.trim().length < 2) newErrors.nombre = "El nombre es obligatorio";
     if (!apellido || apellido.trim().length < 2) newErrors.apellido = "El apellido es obligatorio";
     if (!email || !email.includes("@")) newErrors.email = "Email inválido";
-    if (!["Admin", "Colaborador"].includes(role)) newErrors.role = "Rol inválido";
+    if (!["administrador", "colaborador"].includes(role)) newErrors.role = "Rol inválido";
     if (!validatePassword(password)) newErrors.password = "Contraseña débil (mínimo 6 caracteres, una letra y una mayúscula)";
 
     if (Object.keys(newErrors).length > 0) {
@@ -37,7 +37,7 @@ const CreateUserModal = ({ onClose, onCreate }) => {
     }
 
     const nuevoUsuario = {
-      id: Date.now().toString(),
+      // id: Date.now().toString(),
       nombre,
       apellido,
       email,
@@ -68,8 +68,8 @@ const CreateUserModal = ({ onClose, onCreate }) => {
 
       <label>Rol:</label>
       <select value={role} onChange={(e) => setRole(e.target.value)}>
-        <option value="Admin">Admin</option>
-        <option value="Colaborador">Colaborador</option>
+        <option value="administrador">Administrador</option>
+        <option value="colaborador">Colaborador</option>
       </select>
       {errors.role && <p className={styles.modalError}>{errors.role}</p>}
 

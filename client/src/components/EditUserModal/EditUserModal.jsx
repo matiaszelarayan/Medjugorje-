@@ -23,7 +23,7 @@ const EditUserModal = ({ user, onClose, onSave }) => {
     if (!nombre || nombre.trim().length < 2) newErrors.nombre = "El nombre es obligatorio";
     if (!apellido || apellido.trim().length < 2) newErrors.apellido = "El apellido es obligatorio";
     if (!email || !email.includes("@")) newErrors.email = "Email inválido";
-    if (!["Admin", "Colaborador"].includes(role)) newErrors.role = "Rol inválido";
+    if (!["administrador", "colaborador"].includes(role)) newErrors.role = "Rol inválido";
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -61,8 +61,8 @@ const EditUserModal = ({ user, onClose, onSave }) => {
 
       <label>Rol:</label>
       <select value={role} onChange={(e) => setRole(e.target.value)}>
-        <option value="Admin">Admin</option>
-        <option value="Colaborador">Colaborador</option>
+        <option value="administrador">Administrador</option>
+        <option value="colaborador">Colaborador</option>
       </select>
       {errors.role && <p className={styles.modalError}>{errors.role}</p>}
 

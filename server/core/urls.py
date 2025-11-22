@@ -32,8 +32,8 @@ urlpatterns = [
     path('auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
-    # Rutas de autenticación (perfil, crear usuario, etc.)
-    path('auth/', include('accounts.urls')),
+    # Rutas de perfil, crear usuario
+    path('accounts/', include('accounts.urls')),
 
     # API del sistema
     path('api/', include('api.urls')),

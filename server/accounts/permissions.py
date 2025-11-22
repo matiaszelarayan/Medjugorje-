@@ -7,4 +7,12 @@ class IsAdministrador(BasePermission):
     def has_permission(self, request, view):
         user = request.user
         return user.is_authenticated and user.role == "administrador"
+    
+class IsColaborador(BasePermission):
+    """
+    Permite únicamente a usuarios con rol 'colaborador'.
+    """
+    def has_permission(self, request, view):
+        user = request.user
+        return user.is_authenticated and user.role == "colaborador"
 

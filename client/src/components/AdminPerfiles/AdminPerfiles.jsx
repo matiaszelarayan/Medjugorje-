@@ -1,32 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./AdminPerfiles.module.css";
 import { Pencil, Trash2 } from "lucide-react";
 import CreateUserModal from "../CreateUserModal/CreateUserModal";
 import EditUserModal from "../EditUserModal/EditUserModal";
 import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
 import PrintButton from "./PrintButton";
+import { getUsers, crearUser, eliminarUser, editarUser } from "../../api/userService";
 
-const usuariosSimulados = [
-  {
-    id: "user-001",
-    nombre: "Rubén",
-    apellido: "Aragón",
-    email: "admin@fm.org",
-    role: "Admin",
-    foto_perfil: null,
-  },
-  {
-    id: "user-002",
-    nombre: "Gustavo",
-    apellido: "",
-    email: "colaborador@fm.org",
-    role: "Colaborador",
-    foto_perfil: null,
-  },
-];
+
 
 const AdminPerfiles = () => {
-  const [usuarios, setUsuarios] = useState(usuariosSimulados);
+  const [usuarios, setUsuarios] = useState([]);
   const [usuarioEditando, setUsuarioEditando] = useState(null);
   const [usuarioAEliminar, setUsuarioAEliminar] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -36,13 +20,41 @@ const AdminPerfiles = () => {
   const [paginaActual, setPaginaActual] = useState(1);
   const usuariosPorPagina = 5;
 
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const data = await getUsers();
+        setUsuarios(data);
+      } catch (error) {
+        console.error("Error al obtener los usuarios:", error);
+      }
+    };
+    fetchUsers();
+  }, []);
+
+
   const handleSaveUser = (updatedUser) => {
+
+    console.log(updatedUser);
+
+    try {
+      editarUser(updatedUser);
+    } catch (error) {
+      console.error("Error al editar el usuario:", error);
+    }
     setUsuarios((prev) =>
       prev.map((u) => (u.id === updatedUser.id ? updatedUser : u))
     );
   };
 
-  const handleCreateUser = (nuevoUsuario) => {
+  const handleCreateUser = async (nuevoUsuario) => {
+
+    try {
+      await crearUser(nuevoUsuario);
+    } catch (error) {
+      console.error("Error al crear el usuario:", error);
+    }
+
     setUsuarios((prev) => [...prev, nuevoUsuario]);
     setBusqueda("");
     setFiltroRol("Todos");
@@ -50,6 +62,13 @@ const AdminPerfiles = () => {
   };
 
   const handleDeleteUser = (id) => {
+
+    try {
+      eliminarUser(id);
+    } catch (error) {
+      console.error("Error al eliminar el usuario:", error);
+    }
+
     setUsuarios((prev) => prev.filter((u) => u.id !== id));
     setUsuarioAEliminar(null);
     setMensajeExito("Usuario eliminado con éxito");
@@ -87,8 +106,8 @@ const AdminPerfiles = () => {
           onChange={(e) => setFiltroRol(e.target.value)}
         >
           <option value="Todos">Todos</option>
-          <option value="Admin">Admin</option>
-          <option value="Colaborador">Colaborador</option>
+          <option value="administrador">Administrador</option>
+          <option value="colaborador">Colaborador</option>
         </select>
 
         <input
