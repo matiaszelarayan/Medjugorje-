@@ -1,124 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./ContactosScreen.module.css";
 import ContactFormModal from "../ContactFormModal/ContactFormModal";
 import PrintButton from "../ContactFormModal/PrintButton";
 import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
 import { Pencil, Trash2 } from "lucide-react";
+import {
+  getContactos,
+  crearContacto,
+  editarContacto,
+  eliminarContacto,
+} from "../../api/contactoService";
 
-const initialContacts = [
-  {
-    id: 1,
-    nombre: "María",
-    apellido: "López",
-    email: "maria@fm.org",
-    sexo: "Femenino",
-    pais: "Argentina",
-    provincia: "Buenos Aires",
-    ciudad: "Junín",
-    celular: "555-1234",
-    instagram: "@maria",
-    parroquia: "San José",
-    participa_grupo: true,
-    fecha_nacimiento: "1990-05-12",
-    grupo_oracion: "Grupo Esperanza",
-  },
-  {
-    id: 2,
-    nombre: "Juan",
-    apellido: "Pérez",
-    email: "juan@fm.org",
-    sexo: "Masculino",
-    pais: "Argentina",
-    provincia: "Buenos Aires",
-    ciudad: "Pergamino",
-    celular: "555-5678",
-    instagram: "@juanp",
-    parroquia: "Santa María",
-    participa_grupo: false,
-    fecha_nacimiento: "1985-11-03",
-    grupo_oracion: "",
-  },
-  {
-    id: 3,
-    nombre: "Laura",
-    apellido: "Gómez",
-    email: "laura@fm.org",
-    sexo: "Femenino",
-    pais: "Argentina",
-    provincia: "Córdoba",
-    ciudad: "Villa María",
-    celular: "555-9012",
-    instagram: "@laura.g",
-    parroquia: "Nuestra Señora",
-    participa_grupo: true,
-    fecha_nacimiento: "1992-08-20",
-    grupo_oracion: "Renacer",
-  },
-  {
-    id: 4,
-    nombre: "Carlos",
-    apellido: "Ruiz",
-    email: "carlos@fm.org",
-    sexo: "Masculino",
-    pais: "Argentina",
-    provincia: "Santa Fe",
-    ciudad: "Rosario",
-    celular: "555-3456",
-    instagram: "@carlosruiz",
-    parroquia: "San Pablo",
-    participa_grupo: false,
-    fecha_nacimiento: "1988-03-15",
-    grupo_oracion: "",
-  },
-  {
-    id: 5,
-    nombre: "Ana",
-    apellido: "Torres",
-    email: "ana@fm.org",
-    sexo: "Femenino",
-    pais: "Argentina",
-    provincia: "Mendoza",
-    ciudad: "San Rafael",
-    celular: "555-7890",
-    instagram: "@ana.t",
-    parroquia: "Santa Clara",
-    participa_grupo: true,
-    fecha_nacimiento: "1995-12-01",
-    grupo_oracion: "Luz y Vida",
-  },
-  {
-    id: 6,
-    nombre: "Luis",
-    apellido: "Fernández",
-    email: "luis@fm.org",
-    sexo: "Masculino",
-    pais: "Argentina",
-    provincia: "Salta",
-    ciudad: "Cafayate",
-    celular: "555-2345",
-    instagram: "@luisf",
-    parroquia: "San Miguel",
-    participa_grupo: false,
-    fecha_nacimiento: "1983-07-09",
-    grupo_oracion: "",
-  },
-  {
-    id: 7,
-    nombre: "Sofía",
-    apellido: "Martínez",
-    email: "sofia@fm.org",
-    sexo: "Femenino",
-    pais: "Argentina",
-    provincia: "Tucumán",
-    ciudad: "Yerba Buena",
-    celular: "555-6789",
-    instagram: "@sofia.m",
-    parroquia: "San Juan Bautista",
-    participa_grupo: true,
-    fecha_nacimiento: "1998-04-25",
-    grupo_oracion: "Camino de Fe",
-  },
-];
+
+
 
 const grupos = [
   { id: 1, nombre_grupo: "Grupo Esperanza" },
@@ -127,7 +21,7 @@ const grupos = [
 ];
 
 const ContactosScreen = ({ user }) => {
-  const [contacts, setContacts] = useState(initialContacts);
+  const [contacts, setContacts] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedContact, setSelectedContact] = useState(null);
   const [viewMode, setViewMode] = useState("tabla");
@@ -137,6 +31,18 @@ const ContactosScreen = ({ user }) => {
     texto: "",
   });
   const [deleteTarget, setDeleteTarget] = useState(null);
+
+  useEffect(() => {
+      const fetchContactos = async () => {
+        try {
+          const data = await getContactos();
+          setContacts(data);
+        } catch (error) {
+          console.error("Error al obtener los contactos:", error);
+        }
+      };
+      fetchContactos();
+    }, []);
 
   // 1. Filtrar
   const filteredContacts = contacts.filter((c) => {
@@ -164,19 +70,40 @@ const ContactosScreen = ({ user }) => {
   const totalPages = Math.ceil(sortedFilteredContacts.length / contactsPerPage);
 
   // HANDLERS (sin cambios)
-  const handleSave = (newContact) => {
+  const handleSave = async (formData) => {
+    try {
+    let saved;
+
+    if (formData.id) {
+      // EDITAR
+      saved = await editarContacto(formData);
+    } else {
+      // CREAR
+      saved = await crearContacto(formData);
+    }
+
     setContacts((prev) => {
-      const exists = prev.find((c) => c.id === newContact.id);
+      const exists = prev.find((c) => c.id === saved.id);
       return exists
-        ? prev.map((c) => (c.id === newContact.id ? newContact : c))
-        : [...prev, newContact];
+        ? prev.map((c) => (c.id === saved.id ? saved : c))
+        : [...prev, saved];
     });
+
+  } catch (err) {
+    console.error("Error guardando contacto:", err);
+  }
   };
   const openDeleteModal = (contact) => setDeleteTarget(contact);
-  const confirmDelete = (id) => {
-    setContacts((prev) => prev.filter((c) => c.id !== id));
-    setDeleteTarget(null);
-  };
+
+ const confirmDelete = async (id) => {
+   try {
+     await eliminarContacto(id);
+     setContacts((prev) => prev.filter((c) => c.id !== id));
+   } catch (err) {
+     console.error("Error eliminando contacto:", err);
+   }
+   setDeleteTarget(null);
+ };
   const closeDeleteModal = () => setDeleteTarget(null);
   const openNewContact = () => {
     setSelectedContact(null);
@@ -268,7 +195,7 @@ const ContactosScreen = ({ user }) => {
                     >
                       <Pencil size={16} />
                     </button>
-                    {user.role === "Admin" && (
+                    {user.role === "administrador" && (
                       <button
                         onClick={() => openDeleteModal(contact)}
                         className={styles.deleteBtn}
@@ -307,7 +234,7 @@ const ContactosScreen = ({ user }) => {
                   >
                     <Pencil size={16} />
                   </button>
-                  {user.role === "Admin" && (
+                  {user.role === "administrador" && (
                     <button
                       onClick={() => openDeleteModal(contact)}
                       className={styles.deleteBtn}

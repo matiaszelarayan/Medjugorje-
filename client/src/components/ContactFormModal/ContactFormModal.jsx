@@ -80,12 +80,16 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newContact = isEdit
-      ? { ...formData, id: contact.id }
-      : { ...formData, id: Date.now() };
-    onSave(newContact);
+
+    const payload = {
+      ...formData,
+      id: contact?.id || undefined, // si existe se edita, si no se crea
+    };
+
+    onSave(payload);
     onClose();
   };
+
 
   return (
     <ModalBase onClose={onClose}>
@@ -137,9 +141,9 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
             className={styles.select}
           >
             <option value="">Seleccionar</option>
-            <option value="Femenino">Femenino</option>
-            <option value="Masculino">Masculino</option>
-            <option value="Otro">Otro</option>
+            <option value="femenino">Femenino</option>
+            <option value="masculino">Masculino</option>
+            <option value="otro">Otro</option>
           </select>
         </div>
         <hr className={styles.separator} />
@@ -317,7 +321,7 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
           >
             <option value="">-- Seleccionar grupo --</option>
             {grupos.map((g) => (
-              <option key={g.id} value={g.id}>
+              <option key={g.id} value={g.nombre_grupo}>
                 {g.nombre_grupo}
               </option>
             ))}
