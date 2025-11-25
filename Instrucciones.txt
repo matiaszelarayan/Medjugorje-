@@ -26,7 +26,7 @@ Clave: admin123
 
 Colaborador
 Email: colab@local
-Clave: colab123
+Clave: Colab123
 
 5. Levantar el servidor
 python manage.py runserver
