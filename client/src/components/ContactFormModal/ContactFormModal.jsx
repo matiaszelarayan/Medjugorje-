@@ -321,7 +321,7 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
           >
             <option value="">-- Seleccionar grupo --</option>
             {grupos.map((g) => (
-              <option key={g.id} value={g.nombre_grupo}>
+              <option key={g.id} value={g.id}>
                 {g.nombre_grupo}
               </option>
             ))}

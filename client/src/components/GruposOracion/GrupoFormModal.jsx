@@ -3,7 +3,7 @@ import ModalBase from "../common/ModalBase/ModalBase";
 import styles from "./GrupoFormModal.module.css";
 import { useGeoArgentina } from "../../hooks/useGeoArgentina";
 
-const GrupoFormModal = ({ grupo, onClose, onSave }) => {
+const GrupoFormModal = ({ grupo, onClose, onSave, users }) => {
   const [form, setForm] = useState({
     nombre_grupo: "",
     provincia: "",
@@ -25,15 +25,18 @@ const GrupoFormModal = ({ grupo, onClose, onSave }) => {
     if (grupo) setForm(grupo);
   }, [grupo]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    // Al cambiar provincia, limpiar localidad
-    if (name === "provincia") {
-      setForm({ ...form, provincia: value, localidad: "" });
-    } else {
-      setForm({ ...form, [name]: value });
-    }
-  };
+ const handleChange = (e) => {
+   const { name, value } = e.target;
+
+   if (name === "provincia") {
+     setForm({ ...form, provincia: value, localidad: "" });
+   } else if (name === "responsable") {
+     setForm({ ...form, responsable: Number(value) });
+   } else {
+     setForm({ ...form, [name]: value });
+   }
+ };
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -42,7 +45,7 @@ const GrupoFormModal = ({ grupo, onClose, onSave }) => {
       alert("Todos los campos son obligatorios");
       return;
     }
-    onSave({ ...form, id: grupo?.id || Date.now() });
+    onSave(form);
     onClose();
   };
 
@@ -50,7 +53,6 @@ const GrupoFormModal = ({ grupo, onClose, onSave }) => {
     <ModalBase onClose={onClose}>
       <h3 className={styles.title}>{grupo ? "Editar Grupo" : "Nuevo Grupo"}</h3>
       <form onSubmit={handleSubmit} className={styles.form}>
-
         <label>Nombre del Grupo</label>
         <input
           type="text"
@@ -78,7 +80,9 @@ const GrupoFormModal = ({ grupo, onClose, onSave }) => {
           >
             <option value="">Seleccione provincia...</option>
             {provincias.map((p) => (
-              <option key={p.id} value={p.nombre}>{p.nombre}</option>
+              <option key={p.id} value={p.nombre}>
+                {p.nombre}
+              </option>
             ))}
           </select>
         )}
@@ -103,22 +107,36 @@ const GrupoFormModal = ({ grupo, onClose, onSave }) => {
           >
             <option value="">Seleccione localidad...</option>
             {localidades.map((l) => (
-              <option key={l.id} value={l.nombre}>{l.nombre}</option>
+              <option key={l.id} value={l.nombre}>
+                {l.nombre}
+              </option>
             ))}
           </select>
         )}
 
         <label>Responsable</label>
-        <input
-          type="text"
+        <select
           name="responsable"
           value={form.responsable}
           onChange={handleChange}
-        />
+          required
+          className={styles.select}
+        >
+          <option value="">Seleccione responsable...</option>
+          {users.map((u) => (
+            <option key={u.id} value={u.id}>
+              {u.nombre}
+            </option>
+          ))}
+        </select>
 
         <div className={styles.actions}>
-          <button type="submit" className={styles.saveBtn}>Guardar</button>
-          <button type="button" onClick={onClose} className={styles.cancelBtn}>Cancelar</button>
+          <button type="submit" className={styles.saveBtn}>
+            Guardar
+          </button>
+          <button type="button" onClick={onClose} className={styles.cancelBtn}>
+            Cancelar
+          </button>
         </div>
       </form>
     </ModalBase>
