@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     # Apps propias
     'accounts',
     'contactos',
+    'grupo_oracion',
     'api',
 ]
 

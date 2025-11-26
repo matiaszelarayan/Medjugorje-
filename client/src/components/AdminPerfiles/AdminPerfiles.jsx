@@ -5,9 +5,7 @@ import CreateUserModal from "../CreateUserModal/CreateUserModal";
 import EditUserModal from "../EditUserModal/EditUserModal";
 import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
 import PrintButton from "./PrintButton";
-import { getUsers, crearUser, eliminarUser, editarUser } from "../../api/userService";
-
-
+import { crearUser, eliminarUser, editarUser, getUsers } from "../../api/userService";
 
 const AdminPerfiles = () => {
   const [usuarios, setUsuarios] = useState([]);
@@ -23,8 +21,8 @@ const AdminPerfiles = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const data = await getUsers();
-        setUsuarios(data);
+        const users = await getUsers();
+        setUsuarios(users);
       } catch (error) {
         console.error("Error al obtener los usuarios:", error);
       }

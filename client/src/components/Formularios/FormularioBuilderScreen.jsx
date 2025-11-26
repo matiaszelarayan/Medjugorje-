@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import styles from "./FormularioBuilderScreen.module.css";
 import MainLayout from "../MainLayout/MainLayout";
+import { Plus, Save, X, Edit2, Trash2, ArrowUp, ArrowDown } from "lucide-react";
 
-// Campos tipo iniciales
+// Tipos de campos iniciales
 const initialFields = [
   { label: "Nombre", type: "text", required: true },
   { label: "Apellido", type: "text", required: true },
@@ -16,43 +17,69 @@ const initialFields = [
 
 const FormularioBuilderScreen = ({ user }) => {
   const [fields, setFields] = useState(initialFields);
-  const [formName, setFormName] = useState("");
-  const [slug, setSlug] = useState("");
+  const [formName, setFormName] = useState("Formulario de Inscripción");
+  const [slug, setSlug] = useState("formulario-de-inscripcion");
   const [isPreview, setIsPreview] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(null);
 
   // Handlers para campos dinámicos
-  const addField = () =>
-    setFields([...fields, { label: "", type: "text", required: false }]);
+  const addField = () => {
+    setFields([...fields, { label: "Nuevo Campo", type: "text", required: false }]);
+    setSuccessMessage(null);
+  };
+
   const updateField = (index, key, value) => {
     setFields(fields.map((f, i) => (i === index ? { ...f, [key]: value } : f)));
+    setSuccessMessage(null);
   };
-  const removeField = (index) =>
+
+  const removeField = (index) => {
     setFields(fields.filter((_, i) => i !== index));
+    setSuccessMessage(null);
+  };
+
+  // Mover campos arriba/abajo
+  const moveFieldUp = (index) => {
+    if (index === 0) return;
+    const newFields = [...fields];
+    const temp = newFields[index - 1];
+    newFields[index - 1] = newFields[index];
+    newFields[index] = temp;
+    setFields(newFields);
+  };
+
+  const moveFieldDown = (index) => {
+    if (index === fields.length - 1) return;
+    const newFields = [...fields];
+    const temp = newFields[index + 1];
+    newFields[index + 1] = newFields[index];
+    newFields[index] = temp;
+    setFields(newFields);
+  };
 
   // Generar slug SEO
   const handleGenerateSlug = () => {
-    setSlug(
-      formName
-        .trim()
-        .toLocaleLowerCase()
-        .replace(/[^\w\s-]/g, "")
-        .replace(/\s+/g, "-")
-    );
+    const generatedSlug = formName
+      .trim()
+      .toLocaleLowerCase()
+      .replace(/[^\w\s-]/g, "")
+      .replace(/\s+/g, "-");
+    setSlug(generatedSlug);
   };
 
-  // Previsualización y guardado (mock)
   const handlePreview = () => setIsPreview((prev) => !prev);
+
   const handleSave = () => {
-    alert(
-      "Formulario guardado. Enlace: " +
-        window.location.origin +
-        "/formulario/" +
-        slug
-    );
+    const formUrl = `${window.location.origin}/formulario/${slug}`;
+    setSuccessMessage({
+      name: formName,
+      url: formUrl,
+    });
+    // Simula guardar en backend
+    console.log("Formulario a guardar:", { name: formName, slug, fields });
   };
 
-  // Solo Admin/Colaborador
-  if (!["administrador", "colaborador"].includes(user?.role)) {
+  if (!["administrador", "colaborador", "Admin", "Colaborador"].includes(user?.role)) {
     return (
       <div className={`${styles.screenWrapper} screenWrapperGlobal`}>
         Acceso no autorizado
@@ -65,7 +92,6 @@ const FormularioBuilderScreen = ({ user }) => {
       <div className={`${styles.screenWrapper} screenWrapperGlobal`}>
         <div className={styles.formBuilderContainer}>
           <h2 className={styles.title}>Constructor de Formularios</h2>
-
           <div className={styles.inputField}>
             <input
               type="text"
@@ -77,20 +103,22 @@ const FormularioBuilderScreen = ({ user }) => {
             />
             {slug && (
               <span className={styles.slugLabel}>
-                URL: /formulario/<b>{slug}</b>
+                URL pública: /formulario/<b>{slug}</b>
               </span>
             )}
           </div>
 
-          <button onClick={addField} className="actionButtonGlobal">
-            ➕ Agregar campo
+          {/* Botón Agregar campo */}
+          <button onClick={addField} className={`${styles.btnGreen} ${styles.addFieldButton}`}>
+            <Plus size={18} style={{ marginRight: 8 }} />
+            Agregar campo
           </button>
 
+          {/* Lista de campos */}
           {fields.map((field, idx) => (
             <div key={idx} className={styles.fieldEditor}>
               <input
                 type="text"
-                placeholder="Etiqueta"
                 value={field.label}
                 onChange={(e) => updateField(idx, "label", e.target.value)}
                 className={styles.inputField}
@@ -104,99 +132,140 @@ const FormularioBuilderScreen = ({ user }) => {
                 <option value="email">Email</option>
                 <option value="number">Número</option>
                 <option value="date">Fecha</option>
-                <option value="provincia">Provincia/Estado</option>
-                <option value="localidad">Ciudad/Localidad</option>
                 <option value="checkbox">Checkbox</option>
                 <option value="textarea">Área de texto</option>
+                <option value="provincia">Provincia/Estado</option>
+                <option value="localidad">Ciudad/Localidad</option>
               </select>
               <label className={styles.fieldLabel}>
                 <input
                   type="checkbox"
                   checked={field.required}
-                  onChange={(e) =>
-                    updateField(idx, "required", e.target.checked)
-                  }
+                  onChange={(e) => updateField(idx, "required", e.target.checked)}
                   className={styles.checkboxRequired}
                 />
                 Requerido
               </label>
+              <button type="button" className={styles.btnEdit} title="Editar">
+                <Edit2 size={16} />
+              </button>
               <button
                 type="button"
-                className={styles.deleteBtn}
-                onClick={() => removeField(idx)}
-                title="Quitar campo"
+                className={styles.btnMove}
+                title="Subir"
+                onClick={() => moveFieldUp(idx)}
+                disabled={idx === 0}
               >
-                🗑️
+                <ArrowUp size={16} />
+              </button>
+              <button
+                type="button"
+                className={styles.btnMove}
+                title="Bajar"
+                onClick={() => moveFieldDown(idx)}
+                disabled={idx === fields.length - 1}
+              >
+                <ArrowDown size={16} />
+              </button>
+              <button
+                type="button"
+                className={styles.btnRed}
+                onClick={() => removeField(idx)}
+                title="Eliminar campo"
+              >
+                <Trash2 size={16} />
               </button>
             </div>
           ))}
 
-          <div style={{ marginTop: 16 }}>
-            <button onClick={handlePreview} className="actionButtonGlobal">
-              {isPreview ? "Editar" : "Previsualizar"}
+          {/* Botones de acción */}
+          <div className={styles.actionButtons}>
+            <button
+              onClick={handlePreview}
+              className={`${styles.btnOrange} actionButtonGlobal`}
+            >
+              <Save size={16} style={{ marginRight: 8 }} />
+              {isPreview ? "Volver a Editar" : "Previsualizar Formulario"}
             </button>
             <button
               onClick={handleSave}
               disabled={!formName || fields.length === 0}
-              className="actionButtonGlobal"
+              className={`${styles.btnGreen} actionButtonGlobal`}
             >
+              <Save size={16} style={{ marginRight: 8 }} />
               Guardar y Generar Enlace
+            </button>
+            <button
+              onClick={() => setIsPreview(false)}
+              className={`${styles.btnGray} actionButtonGlobal`}
+              style={{ marginLeft: 8 }}
+            >
+              <X size={16} style={{ marginRight: 8 }} />
+              Cancelar
             </button>
           </div>
 
+          {successMessage && (
+            <div className={styles.successMessage}>
+              ✅ Formulario <strong>"{successMessage.name}"</strong> guardado con éxito.
+              <span>
+                <strong>Enlace generado:</strong> {successMessage.url}
+              </span>
+            </div>
+          )}
+
           {isPreview && (
             <div className={styles.preview}>
-              <h3 className={styles.previewTitle}>Previsualización</h3>
+              <h3 className={styles.previewTitle}>
+                Previsualización: {formName}
+              </h3>
               <form>
                 {fields.map((field, idx) => (
                   <div key={idx} className={styles.formPreviewField}>
                     <label>
                       {field.label}
-                      {field.required && "*"}
+                      {field.required && <span style={{color: 'red', marginLeft: '4px'}}>*</span>}
                     </label>
                     {field.type === "textarea" ? (
                       <textarea
                         required={field.required}
                         className={styles.inputPreview}
+                        placeholder={`Escribe tu ${field.label.toLowerCase()}...`}
                       />
                     ) : field.type === "checkbox" ? (
-                      <input
-                        type="checkbox"
-                        required={field.required}
-                        className={styles.inputPreview}
-                      />
-                    ) : field.type === "provincia" ? (
-                      <input
-                        type="text"
-                        required={field.required}
-                        placeholder="Conectar provincias API"
-                        className={styles.inputPreview}
-                        disabled
-                      />
-                    ) : field.type === "localidad" ? (
-                      <input
-                        type="text"
-                        required={field.required}
-                        placeholder="Conectar localidades API"
-                        className={styles.inputPreview}
-                        disabled
-                      />
+                      <div style={{display: 'flex', alignItems: 'center', marginTop: '5px'}}>
+                        <input
+                          type="checkbox"
+                          required={field.required}
+                          className={styles.inputPreview}
+                          style={{width: 'auto', marginRight: '8px'}}
+                        />
+                      </div>
                     ) : (
                       <input
-                        type={field.type}
+                        type={
+                          field.type === "provincia" || field.type === "localidad"
+                            ? "text"
+                            : field.type
+                        }
                         required={field.required}
                         className={styles.inputPreview}
+                        placeholder={
+                          field.type === "provincia"
+                            ? "Seleccionar Provincia/Estado (API)"
+                            : field.type === "localidad"
+                            ? "Seleccionar Ciudad/Localidad (API)"
+                            : field.label
+                        }
+                        disabled={field.type === "provincia" || field.type === "localidad"}
                       />
                     )}
                   </div>
                 ))}
+                <button type="submit" className="actionButtonGlobal" style={{marginTop: '1rem'}}>
+                  Enviar Formulario
+                </button>
               </form>
-              <div>
-                <strong>Enlace público:</strong>
-                <span>
-                  {slug && `${window.location.origin}/formulario/${slug}`}
-                </span>
-              </div>
             </div>
           )}
         </div>

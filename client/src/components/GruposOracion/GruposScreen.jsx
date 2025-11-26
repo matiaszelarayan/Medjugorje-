@@ -1,64 +1,95 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./GruposScreen.module.css";
 import GrupoFormModal from "./GrupoFormModal";
 import GrupoPrintButton from "./GrupoPrintButton";
 import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
 import { Pencil, Trash2 } from "lucide-react";
+import { getGrupos, crearGrupo, editarGrupo, eliminarGrupo } from "../../api/grupoOracionService";
+import { getUsers } from "../../api/userService";
 
-const initialGrupos = [
-  {
-    id: 1,
-    nombre_grupo: "Grupo Esperanza",
-    provincia: "Buenos Aires",
-    localidad: "Junín",
-    responsable: "María López",
-  },
-  {
-    id: 2,
-    nombre_grupo: "Renacer",
-    provincia: "Córdoba",
-    localidad: "Villa María",
-    responsable: "Laura Gómez",
-  },
-  {
-    id: 3,
-    nombre_grupo: "Camino de Fe",
-    provincia: "Tucumán",
-    localidad: "Yerba Buena",
-    responsable: "Sofía Martínez",
-  },
-];
 
 const GruposScreen = ({ user }) => {
-  const [grupos, setGrupos] = useState(initialGrupos);
+  const [grupos, setGrupos] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedGrupo, setSelectedGrupo] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
+
+  const [users, setUsers] = useState([]);
+
+
+  useEffect(() => {
+    const fetchGrupos = async () => {
+      try {
+        const data = await getGrupos();
+        setGrupos(data);
+      } catch (error) {
+        console.error("Error al obtener los grupos:", error);
+      }
+    };
+    fetchGrupos();
+  }, []);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const users = await getUsers();
+        setUsers(users);
+      } catch (error) {
+        console.error("Error al obtener los usuarios:", error);
+      }
+    };
+    fetchUsers();
+  }, []);
 
   // ORDENAR grupos por nombre_grupo alfabéticamente antes del render
   const sortedGrupos = grupos.slice().sort((a, b) =>
     (a.nombre_grupo || "").toLowerCase().localeCompare((b.nombre_grupo || "").toLowerCase())
   );
 
-  const handleSave = (grupo) => {
-    setGrupos((prev) => {
-      const exists = prev.find((g) => g.id === grupo.id);
-      return exists
-        ? prev.map((g) => (g.id === grupo.id ? grupo : g))
-        : [...prev, { ...grupo, id: Date.now() }];
-    });
-    setShowModal(false);
+
+
+  const handleSave = async (grupo) => {
+    try {
+      let savedGrupo;
+
+      if (grupo.id) {
+        // EDITAR
+        savedGrupo = await editarGrupo(grupo.id, grupo);
+
+        setGrupos((prev) =>
+          prev.map((g) => (g.id === grupo.id ? savedGrupo : g))
+        );
+      } else {
+        // CREAR
+        savedGrupo = await crearGrupo(grupo);
+
+        setGrupos((prev) => [...prev, savedGrupo]);
+      }
+
+      setShowModal(false);
+      setSelectedGrupo(null);
+    } catch (error) {
+      console.error("Error al guardar grupo:", error);
+    }
   };
+
 
   const handleEdit = (grupo) => {
     setSelectedGrupo(grupo);
     setShowModal(true);
   };
   const openDeleteModal = (grupo) => setDeleteTarget(grupo);
-  const confirmDelete = (id) => {
-    setGrupos((prev) => prev.filter((g) => g.id !== id));
-    setDeleteTarget(null);
-  };
+ const confirmDelete = async (id) => {
+   try {
+     await eliminarGrupo(id);
+
+     setGrupos((prev) => prev.filter((g) => g.id !== id));
+     setDeleteTarget(null);
+   } catch (error) {
+     console.error("Error al eliminar grupo:", error);
+   }
+ };
+
   const closeDeleteModal = () => setDeleteTarget(null);
   const openNewGrupo = () => {
     setSelectedGrupo(null);
@@ -70,12 +101,12 @@ const GruposScreen = ({ user }) => {
       <div className={styles.gruposContainer}>
         <h2 className={styles.gruposTitle}>Grupos de Oración</h2>
         <div className={styles.actionsBar}>
-          {user.role === "Admin" && (
+          {user.role === "administrador" && (
             <button onClick={openNewGrupo} className="actionButtonGlobal">
               ➕ Nuevo Grupo
             </button>
           )}
-          {user.role === "Admin" && (
+          {user.role === "administrador" && (
             <GrupoPrintButton
               data={sortedGrupos}
               title="Listado de Grupos de Oración"
@@ -99,7 +130,10 @@ const GruposScreen = ({ user }) => {
                 <td>{grupo.nombre_grupo}</td>
                 <td>{grupo.provincia}</td>
                 <td>{grupo.localidad}</td>
-                <td>{grupo.responsable}</td>
+                <td>
+                  {users.find((u) => u.id === Number(grupo.responsable))
+                    ?.nombre || "—"}
+                </td>
                 <td>
                   <button
                     onClick={() => handleEdit(grupo)}
@@ -108,7 +142,7 @@ const GruposScreen = ({ user }) => {
                   >
                     <Pencil size={16} />
                   </button>
-                  {user.role === "Admin" && (
+                  {user.role === "administrador" && (
                     <button
                       onClick={() => openDeleteModal(grupo)}
                       className={styles.deleteBtn}
@@ -127,6 +161,7 @@ const GruposScreen = ({ user }) => {
             grupo={selectedGrupo}
             onClose={() => setShowModal(false)}
             onSave={handleSave}
+            users={users}
           />
         )}
         {deleteTarget && (
