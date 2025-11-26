@@ -65,3 +65,9 @@ Thumbs.db
 *~
 *.swp
 *.tmp
+
+populate_contacts.py
+populate_grupos.py
+
+server/populate_contacts.py
+server/populate_grupos.py

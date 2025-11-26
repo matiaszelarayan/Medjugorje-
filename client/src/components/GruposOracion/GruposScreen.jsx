@@ -54,7 +54,7 @@ const GruposScreen = ({ user }) => {
 
       if (grupo.id) {
         // EDITAR
-        savedGrupo = await editarGrupo(grupo.id, grupo);
+        savedGrupo = await editarGrupo(grupo);
 
         setGrupos((prev) =>
           prev.map((g) => (g.id === grupo.id ? savedGrupo : g))
