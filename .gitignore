@@ -1,0 +1,67 @@
+# ---- FRONTEND ----
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Vite
+.vite/
+
+# Build output
+client/dist/
+client/build/
+
+# Lockfiles (si NO querés versionar package-lock.json, inclúyelo aquí)
+client/package-lock.json
+client/yarn.lock
+
+# ---- BACKEND ----
+
+# Entornos virtuales
+venv/
+env/
+ENV/
+
+# Python bytecode
+*.pyc
+*.pyo
+*.pyd
+
+# Django migrations y cachés
+__pycache__/
+**/__pycache__/
+*.sqlite3
+server/db.sqlite3
+db.sqlite3
+
+# Ficheros temporales SQLite
+*.db
+*.db-journal
+
+# Ficheros de compilación y logs
+*.log
+*.out
+*.pid
+
+# Archivos de entorno y configuración secretos
+.env
+.env.local
+.env.dev
+.env.prod
+
+# IDE/editor config
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Documentos temporales y swap
+*~
+*.swp
+*.tmp
