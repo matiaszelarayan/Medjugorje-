@@ -10,6 +10,7 @@ import {
   editarContacto,
   eliminarContacto,
 } from "../../api/contactoService";
+import  CopiarLinkFormulario from "./CopiarLinkFormulario";
 
 import { getGrupos } from "../../api/grupoOracionService";
 
@@ -163,6 +164,7 @@ const ContactosScreen = ({ user }) => {
           <button onClick={openNewContact} className="actionButtonGlobal">
             ➕ Nuevo Contacto
           </button>
+          <CopiarLinkFormulario/>
           <button
             onClick={() =>
               setViewMode(viewMode === "tabla" ? "tarjetas" : "tabla")

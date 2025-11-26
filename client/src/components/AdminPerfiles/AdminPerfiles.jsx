@@ -51,8 +51,12 @@ const AdminPerfiles = () => {
       await crearUser(nuevoUsuario);
     } catch (error) {
       console.error("Error al crear el usuario:", error);
+      console.error(
+        "Error al crear el usuario:",
+        error.response?.data || error
+      );
     }
-
+    
     setUsuarios((prev) => [...prev, nuevoUsuario]);
     setBusqueda("");
     setFiltroRol("Todos");

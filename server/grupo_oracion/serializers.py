@@ -14,3 +14,7 @@ class GrupoDeOracionSerializer(serializers.ModelSerializer):
             "responsable",
             "responsable_email",
         ]
+class GrupoDeOracionPublicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GrupoDeOracion
+        fields = ["id", "nombre_grupo"]

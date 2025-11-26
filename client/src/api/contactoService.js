@@ -22,7 +22,3 @@ export async function editarContacto(contacto) {
   return res.data;
 }
 
-export async function getContactoPublic(contacto) {
-  const res = await axiosClient.post(`${BASE_URL}public/`, contacto);
-  return res.data;
-}

@@ -1,6 +1,6 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, generics
 from .models import GrupoDeOracion
-from .serializers import GrupoDeOracionSerializer
+from .serializers import GrupoDeOracionSerializer, GrupoDeOracionPublicSerializer
 from accounts.permissions import IsAdministrador, IsColaborador, IsAdminOrColaborador
 
 class GrupoDeOracionViewSet(viewsets.ModelViewSet):
@@ -16,3 +16,8 @@ class GrupoDeOracionViewSet(viewsets.ModelViewSet):
             return [IsAdminOrColaborador()]
 
         return [permissions.IsAuthenticated()]
+
+class GrupoDeOracionPublicListView(generics.ListAPIView):
+    queryset = GrupoDeOracion.objects.all().order_by("nombre_grupo")
+    serializer_class = GrupoDeOracionPublicSerializer
+    permission_classes = [permissions.AllowAny]
