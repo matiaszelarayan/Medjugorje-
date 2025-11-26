@@ -11,14 +11,10 @@ import {
   eliminarContacto,
 } from "../../api/contactoService";
 
+import { getGrupos } from "../../api/grupoOracionService";
 
 
 
-const grupos = [
-  { id: 1, nombre_grupo: "Grupo Esperanza" },
-  { id: 2, nombre_grupo: "Renacer" },
-  { id: 3, nombre_grupo: "Camino de Fe" },
-];
 
 const ContactosScreen = ({ user }) => {
   const [contacts, setContacts] = useState([]);
@@ -32,6 +28,20 @@ const ContactosScreen = ({ user }) => {
   });
   const [deleteTarget, setDeleteTarget] = useState(null);
 
+  const [grupos, setGrupos] = useState([]);
+
+  useEffect(() => {
+    const fetchGrupos = async () => {
+      try {
+        const data = await getGrupos();
+        setGrupos(data);
+      } catch (error) {
+        console.error("Error al obtener los grupos:", error);
+      }
+    };
+    fetchGrupos();
+  }, []);
+
   useEffect(() => {
       const fetchContactos = async () => {
         try {
@@ -41,8 +51,8 @@ const ContactosScreen = ({ user }) => {
           console.error("Error al obtener los contactos:", error);
         }
       };
-      fetchContactos();
-    }, []);
+    fetchContactos();
+  }, []);
 
   // 1. Filtrar
   const filteredContacts = contacts.filter((c) => {
@@ -185,7 +195,10 @@ const ContactosScreen = ({ user }) => {
                   <td>{contact.email}</td>
                   <td>{contact.provincia}</td>
                   <td>{contact.ciudad}</td>
-                  <td>{contact.grupo_oracion || "—"}</td>
+                  <td>
+                    {grupos.find((g) => g.id === Number(contact.grupo_oracion))
+                      ?.nombre_grupo || "—"}
+                  </td>
                   <td>{contact.participa_grupo ? "✅" : "❌"}</td>
                   <td>
                     <button
@@ -221,7 +234,9 @@ const ContactosScreen = ({ user }) => {
                   📍 {contact.provincia}, {contact.ciudad}
                 </div>
                 <div className={styles.contactoGrupo}>
-                  🙏 {contact.grupo_oracion || "Sin grupo"}
+                  🙏{" "}
+                  {grupos.find((g) => g.id === Number(contact.grupo_oracion))
+                    ?.nombre_grupo || "—"}
                 </div>
                 <div className={styles.contactoParticipa}>
                   {contact.participa_grupo ? "✅ Participa" : "❌ No participa"}

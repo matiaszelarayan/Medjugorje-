@@ -1,5 +1,8 @@
 from django.db import models
 from django.conf import settings
+from grupo_oracion.models import GrupoDeOracion
+
+
 
 class Contacto(models.Model):
     SEXO_CHOICES = [
@@ -23,7 +26,15 @@ class Contacto(models.Model):
     instagram = models.CharField(max_length=100, blank=True, null=True)
     parroquia = models.CharField(max_length=100, blank=True, null=True)
     participa_grupo = models.BooleanField(default=False)
-    grupo_oracion = models.CharField(max_length=100, blank=True, null=True)
+
+    grupo_oracion = models.ForeignKey(
+        GrupoDeOracion,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="contactos"
+    )
+  
 
     creado_por = models.ForeignKey(
         settings.AUTH_USER_MODEL,

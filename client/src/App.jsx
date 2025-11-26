@@ -51,8 +51,6 @@ export default function App() {
       });
   }, []);
 
-
-
   const handleLogin = async ({ email, password }) => {
     try {
       const data = await loginAPI(email, password);
