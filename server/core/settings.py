@@ -9,6 +9,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-0^w-ypsvko0f8=-z#=t2%vjqw*h!5*ja#z_ctv7uk3!t9263!i'
 
+import environ
+import os
+
+# Inicializar environ
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
+
+SENDGRID_API_KEY = env("SENDGRID_API_KEY")
+SENDGRID_FROM_EMAIL = env("SENDGRID_FROM_EMAIL")
+
+
 DEBUG = True
 ALLOWED_HOSTS = []
 
@@ -29,6 +40,7 @@ INSTALLED_APPS = [
     'accounts',
     'contactos',
     'grupo_oracion',
+    'correos',
     'api',
 ]
 

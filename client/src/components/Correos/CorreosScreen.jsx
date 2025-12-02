@@ -40,26 +40,37 @@ const CorreosScreen = ({ user }) => {
   const [correoSeleccionado, setCorreoSeleccionado] = useState(null);
   const [correoAEliminar, setCorreoAEliminar] = useState(null);
 
-  const puedeEnviar = user.role === "Admin";
-  const puedeEditar = user.role === "Admin" || user.role === "Colaborador";
+  const puedeEnviar = user.role === "administrador";
+  const puedeEditar =
+    user.role === "administrador" || user.role === "colaborador";
 
   // Ordenar por título
-  const sortedCorreos = correos.slice().sort((a, b) =>
-    (a.titulo || "").toLowerCase().localeCompare((b.titulo || "").toLowerCase())
-  );
+  const sortedCorreos = correos
+    .slice()
+    .sort((a, b) =>
+      (a.titulo || "")
+        .toLowerCase()
+        .localeCompare((b.titulo || "").toLowerCase())
+    );
 
   // Guardar correo editado o nuevo
   const handleGuardarCorreo = (nuevoCorreo) => {
     if (correoEditando) {
-      setCorreos(prev =>
-        prev.map(c => c.id === correoEditando.id
-          ? { ...c, ...nuevoCorreo, id: correoEditando.id, titulo: nuevoCorreo.asunto }
-          : c
+      setCorreos((prev) =>
+        prev.map((c) =>
+          c.id === correoEditando.id
+            ? {
+                ...c,
+                ...nuevoCorreo,
+                id: correoEditando.id,
+                titulo: nuevoCorreo.asunto,
+              }
+            : c
         )
       );
     } else {
       const nuevo = {
-        id: correos.length ? Math.max(...correos.map(c => c.id)) + 1 : 1,
+        id: correos.length ? Math.max(...correos.map((c) => c.id)) + 1 : 1,
         titulo: nuevoCorreo.asunto,
         estado: "Borrador",
         destinatarios: nuevoCorreo.destinatarios || 3,
@@ -119,7 +130,10 @@ const CorreosScreen = ({ user }) => {
         </p>
         <div className={styles.actionsBar}>
           <button
-            onClick={() => { setCorreoEditando(null); setModalAbierto(true); }}
+            onClick={() => {
+              setCorreoEditando(null);
+              setModalAbierto(true);
+            }}
             className="actionButtonGlobal"
           >
             ➕ Nuevo Correo
@@ -177,7 +191,10 @@ const CorreosScreen = ({ user }) => {
         {modalAbierto && (
           <NuevoCorreoModal
             correo={correoEditando}
-            onClose={() => { setModalAbierto(false); setCorreoEditando(null); }}
+            onClose={() => {
+              setModalAbierto(false);
+              setCorreoEditando(null);
+            }}
             onSave={handleGuardarCorreo}
           />
         )}
@@ -185,7 +202,10 @@ const CorreosScreen = ({ user }) => {
           <EnvioCorreoModal
             correo={correoSeleccionado}
             destinatarios={correoSeleccionado.destinatarios}
-            onClose={() => { setModalEnvioAbierto(false); setCorreoSeleccionado(null); }}
+            onClose={() => {
+              setModalEnvioAbierto(false);
+              setCorreoSeleccionado(null);
+            }}
             onSend={handleConfirmarEnvio}
           />
         )}

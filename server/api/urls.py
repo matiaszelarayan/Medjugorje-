@@ -7,5 +7,6 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('contactos/', include('contactos.urls')),
     path('grupo-oracion/', include('grupo_oracion.urls')),
+    path('correos/', include('correos.urls')),
     
 ]

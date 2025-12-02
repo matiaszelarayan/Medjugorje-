@@ -62,7 +62,7 @@ const EventosScreen = ({ user }) => {
     setShowModal(true);
   };
 
-  const esAdmin = user.role === "Admin";
+  const esAdmin = user.role === "administrador";
 
   return (
     <div className={styles.screenWrapper}>
