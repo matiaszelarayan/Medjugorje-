@@ -93,16 +93,21 @@ const EnvioCorreoModal = ({ correo, destinatarios, onClose, onSend }) => {
    * };
    */
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (enviando) return;
+
     setEnviando(true);
-    // SIMULACIÓN: Mantener por ahora para testing local
-    setTimeout(() => {
-      onSend();
+
+    try {
+      await onSend(); // aquí se ejecuta enviarCorreo(id)
+      onClose(); // cierra modal
+    } catch (error) {
+      console.error("Error enviando correo:", error);
+    } finally {
       setEnviando(false);
-      onClose();
-    }, 3000);
+    }
   };
+
 
   return (
     <ModalBase onClose={onClose}>

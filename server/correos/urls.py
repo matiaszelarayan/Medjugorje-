@@ -12,6 +12,6 @@ urlpatterns = [
     # Obtener, editar o eliminar un correo masivo específico
     path("<int:pk>/", CorreoMasivoDetailView.as_view(), name="correos-detail"),
 
-    # Enviar un correo masivo (genera destinatarios y luego lo conectaremos a SendGrid)
+    # Enviar un correo masivo (genera destinatarios y luego se conecta a SendGrid)
     path("<int:pk>/enviar/", EnviarCorreoMasivoView.as_view(), name="correos-enviar"),
 ]

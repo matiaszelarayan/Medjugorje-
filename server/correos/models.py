@@ -54,7 +54,7 @@ class CorreoMasivo(models.Model):
 
 class DestinatarioCorreo(models.Model):
     """
-    Registra a que contacto se le envió o intentó enviar
+    registra a que contacto se le envió o intentó enviar
     un correo masivo y cuál fue el resultado.
     """
 

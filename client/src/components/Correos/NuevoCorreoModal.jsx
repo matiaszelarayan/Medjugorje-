@@ -2,19 +2,7 @@ import React, { useEffect, useState } from "react";
 import ModalBase from "../common/ModalBase/ModalBase";
 import styles from "./NuevoCorreoModal.module.css";
 import { useGeoArgentina } from "../../hooks/useGeoArgentina";
-
-// Simulados (en real vendrán de la API BD)
-const gruposOracion = [
-  { id: 1, nombre_grupo: "Grupo Esperanza" },
-  { id: 2, nombre_grupo: "Renacer" },
-  { id: 3, nombre_grupo: "Camino de Fe" },
-];
-const contactos = [
-  { id: 1, provincia: "Buenos Aires", ciudad: "Junín", grupo_id: 1, acepta_newsletter: true },
-  { id: 2, provincia: "Buenos Aires", ciudad: "Pergamino", grupo_id: 2, acepta_newsletter: false },
-  { id: 3, provincia: "Córdoba", ciudad: "Villa María", grupo_id: 1, acepta_newsletter: true },
-  { id: 4, provincia: "Santa Fe", ciudad: "Rosario", grupo_id: 3, acepta_newsletter: true },
-];
+import { getGrupos } from "../../api/grupoOracionService";
 
 const NuevoCorreoModal = ({ correo, onClose, onSave }) => {
   const [formData, setFormData] = useState({
@@ -25,6 +13,14 @@ const NuevoCorreoModal = ({ correo, onClose, onSave }) => {
     grupo: "todos",
     soloNewsletter: false,
   });
+
+  const [grupos, setGrupos] = useState([]);
+
+   useEffect(() => {
+     getGrupos()
+       .then(setGrupos)
+       .catch((e) => console.error("Error grupos:", e));
+   }, []);
 
   // Carga inicial para edición
   useEffect(() => {
@@ -53,11 +49,13 @@ const NuevoCorreoModal = ({ correo, onClose, onSave }) => {
   // Manejo de cambios en el formulario
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+
     if (name === "provincia") {
+      setFormData((prev) => ({ ...prev, provincia: value, ciudad: "" }));
+    } else if (name === "grupo_oracion") {
       setFormData((prev) => ({
         ...prev,
-        provincia: value,
-        ciudad: "",
+        grupo_oracion: value === "" ? null : Number(value),
       }));
     } else {
       setFormData((prev) => ({
@@ -67,47 +65,53 @@ const NuevoCorreoModal = ({ correo, onClose, onSave }) => {
     }
   };
 
-  // Lista de destinatarios filtrados
-  const destinatariosList = contactos.filter((c) => {
-    const matchProvincia = !formData.provincia || c.provincia === formData.provincia;
-    const matchCiudad = !formData.ciudad || c.ciudad === formData.ciudad;
-    const matchGrupo = formData.grupo === "todos" || c.grupo_id === parseInt(formData.grupo);
-    const matchNewsletter = !formData.soloNewsletter || c.acepta_newsletter;
-    return matchProvincia && matchCiudad && matchGrupo && matchNewsletter;
-  });
-  const destinatarios = destinatariosList.length;
-
+  
+  // resolver despues
+  
   // Contactos por grupo (con filtros activos)
-  const grupoContactCount = gruposOracion.map(grupo => ({
-    ...grupo,
-    count: contactos.filter(c =>
-      (!formData.provincia || c.provincia === formData.provincia) &&
-      (!formData.ciudad || c.ciudad === formData.ciudad) &&
-      (!formData.soloNewsletter || c.acepta_newsletter) &&
-      c.grupo_id === grupo.id
-    ).length
-  }));
+  // const grupoContactCount = gruposOracion.map(grupo => ({
+  //   ...grupo,
+  //   count: contactos.filter(c =>
+  //     (!formData.provincia || c.provincia === formData.provincia) &&
+  //     (!formData.ciudad || c.ciudad === formData.ciudad) &&
+  //     (!formData.soloNewsletter || c.acepta_newsletter) &&
+  //     c.grupo_id === grupo.id
+  //   ).length
+  // }));
 
   // Exportar destinatarios actuales a CSV
-  const handleExport = () => {
-    const header = "ID,Provincia,Ciudad,Grupo,Newsletter\n";
-    const rows = destinatariosList
-      .map(c =>
-        `${c.id},"${c.provincia}","${c.ciudad}","${gruposOracion.find(g => g.id === c.grupo_id)?.nombre_grupo ?? ""}","${c.acepta_newsletter ? "Sí" : "No"}"`
-      ).join("\n");
-    const csv = header + rows;
-    const blob = new Blob([csv], { type: "text/csv" });
-    const link = document.createElement("a");
-    link.href = window.URL.createObjectURL(blob);
-    link.download = "destinatarios.csv";
-    link.click();
-  };
+  // const handleExport = () => {
+  //   const header = "ID,Provincia,Ciudad,Grupo,Newsletter\n";
+  //   const rows = destinatariosList
+  //     .map(c =>
+  //       `${c.id},"${c.provincia}","${c.ciudad}","${gruposOracion.find(g => g.id === c.grupo_id)?.nombre_grupo ?? ""}","${c.acepta_newsletter ? "Sí" : "No"}"`
+  //     ).join("\n");
+  //   const csv = header + rows;
+  //   const blob = new Blob([csv], { type: "text/csv" });
+  //   const link = document.createElement("a");
+  //   link.href = window.URL.createObjectURL(blob);
+  //   link.download = "destinatarios.csv";
+  //   link.click();
+  // };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSave({ ...formData, destinatarios });
-    onClose();
-  };
+ const handleSubmit = (e) => {
+   e.preventDefault();
+
+   const payload = {
+     titulo: formData.asunto,
+     asunto: formData.asunto,
+     contenido: formData.contenido,
+     solo_newsletter: formData.soloNewsletter,
+     provincia: formData.provincia || null,
+     ciudad: formData.ciudad || null,
+     grupo_oracion:
+       formData.grupo_oracion === "todos" || formData.grupo_oracion === ""
+         ? null
+         : Number(formData.grupo_oracion),
+   };
+
+   onSave(payload);
+ };
 
   return (
     <ModalBase onClose={onClose}>
@@ -205,21 +209,21 @@ const NuevoCorreoModal = ({ correo, onClose, onSave }) => {
         <div className={styles.formGroup}>
           <label className={styles.label}>Grupo de Oración</label>
           <select
-            name="grupo"
-            value={formData.grupo}
+            name="grupo_oracion"
+            value={formData.grupo_oracion || ""}
             onChange={handleChange}
             className={styles.select}
             required
           >
             <option value="todos">Todos los grupos</option>
-            {grupoContactCount.map((g) => (
+            {grupos.map((g) => (
               <option key={g.id} value={g.id}>
-                {g.nombre_grupo} ({g.count})
+                {g.nombre_grupo}
               </option>
             ))}
           </select>
         </div>
-        <div className={styles.exportWrapper}>
+        {/* <div className={styles.exportWrapper}>
           <p className={styles.destinatarios}>
             Destinatarios: {destinatarios} contactos
           </p>
@@ -231,7 +235,7 @@ const NuevoCorreoModal = ({ correo, onClose, onSave }) => {
           >
             Exportar contactos
           </button>
-        </div>
+        </div> */}
         <div className={styles.actions}>
           <button
             type="button"

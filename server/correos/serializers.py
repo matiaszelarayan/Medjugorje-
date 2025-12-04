@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import CorreoMasivo, DestinatarioCorreo
-from contactos.models import Contacto
+from .utils import obtener_contactos_para_correo
 
 
 class DestinatarioCorreoSerializer(serializers.ModelSerializer):
@@ -22,6 +22,7 @@ class DestinatarioCorreoSerializer(serializers.ModelSerializer):
 
 class CorreoMasivoSerializer(serializers.ModelSerializer):
     destinatarios = DestinatarioCorreoSerializer(many=True, read_only=True)
+    cantidad_destinatarios = serializers.SerializerMethodField()
 
     class Meta:
         model = CorreoMasivo
@@ -39,16 +40,19 @@ class CorreoMasivoSerializer(serializers.ModelSerializer):
             "fecha_creacion",
             "fecha_envio",
             "destinatarios",
+            "cantidad_destinatarios",
         ]
         read_only_fields = ["creado_por", "fecha_creacion", "fecha_envio"]
+    
+    def get_cantidad_destinatarios(self, obj):
+        _, cantidad = obtener_contactos_para_correo(obj)
+        return cantidad
 
     def create(self, validated_data):
         """
-        Crea el correo masivo, pero *NO* genera destinatarios todavía.
+        Crea el correo masivo, pero no genera los destinatarios 
         Eso se hará cuando se presione "Enviar".
         """
-        request = self.context.get("request")
-        user = request.user if request else None
 
         correo = CorreoMasivo.objects.create(
             **validated_data

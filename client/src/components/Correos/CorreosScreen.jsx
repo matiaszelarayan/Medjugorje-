@@ -1,44 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./CorreosScreen.module.css";
 import { Pencil, Send, Trash2 } from "lucide-react";
 import NuevoCorreoModal from "./NuevoCorreoModal";
 import EnvioCorreoModal from "./EnvioCorreoModal";
 import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
+import {
+  getCorreos,
+  crearCorreo,
+  editarCorreo,
+  eliminarCorreo,
+  enviarCorreo,
+} from "../../api/correoService";
 
 const CorreosScreen = ({ user }) => {
-  const [correos, setCorreos] = useState([
-    {
-      id: 1,
-      titulo: "Correo de prueba",
-      estado: "Borrador",
-      destinatarios: 3,
-      fecha: "5 nov 2025, 17:51",
-      asunto: "Correo de prueba",
-      contenido: "Aquí va el cuerpo del correo",
-      soloNewsletter: true,
-      provincia: "",
-      ciudad: "",
-      grupo: "todos",
-    },
-    {
-      id: 2,
-      titulo: "Viaje a Medjugorje",
-      estado: "Enviado",
-      destinatarios: 3,
-      fecha: "5 nov 2025, 11:28",
-      asunto: "Viaje a Medjugorje",
-      contenido: "Detalles del viaje",
-      soloNewsletter: false,
-      provincia: "",
-      ciudad: "",
-      grupo: "todos",
-    },
-  ]);
+
+  const [correos, setCorreos] = useState([]);
   const [modalAbierto, setModalAbierto] = useState(false);
   const [correoEditando, setCorreoEditando] = useState(null);
   const [modalEnvioAbierto, setModalEnvioAbierto] = useState(false);
   const [correoSeleccionado, setCorreoSeleccionado] = useState(null);
   const [correoAEliminar, setCorreoAEliminar] = useState(null);
+
+  useEffect(() => {
+    getCorreos()
+      .then((correos) => {
+        setCorreos(correos);
+      })
+      .catch((error) => {
+        console.error("Error al obtener los correos:", error);
+      });
+  }, []);
+
 
   const puedeEnviar = user.role === "administrador";
   const puedeEditar =
@@ -54,68 +46,70 @@ const CorreosScreen = ({ user }) => {
     );
 
   // Guardar correo editado o nuevo
-  const handleGuardarCorreo = (nuevoCorreo) => {
-    if (correoEditando) {
-      setCorreos((prev) =>
-        prev.map((c) =>
-          c.id === correoEditando.id
-            ? {
-                ...c,
-                ...nuevoCorreo,
-                id: correoEditando.id,
-                titulo: nuevoCorreo.asunto,
-              }
-            : c
-        )
-      );
-    } else {
-      const nuevo = {
-        id: correos.length ? Math.max(...correos.map((c) => c.id)) + 1 : 1,
-        titulo: nuevoCorreo.asunto,
-        estado: "Borrador",
-        destinatarios: nuevoCorreo.destinatarios || 3,
-        fecha: new Date().toLocaleString("es-AR", {
-          day: "numeric",
-          month: "short",
-          year: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-        asunto: nuevoCorreo.asunto,
-        contenido: nuevoCorreo.contenido,
-        soloNewsletter: nuevoCorreo.soloNewsletter,
-        provincia: nuevoCorreo.provincia,
-        ciudad: nuevoCorreo.ciudad,
-        grupo: nuevoCorreo.grupo,
-      };
-      setCorreos([nuevo, ...correos]);
+  const handleGuardarCorreo = async (formData) => {
+    console.log(formData);
+    try {
+      if (correoEditando) {
+        const actualizado = await editarCorreo({
+          ...formData,
+          id: correoEditando.id,
+        });
+        setCorreos((prev) =>
+          prev.map((c) => (c.id === actualizado.id ? actualizado : c))
+        );
+      } else {
+        const creado = await crearCorreo(formData);
+        setCorreos((prev) => [creado, ...prev]);
+      }
+    } catch (err) {
+      console.error("Error guardando correo:", err);
     }
+
     setCorreoEditando(null);
     setModalAbierto(false);
   };
-
   const handleAbrirEnvio = (correo) => {
     setCorreoSeleccionado(correo);
     setModalEnvioAbierto(true);
   };
 
-  const handleConfirmarEnvio = () => {
-    setCorreos((prev) =>
-      prev.map((c) =>
-        c.id === correoSeleccionado.id ? { ...c, estado: "Enviado" } : c
-      )
-    );
-    setModalEnvioAbierto(false);
-    setCorreoSeleccionado(null);
-  };
+ const handleConfirmarEnvio = async () => {
+   try {
+     const data = await enviarCorreo(correoSeleccionado.id);
+
+     setCorreos((prev) =>
+       prev.map((c) =>
+         c.id === correoSeleccionado.id
+           ? {
+               ...c,
+               estado: data.estado, 
+               fecha_envio: data.fecha_envio, 
+             }
+           : c
+       )
+     );
+   } catch (error) {
+     console.error("Error enviando correo:", error);
+   }
+
+   setModalEnvioAbierto(false);
+   setCorreoSeleccionado(null);
+ };
+
 
   // ---- ELIMINACIÓN ----
   const handleEliminarCorreo = (correo) => {
     setCorreoAEliminar(correo);
   };
 
-  const confirmarEliminacion = (id) => {
-    setCorreos((prev) => prev.filter((c) => c.id !== id));
+  const confirmarEliminacion = async (id) => {
+    try {
+      await eliminarCorreo(id);
+      setCorreos((prev) => prev.filter((c) => c.id !== id));
+    } catch (err) {
+      console.error("Error eliminando correo:", err);
+    }
+
     setCorreoAEliminar(null);
   };
 
@@ -145,7 +139,8 @@ const CorreosScreen = ({ user }) => {
               <th>Título</th>
               <th>Estado</th>
               <th>Destinatarios</th>
-              <th>Fecha</th>
+              <th>Fecha Creacion</th>
+              <th>Fecha Envio</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -154,8 +149,9 @@ const CorreosScreen = ({ user }) => {
               <tr key={correo.id}>
                 <td>{correo.titulo}</td>
                 <td>{correo.estado}</td>
-                <td>{correo.destinatarios} contactos</td>
-                <td>{correo.fecha}</td>
+                <td>{correo.cantidad_destinatarios || 0} contactos</td>
+                <td>{correo.fecha_creacion.slice(0, 10)}</td>
+                <td>{correo.fecha_envio?.slice(0, 10) || "-"}</td>
                 <td>
                   {puedeEditar && (
                     <button
@@ -169,7 +165,7 @@ const CorreosScreen = ({ user }) => {
                       <Pencil size={16} />
                     </button>
                   )}
-                  {puedeEnviar && correo.estado === "Borrador" && (
+                  {puedeEnviar && correo.estado === "borrador" && (
                     <button
                       className={styles.sendBtn}
                       onClick={() => handleAbrirEnvio(correo)}
@@ -201,7 +197,7 @@ const CorreosScreen = ({ user }) => {
         {modalEnvioAbierto && correoSeleccionado && (
           <EnvioCorreoModal
             correo={correoSeleccionado}
-            destinatarios={correoSeleccionado.destinatarios}
+            destinatarios={correoSeleccionado.cantidad_destinatarios}
             onClose={() => {
               setModalEnvioAbierto(false);
               setCorreoSeleccionado(null);
