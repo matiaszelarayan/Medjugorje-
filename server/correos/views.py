@@ -25,6 +25,9 @@ class CorreoMasivoListCreateView(generics.ListCreateAPIView):
    
        correo = serializer.save(creado_por=request.user)
    
+      # validated_data = serializer.validated_data
+      # validated_data['creado_por'] = request.user
+      # correo = CorreoMasivo.objects.create(**validated_data)
        contactos, cantidad = obtener_contactos_para_correo(correo)
    
        return Response(
