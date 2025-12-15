@@ -4,8 +4,8 @@ import styles from "./eventos.module.css";
 
 const defaultForm = {
   titulo: "",
-  fechaInicio: "",
-  fechaFin: "",
+  fecha_inicio: "",
+  fecha_fin: "",
   ubicacion: "",
   url: "",
   descripcion: "",
@@ -18,13 +18,13 @@ const EventoFormModal = ({ evento, onClose, onSave }) => {
 
   useEffect(() => {
     if (evento) setForm({
-      titulo: evento.titulo || "",
-      fechaInicio: evento.fechaInicio || "",
-      fechaFin: evento.fechaFin || "",
-      ubicacion: evento.ubicacion || "",
-      url: evento.url || "",
-      descripcion: evento.descripcion || "",
-      publico: !!evento.publico,
+      titulo: evento.titulo ?? "",
+      fecha_inicio: evento.fecha_inicio ?? "",
+      fecha_fin: evento.fecha_fin ?? "",
+      ubicacion: evento.ubicacion ?? "",
+      url: evento.url ?? "",
+      descripcion: evento.descripcion ?? "",
+      publico: evento.publico ?? true,
     });
   }, [evento]);
 
@@ -32,9 +32,9 @@ const EventoFormModal = ({ evento, onClose, onSave }) => {
   const validar = () => {
     let err = {};
     if (!form.titulo.trim()) err.titulo = "El título es obligatorio";
-    if (!form.fechaInicio) err.fechaInicio = "La fecha/hora de inicio es obligatoria";
-    if (form.fechaFin && form.fechaInicio && new Date(form.fechaFin) < new Date(form.fechaInicio)) {
-      err.fechaFin = "La fecha/hora de fin debe ser mayor o igual a la de inicio";
+    if (!form.fecha_inicio) err.fecha_inicio = "La fecha/hora de inicio es obligatoria";
+    if (form.fecha_fin && form.fecha_inicio && new Date(form.fecha_fin) < new Date(form.fecha_inicio)) {
+      err.fecha_fin = "La fecha/hora de fin debe ser mayor o igual a la de inicio";
     }
     return err;
   };
@@ -81,27 +81,27 @@ const EventoFormModal = ({ evento, onClose, onSave }) => {
             <label className={styles.label}>Fecha/Hora Inicio *</label>
             <input
               type="datetime-local"
-              name="fechaInicio"
-              value={form.fechaInicio}
+              name="fecha_inicio"
+              value={form.fecha_inicio}
               onChange={handleChange}
               className={styles.input}
               required
             />
-            {errores.fechaInicio && (
-              <div className={styles.error}>{errores.fechaInicio}</div>
+            {errores.fecha_inicio && (
+              <div className={styles.error}>{errores.fecha_inicio}</div>
             )}
           </div>
           <div>
             <label className={styles.label}>Fecha/Hora Fin</label>
             <input
               type="datetime-local"
-              name="fechaFin"
-              value={form.fechaFin}
+              name="fecha_fin"
+              value={form.fecha_fin}
               onChange={handleChange}
               className={styles.input}
             />
-            {errores.fechaFin && (
-              <div className={styles.error}>{errores.fechaFin}</div>
+            {errores.fecha_fin && (
+              <div className={styles.error}>{errores.fecha_fin}</div>
             )}
           </div>
         </div>

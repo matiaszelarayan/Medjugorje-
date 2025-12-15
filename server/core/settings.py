@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'contactos',
     'grupo_oracion',
     'correos',
+    'eventos',
     'api',
 ]
 

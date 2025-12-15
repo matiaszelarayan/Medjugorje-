@@ -1,57 +1,73 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./eventos.module.css";
 import EventoFormModal from "./EventoFormModal";
 import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
 import { Pencil, Trash2 } from "lucide-react";
+import {
+  getEventos,
+  crearEvento,
+  editarEvento,
+  eliminarEvento,
+} from "../../api/eventosService";
 
-// Datos simulados
-const initialEventos = [
-  {
-    id: 1,
-    titulo: "Viaje a Medjugorje",
-    fechaInicio: "2026-05-02T08:00",
-    fechaFin: "2026-05-09T22:00",
-    ubicacion: "Medjugorje - Bosnia y Herzegovina",
-    url: "",
-    descripcion: "Peregrinación anual",
-    publico: true
-  }
-];
+
 
 const EventosScreen = ({ user }) => {
-  const [eventos, setEventos] = useState(initialEventos);
+  const [eventos, setEventos] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [eventoEditando, setEventoEditando] = useState(null);
   const [eventoAEliminar, setEventoAEliminar] = useState(null);
 
+  useEffect(() => {
+    const fetchEventos = async () => {
+      try {
+        const data = await getEventos();
+        setEventos(data);
+      } catch (error) {
+        console.error("Error al obtener los eventos:", error);
+      }
+    };
+    fetchEventos();
+  }, []);
+
   // Orden por fecha de inicio
   const sortedEventos = eventos.slice().sort((a, b) =>
-    (a.fechaInicio || "").localeCompare(b.fechaInicio || "")
+    (a.fecha_inicio || "").localeCompare(b.fecha_inicio || "")
   );
 
   // Crear o editar
-  const handleSave = (evento) => {
-    if (eventoEditando) {
-      setEventos(prev =>
-        prev.map(ev =>
-          ev.id === eventoEditando.id ? { ...ev, ...evento, id: eventoEditando.id } : ev
-        )
-      );
-    } else {
-      const nuevo = {
-        ...evento,
-        id: eventos.length ? Math.max(...eventos.map(ev => ev.id)) + 1 : 1,
-      };
-      setEventos([...eventos, nuevo]);
+  const handleSave = async (evento) => {
+    try {
+      let data;
+
+      if (eventoEditando) {
+        data = await editarEvento({
+          ...evento,
+          id: eventoEditando.id,
+        });
+
+        setEventos((prev) => prev.map((ev) => (ev.id === data.id ? data : ev)));
+      } else {
+        data = await crearEvento(evento);
+        setEventos((prev) => [...prev, data]);
+      }
+
+      setShowModal(false);
+      setEventoEditando(null);
+    } catch (error) {
+      console.error("Error guardando evento", error);
     }
-    setShowModal(false);
-    setEventoEditando(null);
   };
 
   // Borrar evento
-  const handleDelete = (id) => {
-    setEventos(prev => prev.filter(ev => ev.id !== id));
-    setEventoAEliminar(null);
+  const handleDelete = async () => {
+    try {
+      await eliminarEvento(eventoAEliminar.id);
+      setEventos((prev) => prev.filter((ev) => ev.id !== eventoAEliminar.id));
+      setEventoAEliminar(null);
+    } catch (err) {
+      console.error("Error eliminando evento", err);
+    }
   };
   const handleEdit = (evento) => {
     setEventoEditando(evento);
@@ -88,8 +104,8 @@ const EventosScreen = ({ user }) => {
             <tr key={ev.id}>
               <td>{ev.titulo}</td>
               <td>
-                {ev.fechaInicio
-                  ? new Date(ev.fechaInicio).toLocaleString("es-AR", {
+                {ev.fecha_inicio
+                  ? new Date(ev.fecha_inicio).toLocaleString("es-AR", {
                       day: "numeric",
                       month: "long",
                       year: "numeric",
