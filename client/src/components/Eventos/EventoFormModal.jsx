@@ -12,6 +12,7 @@ const defaultForm = {
   publico: true,
 };
 
+
 const EventoFormModal = ({ evento, onClose, onSave }) => {
   const [form, setForm] = useState(defaultForm);
   const [errores, setErrores] = useState({});

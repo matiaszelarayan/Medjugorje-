@@ -3,7 +3,6 @@ from django.conf import settings
 from grupo_oracion.models import GrupoDeOracion
 
 
-
 class Contacto(models.Model):
     SEXO_CHOICES = [
         ("masculino", "Masculino"),

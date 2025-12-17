@@ -58,7 +58,7 @@ const Sidebar = ({ active, setScreen, user }) => {
         </div>
       )}
 
-      {(user.role === "administrador" || user.role === "colaborador") && (
+      {/* {(user.role === "administrador" || user.role === "colaborador") && (
         <div
           className={`${styles.sidebarItem} ${
             active === "formularios" ? styles.active : ""
@@ -69,7 +69,7 @@ const Sidebar = ({ active, setScreen, user }) => {
           <FileText size={20} className={styles.sidebarIcon} />
           <span>Formularios</span>
         </div>
-      )}
+      )} */}
 
       <div
         className={`${styles.sidebarItem} ${

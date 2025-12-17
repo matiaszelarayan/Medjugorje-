@@ -4,7 +4,7 @@ from .serializers import GrupoDeOracionSerializer, GrupoDeOracionPublicSerialize
 from accounts.permissions import IsAdministrador, IsColaborador, IsAdminOrColaborador
 
 class GrupoDeOracionViewSet(viewsets.ModelViewSet):
-    queryset = GrupoDeOracion.objects.all().order_by("nombre_grupo")
+    queryset = GrupoDeOracion.objects.all()
     serializer_class = GrupoDeOracionSerializer
 
     def get_permissions(self):

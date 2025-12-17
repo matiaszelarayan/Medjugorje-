@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import User
+from core.messages import Messages
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -17,19 +18,25 @@ class CreateUserSerializer(serializers.ModelSerializer):
     Serializer para crear usuarios desde la API.
     El campo password es write_only: se envía pero no se devuelve.
     """
-    password = serializers.CharField(write_only=True)
+    password = serializers.CharField(
+        write_only=True,
+        min_length=8,
+        error_messages={
+            "min_length": "La contraseña debe tener al menos 8 caracteres"
+        }
+    )
     email = serializers.EmailField()  # aplica validación de formato
 
     class Meta:
         model = User
-        fields = ["nombre", "apellido", "email", "role", "password"]
+        fields = ["nombre", "apellido", "email", "password", "role"]
 
     def validate_email(self, value):
         """
         Valida que el email no esté ya registrado.
         """
         if User.objects.filter(email=value).exists():
-            raise serializers.ValidationError("Este email ya está registrado.")
+            raise serializers.ValidationError(Messages.EMAIL_ALREADY_EXISTS)
         return value
 
     def create(self, validated_data):
@@ -65,7 +72,7 @@ class UpdateUserSerializer(serializers.ModelSerializer):
 
         # Si el email pertenece a otro usuario tira error
         if User.objects.filter(email=value).exclude(id=user.id).exists():
-            raise serializers.ValidationError("Este email ya está registrado por otro usuario.")
+            raise serializers.ValidationError(Messages.EMAIL_ALREADY_EXISTS)
 
         return value
 
@@ -80,7 +87,14 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         return instance
     
 class PerfilColaboradorSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, required=False)
+    password = serializers.CharField(
+        write_only=True,
+        required=False,
+        min_length=8,
+        error_messages={
+            "min_length": "La contraseña debe tener al menos 8 caracteres"
+        }
+    )
 
     class Meta:
         model = User

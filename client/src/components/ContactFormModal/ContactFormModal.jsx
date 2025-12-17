@@ -3,7 +3,7 @@ import ModalBase from "../common/ModalBase/ModalBase";
 import styles from "./ContactFormModal.module.css";
 import { useGeoArgentina } from "../../hooks/useGeoArgentina";
 
-const API_COUNTRIES = "https://restcountries.com/v3.1/all?fields=name";
+const API_COUNTRIES = import.meta.env.VITE_API_COUNTRIES;
 
 const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
   const [formData, setFormData] = useState({
@@ -272,6 +272,7 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
             value={formData.celular}
             onChange={handleChange}
             className={styles.input}
+            required
           />
         </div>
         <div className={styles.formGroup}>
@@ -282,6 +283,7 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
             value={formData.instagram}
             onChange={handleChange}
             className={styles.input}
+            required
           />
         </div>
         <div className={styles.formGroup}>
@@ -292,6 +294,7 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
             value={formData.parroquia}
             onChange={handleChange}
             className={styles.input}
+            required
           />
         </div>
         <div className={styles.formGroupCheckbox}>
@@ -314,6 +317,7 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
             value={formData.fecha_nacimiento}
             onChange={handleChange}
             className={styles.input}
+            required
           />
         </div>
         <div className={styles.formGroup}>

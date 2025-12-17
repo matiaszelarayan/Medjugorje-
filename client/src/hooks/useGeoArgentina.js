@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react";
 
-const API_PROVINCIAS = "https://apis.datos.gob.ar/georef/api/provincias";
-const API_LOCALIDADES = "https://apis.datos.gob.ar/georef/api/localidades?max=1000";
+
+const API_PROVINCIAS = import.meta.env.VITE_API_PROVINCIAS;
+const API_LOCALIDADES = import.meta.env.VITE_API_LOCALIDADES;
 
 /**
  * Hook para obtener provincias y localidades de Argentina de forma reutilizable.

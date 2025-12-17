@@ -8,19 +8,19 @@ const CreateUserModal = ({ onClose, onCreate }) => {
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("colaborador");
   const [password, setPassword] = useState("");
-  const [fotoPreview, setFotoPreview] = useState(null);
+  // const [fotoPreview, setFotoPreview] = useState(null);
   const [errors, setErrors] = useState({});
 
   const validatePassword = (pass) => {
     return pass.length >= 6 && /[a-zA-Z]/.test(pass) && /[A-Z]/.test(pass);
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file && (file.type === "image/jpeg" || file.type === "image/png")) {
-      setFotoPreview(URL.createObjectURL(file));
-    }
-  };
+  // const handleImageChange = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file && (file.type === "image/jpeg" || file.type === "image/png")) {
+  //     setFotoPreview(URL.createObjectURL(file));
+  //   }
+  // };
 
   const handleCreate = () => {
     const newErrors = {};
@@ -42,7 +42,7 @@ const CreateUserModal = ({ onClose, onCreate }) => {
       apellido,
       email,
       role,
-      foto_perfil: fotoPreview,
+      // foto_perfil: fotoPreview,
       password, // solo para simulación
     };
 
@@ -77,13 +77,13 @@ const CreateUserModal = ({ onClose, onCreate }) => {
       <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
       {errors.password && <p className={styles.modalError}>{errors.password}</p>}
 
-      <label>Foto de perfil:</label>
+      {/* <label>Foto de perfil:</label>
       <input type="file" accept=".jpg,.png" onChange={handleImageChange} />
       {fotoPreview && (
         <div className={styles.modalImagePreview}>
           <img src={fotoPreview} alt="Preview" />
         </div>
-      )}
+      )} */}
 
       <div className={styles.modalActions}>
         <button onClick={handleCreate} className={styles.createBtn}>Crear</button>

@@ -6,9 +6,12 @@ from grupo_oracion.models import GrupoDeOracion
 
 class CorreoMasivo(models.Model):
 
+    ESTADO_BORRADOR = "borrador"
+    ESTADO_ENVIADO = "enviado"
+
     ESTADOS = [
-        ( "borrador", "Borrador"),
-        ("enviado", "Enviado"),
+        (ESTADO_BORRADOR, "Borrador"),
+        (ESTADO_ENVIADO, "Enviado"),
     ]
 
     titulo = models.CharField("título", max_length=255)
@@ -23,9 +26,9 @@ class CorreoMasivo(models.Model):
     )
 
     # Filtros para seleccionar destinatarios
-    solo_newsletter = models.BooleanField("solo newsletter", default=False)
-    provincia = models.CharField("provincia", max_length=100, blank=True)
-    ciudad = models.CharField("ciudad", max_length=100, blank=True)
+    # solo_newsletter = models.BooleanField("solo newsletter", default=False)
+    provincia = models.CharField("provincia", max_length=100, blank=True, null=True)
+    ciudad = models.CharField("ciudad", max_length=100, blank=True, null=True)
 
     grupo_oracion = models.ForeignKey(
         GrupoDeOracion,

@@ -1,25 +1,28 @@
 from rest_framework.permissions import BasePermission
+from core.messages import Messages
+from accounts.models import User
 
-class IsAdministrador(BasePermission):
-    """
-    Permite únicamente a usuarios con rol 'administrador'.
-    """
+
+class HasRole(BasePermission):
+    allowed_roles = []
+
+    message = Messages.PERMISSION_DENIED
+
     def has_permission(self, request, view):
         user = request.user
-        return user.is_authenticated and user.role == "administrador"
-    
-class IsColaborador(BasePermission):
-    """
-    Permite únicamente a usuarios con rol 'colaborador'.
-    """
-    def has_permission(self, request, view):
-        user = request.user
-        return user.is_authenticated and user.role == "colaborador"
+        return (
+            user
+            and user.is_authenticated
+            and user.role in self.allowed_roles
+        )
 
-from rest_framework.permissions import BasePermission
+class IsAdministrador(HasRole):
+    allowed_roles = [User.ROLE_ADMIN]
 
-class IsAdminOrColaborador(BasePermission):
-    def has_permission(self, request, view):
-        user = request.user
-        return user.is_authenticated and user.role in ["administrador", "colaborador"]
 
+class IsColaborador(HasRole):
+    allowed_roles = [User.ROLE_COLAB]
+
+
+class IsAdminOrColaborador(HasRole):
+    allowed_roles = [User.ROLE_ADMIN, User.ROLE_COLAB]

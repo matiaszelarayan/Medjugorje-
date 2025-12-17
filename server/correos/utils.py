@@ -1,52 +1,35 @@
-# utils.py
 from contactos.models import Contacto
 
 def obtener_contactos_para_correo(correo):
     """
-    Devuelve un queryset de Contacto filtrado según:
-    - solo_newsletter
-    - provincia
-    - ciudad
-    - grupo_oracion (LOS SUMA AUNQUE NO COINCIDAN provincia/ciudad)
-
-    También devuelve la cantidad final.
+    Filtra contactos según:
+    1) Provincia
+    2) Ciudad (dentro de la provincia)
+    3) Grupo de oración (se suma al filtro anterior)
+    Devuelve queryset y cantidad.
     """
-    # esto se puede mejorar cuadno pasemos a psotrgres
-    
 
-    
-    # contactos por provincia/ciudad (base)
+    # Filtrado por provincia/ciudad
     contactos_prov_ciudad = Contacto.objects.all()
-
-    if correo.solo_newsletter:
-        contactos_prov_ciudad = contactos_prov_ciudad.filter(participa_grupo=True)
-
-    if correo.provincia and correo.provincia.strip():
+    
+    if correo.provincia:
         contactos_prov_ciudad = contactos_prov_ciudad.filter(
             provincia__iexact=correo.provincia.strip()
         )
-
-    if correo.ciudad and correo.ciudad.strip():
-        contactos_prov_ciudad = contactos_prov_ciudad.filter(
-            ciudad__iexact=correo.ciudad.strip()
-        )
-
-    # contactos por grupo (independientes)
-    # if correo.grupo_oracion:
-    #     contactos_grupo = Contacto.objects.filter(grupo_oracion=correo.grupo_oracion)
-    # else:
-    #     contactos_grupo = Contacto.objects.none()
-
-    # si selecciona todos los grupos va a venir null, entoces incluimos todos
-    if correo.grupo_oracion is None:
-        # incluir todos los grupos 
-        contactos_grupo = Contacto.objects.all()
-    else:
+    
+        if correo.ciudad:
+            contactos_prov_ciudad = contactos_prov_ciudad.filter(
+                ciudad__iexact=correo.ciudad.strip()
+            )
+    
+    # Filtrado por grupo de oración
+    if correo.grupo_oracion:
         contactos_grupo = Contacto.objects.filter(grupo_oracion=correo.grupo_oracion)
+    else:
+        contactos_grupo = Contacto.objects.all()  # incluye todos si no se indica grupo
 
-    # unir en un solo set de IDs para evitar duplicados
-    contactos_ids = set()
-    contactos_ids.update(contactos_prov_ciudad.values_list("id", flat=True))
+    # Unir IDs para evitar duplicados
+    contactos_ids = set(contactos_prov_ciudad.values_list("id", flat=True))
     contactos_ids.update(contactos_grupo.values_list("id", flat=True))
 
     contactos_finales = Contacto.objects.filter(id__in=contactos_ids)

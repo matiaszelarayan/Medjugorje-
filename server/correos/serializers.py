@@ -32,7 +32,6 @@ class CorreoMasivoSerializer(serializers.ModelSerializer):
             "asunto",
             "contenido",
             "estado",
-            "solo_newsletter",
             "provincia",
             "ciudad",
             "grupo_oracion",

@@ -1,11 +1,10 @@
-from rest_framework import generics, permissions, status
+from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.utils import timezone
 
 from .models import CorreoMasivo, DestinatarioCorreo
 from .serializers import CorreoMasivoSerializer
-
 
 from .sendgrid_service import enviar_multiples_correos
 from .utils import obtener_contactos_para_correo
@@ -25,9 +24,6 @@ class CorreoMasivoListCreateView(generics.ListCreateAPIView):
    
        correo = serializer.save(creado_por=request.user)
    
-      # validated_data = serializer.validated_data
-      # validated_data['creado_por'] = request.user
-      # correo = CorreoMasivo.objects.create(**validated_data)
        contactos, cantidad = obtener_contactos_para_correo(correo)
    
        return Response(
@@ -39,7 +35,6 @@ class CorreoMasivoListCreateView(generics.ListCreateAPIView):
              "provincia": correo.provincia,
              "ciudad": correo.ciudad,
              "grupo_oracion": correo.grupo_oracion_id,
-             "solo_newsletter": correo.solo_newsletter,
              "estado": correo.estado,
              "fecha_creacion": correo.fecha_creacion,
              "cantidad_destinatarios": cantidad,
@@ -89,7 +84,7 @@ class EnviarCorreoMasivoView(APIView):
             contenido_html=correo.contenido
         )
 
-        correo.estado = "enviado"
+        correo.estado = CorreoMasivo.ESTADO_ENVIADO
         correo.fecha_envio = timezone.now()
         correo.save()
 

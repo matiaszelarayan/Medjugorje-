@@ -9,5 +9,6 @@ urlpatterns = [
     path('grupo-oracion/', include('grupo_oracion.urls')),
     path('correos/', include('correos.urls')),
     path('eventos/', include('eventos.urls')),
+    path('dashboard/', include('dashboard.urls')),
     
 ]

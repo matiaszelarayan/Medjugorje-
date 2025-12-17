@@ -6,6 +6,7 @@ import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
 import { Pencil, Trash2 } from "lucide-react";
 import { getGrupos, crearGrupo, editarGrupo, eliminarGrupo } from "../../api/grupoOracionService";
 import { getUsers } from "../../api/userService";
+import logger from "../../utils/logger";
 
 
 const GruposScreen = ({ user }) => {
@@ -23,7 +24,7 @@ const GruposScreen = ({ user }) => {
         const data = await getGrupos();
         setGrupos(data);
       } catch (error) {
-        console.error("Error al obtener los grupos:", error);
+        logger.error("Error al obtener los grupos:", error);
       }
     };
     fetchGrupos();
@@ -35,7 +36,7 @@ const GruposScreen = ({ user }) => {
         const users = await getUsers();
         setUsers(users);
       } catch (error) {
-        console.error("Error al obtener los usuarios:", error);
+        logger.error("Error al obtener los usuarios:", error);
       }
     };
     fetchUsers();
@@ -69,7 +70,7 @@ const GruposScreen = ({ user }) => {
       setShowModal(false);
       setSelectedGrupo(null);
     } catch (error) {
-      console.error("Error al guardar grupo:", error);
+      logger.error("Error al guardar grupo:", error);
     }
   };
 
@@ -86,7 +87,7 @@ const GruposScreen = ({ user }) => {
      setGrupos((prev) => prev.filter((g) => g.id !== id));
      setDeleteTarget(null);
    } catch (error) {
-     console.error("Error al eliminar grupo:", error);
+     logger.error("Error al eliminar grupo:", error);
    }
  };
 

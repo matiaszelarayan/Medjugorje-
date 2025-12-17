@@ -32,9 +32,13 @@ class ContactoPublicCreateView(APIView):
 
     def post(self, request):
         serializer = ContactoSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(creado_por=None)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        serializer.is_valid(raise_exception=True)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # Creación pública → sin usuario creador
+        contacto = serializer.save(creado_por=None)
+
+        return Response(
+            ContactoSerializer(contacto).data,
+            status=status.HTTP_201_CREATED,
+        )
 

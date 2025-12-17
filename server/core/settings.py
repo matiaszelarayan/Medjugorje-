@@ -2,26 +2,27 @@
 Django settings for core project.
 """
 
+import os
 from pathlib import Path
 from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-0^w-ypsvko0f8=-z#=t2%vjqw*h!5*ja#z_ctv7uk3!t9263!i'
-
 import environ
-import os
 
 # Inicializar environ
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
+SECRET_KEY = env("SECRET_KEY")
+
 SENDGRID_API_KEY = env("SENDGRID_API_KEY")
 SENDGRID_FROM_EMAIL = env("SENDGRID_FROM_EMAIL")
 
 
-DEBUG = True
-ALLOWED_HOSTS = []
+DEBUG = env.bool("DEBUG", default=False)
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
+
 
 INSTALLED_APPS = [
     # Django apps
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     'grupo_oracion',
     'correos',
     'eventos',
+    'dashboard',
     'api',
 ]
 
@@ -80,11 +82,12 @@ TEMPLATES = [
 WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    "default": env.db(
+        "DATABASE_URL",
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
+    )
 }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -93,8 +96,8 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+LANGUAGE_CODE = 'es-ar'
+TIME_ZONE = 'America/Argentina/Buenos_Aires'
 
 USE_I18N = True
 USE_TZ = True
@@ -113,6 +116,9 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": (
         "rest_framework.permissions.IsAuthenticated",
     ),
+    "EXCEPTION_HANDLER": (
+      "core.exceptions.custom_exception_handler"
+    )
 }
 
 APPEND_SLASH = False

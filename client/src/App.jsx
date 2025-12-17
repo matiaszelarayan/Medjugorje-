@@ -16,6 +16,7 @@ import FormularioBuilderScreen from "./components/Formularios/FormularioBuilderS
 
 import { login as loginAPI, logout as logoutAPI } from "./api/authService";
 import { getPerfil } from "./api/userService";
+import  logger  from "./utils/logger"
 
 
 export default function App() {
@@ -53,16 +54,15 @@ export default function App() {
 
   const handleLogin = async ({ email, password }) => {
     try {
-      const data = await loginAPI(email, password);
-      console.log(data);
-
+      await loginAPI(email, password);
+      
       // Con token válido obtener perfil
       const user = await getPerfil();
       setCurrentUser(user);
       setIsAuthenticated(true);
       return true;
     } catch (err) {
-      console.error(err);
+      logger.error(err);
       return false;
     }
   };
@@ -90,8 +90,8 @@ export default function App() {
         return <PerfilScreen user={currentUser} />;
       case "admin-perfiles":
         return <AdminPerfiles />;
-      case "formularios":
-        return <FormularioBuilderScreen user={currentUser} />;
+      // case "formularios":
+      //   return <FormularioBuilderScreen user={currentUser} />;
       default:
         return <Dashboard user={currentUser} />;
     }

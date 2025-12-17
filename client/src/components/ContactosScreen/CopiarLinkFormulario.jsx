@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import logger from "../../utils/logger";
 
 function CopiarLinkFormulario() {
 
@@ -12,7 +13,7 @@ function CopiarLinkFormulario() {
       setCopiado(true);
       setTimeout(() => setCopiado(false), 2000);
     } catch (err) {
-      console.error(err);
+      logger.error(err);
     }
   };
 

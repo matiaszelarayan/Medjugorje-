@@ -9,6 +9,7 @@ import {
   editarEvento,
   eliminarEvento,
 } from "../../api/eventosService";
+import logger from "../../utils/logger";
 
 
 
@@ -24,7 +25,7 @@ const EventosScreen = ({ user }) => {
         const data = await getEventos();
         setEventos(data);
       } catch (error) {
-        console.error("Error al obtener los eventos:", error);
+        logger.error("Error al obtener los eventos:", error);
       }
     };
     fetchEventos();
@@ -37,6 +38,7 @@ const EventosScreen = ({ user }) => {
 
   // Crear o editar
   const handleSave = async (evento) => {
+    logger.log("Guardando evento:", evento);
     try {
       let data;
 
@@ -49,13 +51,14 @@ const EventosScreen = ({ user }) => {
         setEventos((prev) => prev.map((ev) => (ev.id === data.id ? data : ev)));
       } else {
         data = await crearEvento(evento);
+        logger.log("Evento creado:", data);
         setEventos((prev) => [...prev, data]);
       }
 
       setShowModal(false);
       setEventoEditando(null);
     } catch (error) {
-      console.error("Error guardando evento", error);
+      logger.error("Error guardando evento", error);
     }
   };
 
@@ -66,7 +69,7 @@ const EventosScreen = ({ user }) => {
       setEventos((prev) => prev.filter((ev) => ev.id !== eventoAEliminar.id));
       setEventoAEliminar(null);
     } catch (err) {
-      console.error("Error eliminando evento", err);
+      logger.error("Error eliminando evento", err);
     }
   };
   const handleEdit = (evento) => {

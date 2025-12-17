@@ -7,15 +7,15 @@ const EditUserModal = ({ user, onClose, onSave }) => {
   const [apellido, setApellido] = useState(user.apellido);
   const [email, setEmail] = useState(user.email);
   const [role, setRole] = useState(user.role);
-  const [fotoPreview, setFotoPreview] = useState(user.foto_perfil || null);
+  // const [fotoPreview, setFotoPreview] = useState(user.foto_perfil || null);
   const [errors, setErrors] = useState({});
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file && (file.type === "image/jpeg" || file.type === "image/png")) {
-      setFotoPreview(URL.createObjectURL(file));
-    }
-  };
+  // const handleImageChange = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file && (file.type === "image/jpeg" || file.type === "image/png")) {
+  //     setFotoPreview(URL.createObjectURL(file));
+  //   }
+  // };
 
   const handleSave = () => {
     const newErrors = {};
@@ -36,7 +36,7 @@ const EditUserModal = ({ user, onClose, onSave }) => {
       apellido,
       email,
       role,
-      foto_perfil: fotoPreview,
+      // foto_perfil: fotoPreview,
     };
 
     onSave(updatedUser);
@@ -66,13 +66,13 @@ const EditUserModal = ({ user, onClose, onSave }) => {
       </select>
       {errors.role && <p className={styles.modalError}>{errors.role}</p>}
 
-      <label>Foto de perfil:</label>
+      {/* <label>Foto de perfil:</label>
       <input type="file" accept=".jpg,.png" onChange={handleImageChange} />
       {fotoPreview && (
         <div className={styles.modalImagePreview}>
           <img src={fotoPreview} alt="Preview" />
         </div>
-      )}
+      )} */}
 
       <div className={styles.modalActions}>
         <button onClick={handleSave} className={styles.saveBtn}>Guardar</button>

@@ -11,7 +11,7 @@ const NuevoCorreoModal = ({ correo, onClose, onSave }) => {
     provincia: "",
     ciudad: "",
     grupo: "todos",
-    soloNewsletter: false,
+    // soloNewsletter: false,
   });
 
   const [grupos, setGrupos] = useState([]);
@@ -31,7 +31,7 @@ const NuevoCorreoModal = ({ correo, onClose, onSave }) => {
         provincia: correo.provincia || "",
         ciudad: correo.ciudad || "",
         grupo: correo.grupo || "todos",
-        soloNewsletter: correo.soloNewsletter || false
+        // soloNewsletter: correo.soloNewsletter || false
       });
     }
   }, [correo]);
@@ -101,7 +101,7 @@ const NuevoCorreoModal = ({ correo, onClose, onSave }) => {
      titulo: formData.asunto,
      asunto: formData.asunto,
      contenido: formData.contenido,
-     solo_newsletter: formData.soloNewsletter,
+    //  solo_newsletter: formData.soloNewsletter,
      provincia: formData.provincia || null,
      ciudad: formData.ciudad || null,
      grupo_oracion:
@@ -142,7 +142,7 @@ const NuevoCorreoModal = ({ correo, onClose, onSave }) => {
             rows={6}
           />
         </div>
-        <div className={styles.formGroupCheckbox}>
+        {/* <div className={styles.formGroupCheckbox}>
           <label>
             <input
               type="checkbox"
@@ -152,7 +152,7 @@ const NuevoCorreoModal = ({ correo, onClose, onSave }) => {
             />
             Solo contactos que aceptan newsletter
           </label>
-        </div>
+        </div> */}
         <div className={styles.formGroup}>
           <label className={styles.label}>Provincia</label>
           {loadingProv ? (

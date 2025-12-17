@@ -10,11 +10,11 @@ import {
   editarContacto,
   eliminarContacto,
 } from "../../api/contactoService";
-import  CopiarLinkFormulario from "./CopiarLinkFormulario";
+import CopiarLinkFormulario from "./CopiarLinkFormulario";
+import logger from "../../utils/logger";
 
 import { getGrupos } from "../../api/grupoOracionService";
-
-
+import { useGeoArgentina } from "../../hooks/useGeoArgentina";
 
 
 const ContactosScreen = ({ user }) => {
@@ -37,7 +37,7 @@ const ContactosScreen = ({ user }) => {
         const data = await getGrupos();
         setGrupos(data);
       } catch (error) {
-        console.error("Error al obtener los grupos:", error);
+        logger.error("Error al obtener los grupos:", error);
       }
     };
     fetchGrupos();
@@ -49,7 +49,7 @@ const ContactosScreen = ({ user }) => {
           const data = await getContactos();
           setContacts(data);
         } catch (error) {
-          console.error("Error al obtener los contactos:", error);
+          logger.error("Error al obtener los contactos:", error);
         }
       };
     fetchContactos();
@@ -101,7 +101,7 @@ const ContactosScreen = ({ user }) => {
     });
 
   } catch (err) {
-    console.error("Error guardando contacto:", err);
+    logger.error("Error guardando contacto:", err);
   }
   };
   const openDeleteModal = (contact) => setDeleteTarget(contact);
@@ -111,7 +111,7 @@ const ContactosScreen = ({ user }) => {
      await eliminarContacto(id);
      setContacts((prev) => prev.filter((c) => c.id !== id));
    } catch (err) {
-     console.error("Error eliminando contacto:", err);
+     logger.error("Error eliminando contacto:", err);
    }
    setDeleteTarget(null);
  };
@@ -124,6 +124,9 @@ const ContactosScreen = ({ user }) => {
     setSelectedContact(contact);
     setShowModal(true);
   };
+
+  const { provincias, loadingProv } = useGeoArgentina(null);
+
 
   // RENDER
   return (
@@ -148,14 +151,15 @@ const ContactosScreen = ({ user }) => {
               setFilters({ ...filters, provincia: e.target.value })
             }
             className={styles.filterSelect}
+            disabled={loadingProv}
           >
             <option value="">Todas las provincias</option>
-            <option value="Buenos Aires">Buenos Aires</option>
-            <option value="Córdoba">Córdoba</option>
-            <option value="Santa Fe">Santa Fe</option>
-            <option value="Mendoza">Mendoza</option>
-            <option value="Salta">Salta</option>
-            <option value="Tucumán">Tucumán</option>
+
+            {provincias.map((prov) => (
+              <option key={prov.id} value={prov.nombre}>
+                {prov.nombre}
+              </option>
+            ))}
           </select>
           <PrintButton data={filteredContacts} title="Listado de Contactos" />
         </div>
@@ -164,7 +168,7 @@ const ContactosScreen = ({ user }) => {
           <button onClick={openNewContact} className="actionButtonGlobal">
             ➕ Nuevo Contacto
           </button>
-          <CopiarLinkFormulario/>
+          <CopiarLinkFormulario />
           <button
             onClick={() =>
               setViewMode(viewMode === "tabla" ? "tarjetas" : "tabla")

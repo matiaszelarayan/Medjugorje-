@@ -6,6 +6,7 @@ import EditUserModal from "../EditUserModal/EditUserModal";
 import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
 import PrintButton from "./PrintButton";
 import { crearUser, eliminarUser, editarUser, getUsers } from "../../api/userService";
+import logger from "../../utils/logger";
 
 const AdminPerfiles = () => {
   const [usuarios, setUsuarios] = useState([]);
@@ -24,7 +25,7 @@ const AdminPerfiles = () => {
         const users = await getUsers();
         setUsuarios(users);
       } catch (error) {
-        console.error("Error al obtener los usuarios:", error);
+        logger.error("Error al obtener los usuarios:", error);
       }
     };
     fetchUsers();
@@ -33,12 +34,10 @@ const AdminPerfiles = () => {
 
   const handleSaveUser = (updatedUser) => {
 
-    console.log(updatedUser);
-
     try {
       editarUser(updatedUser);
     } catch (error) {
-      console.error("Error al editar el usuario:", error);
+      logger.error("Error al editar el usuario:", error);
     }
     setUsuarios((prev) =>
       prev.map((u) => (u.id === updatedUser.id ? updatedUser : u))
@@ -50,8 +49,8 @@ const AdminPerfiles = () => {
     try {
       await crearUser(nuevoUsuario);
     } catch (error) {
-      console.error("Error al crear el usuario:", error);
-      console.error(
+      logger.error("Error al crear el usuario:", error);
+      logger.error(
         "Error al crear el usuario:",
         error.response?.data || error
       );
@@ -68,7 +67,7 @@ const AdminPerfiles = () => {
     try {
       eliminarUser(id);
     } catch (error) {
-      console.error("Error al eliminar el usuario:", error);
+      logger.error("Error al eliminar el usuario:", error);
     }
 
     setUsuarios((prev) => prev.filter((u) => u.id !== id));

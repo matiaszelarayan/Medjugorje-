@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useGeoArgentina } from "../hooks/useGeoArgentina";
 import axios from "axios";
 import styles from "../components/ContactFormModal/ContactFormModal.module.css";
+import { contactoPublicSchema } from "../validators/contactoPublic.schema";
 
-const API_COUNTRIES = "https://restcountries.com/v3.1/all?fields=name";
-const API_PUBLIC_CONTACTO = "http://127.0.0.1:8000/api/contactos/public/";
-const API_GRUPOS = "http://127.0.0.1:8000/api/grupo-oracion/public/";
+
+const API_COUNTRIES = import.meta.env.VITE_API_COUNTRIES;
+const API_URL = import.meta.env.VITE_API_URL;
+const API_PUBLIC_CONTACTO = `${API_URL}/api/contactos/public/`;
+const API_GRUPOS = `${API_URL}/api/grupo-oracion/public/`;
 
 function FormularioInscripcionPublic() {
   const [form, setForm] = useState({
@@ -29,6 +32,9 @@ function FormularioInscripcionPublic() {
   const [errorCountries, setErrorCountries] = useState(null);
   const [grupos, setGrupos] = useState([]);
   const [mensaje, setMensaje] = useState(null);
+  const [errores, setErrores] = useState({});
+  
+
 
   useEffect(() => {
     const fetchGrupos = async () => {
@@ -62,6 +68,16 @@ function FormularioInscripcionPublic() {
         setLoadingCountries(false);
       });
   }, []);
+
+  useEffect(() => {
+    if (Object.keys(errores).length === 0) return;
+
+    const timer = setTimeout(() => {
+      setErrores({});
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [errores]);
 
   // --- HOOK PROVINCIAS/LOCALIDADES ---
   const {
@@ -108,9 +124,22 @@ function FormularioInscripcionPublic() {
   // --- ENVÍO A API ---
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrores({});
+
+    const result = contactoPublicSchema.safeParse(form);
+
+    if (!result.success) {
+      const fieldErrors = {};
+       result.error.issues.forEach((err) => {
+         fieldErrors[err.path[0]] = err.message;
+       });
+      setErrores(fieldErrors);
+      return;
+    }
 
     try {
-      await axios.post(API_PUBLIC_CONTACTO, form);
+      await axios.post(API_PUBLIC_CONTACTO, result.data);
+
       setForm({
         nombre: "",
         apellido: "",
@@ -126,6 +155,7 @@ function FormularioInscripcionPublic() {
         fecha_nacimiento: "",
         grupo_oracion: null,
       });
+
       setMensaje("¡Gracias por tu inscripción!");
       setTimeout(() => setMensaje(null), 5000);
     } catch (error) {
@@ -137,7 +167,7 @@ function FormularioInscripcionPublic() {
     <div style={{ maxWidth: 600, margin: "0 auto", padding: 20 }}>
       <h2 className={styles.title}>Formulario de Inscripción</h2>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} noValidate>
         <div className={styles.formGroup}>
           <label className={styles.label}>Nombre</label>
           <input
@@ -147,6 +177,9 @@ function FormularioInscripcionPublic() {
             required
             className={styles.input}
           />
+          {errores.nombre && (
+            <div className={styles.errorText}>{errores.nombre}</div>
+          )}
         </div>
         <div className={styles.formGroup}>
           <label className={styles.label}>Apellido</label>
@@ -157,6 +190,9 @@ function FormularioInscripcionPublic() {
             required
             className={styles.input}
           />
+          {errores.apellido && (
+            <div className={styles.errorText}>{errores.apellido}</div>
+          )}
         </div>
 
         <div className={styles.formGroup}>
@@ -169,6 +205,9 @@ function FormularioInscripcionPublic() {
             required
             className={styles.input}
           />
+          {errores.email && (
+            <div className={styles.errorText}>{errores.email}</div>
+          )}
         </div>
 
         <div className={styles.formGroup}>
@@ -185,6 +224,9 @@ function FormularioInscripcionPublic() {
             <option value="masculino">Masculino</option>
             <option value="otro">Otro</option>
           </select>
+          {errores.sexo && (
+            <div className={styles.errorText}>{errores.sexo}</div>
+          )}
         </div>
 
         <div className={styles.formGroup}>
@@ -211,6 +253,9 @@ function FormularioInscripcionPublic() {
                 </option>
               ))}
             </select>
+          )}
+          {errores.pais && (
+            <div className={styles.errorText}>{errores.pais}</div>
           )}
         </div>
 
@@ -242,6 +287,9 @@ function FormularioInscripcionPublic() {
                   ))}
                 </select>
               )}
+              {errores.provincia && (
+                <div className={styles.errorText}>{errores.provincia}</div>
+              )}
             </div>
             <div className={styles.formGroup}>
               {/* Localidades */}
@@ -270,6 +318,9 @@ function FormularioInscripcionPublic() {
                   ))}
                 </select>
               )}
+              {errores.ciudad && (
+                <div className={styles.errorText}>{errores.ciudad}</div>
+              )}
             </div>
           </>
         )}
@@ -282,6 +333,9 @@ function FormularioInscripcionPublic() {
             onChange={handleChange}
             className={styles.input}
           />
+          {errores.celular && (
+            <div className={styles.errorText}>{errores.celular}</div>
+          )}
         </div>
 
         <div className={styles.formGroup}>
@@ -292,6 +346,9 @@ function FormularioInscripcionPublic() {
             onChange={handleChange}
             className={styles.input}
           />
+          {errores.instagram && (
+            <div className={styles.errorText}>{errores.instagram}</div>
+          )}
         </div>
 
         <div className={styles.formGroup}>
@@ -302,6 +359,9 @@ function FormularioInscripcionPublic() {
             onChange={handleChange}
             className={styles.input}
           />
+          {errores.parroquia && (
+            <div className={styles.errorText}>{errores.parroquia}</div>
+          )}
         </div>
         <div className={styles.formGroupCheckbox}>
           <label className={styles.label}>
@@ -324,6 +384,9 @@ function FormularioInscripcionPublic() {
             onChange={handleChange}
             className={styles.input}
           />
+          {errores.fecha_nacimiento && (
+            <div className={styles.errorText}>{errores.fecha_nacimiento}</div>
+          )}
         </div>
         <div className={styles.formGroup}>
           <label className={styles.label}>Grupo de Oración</label>
