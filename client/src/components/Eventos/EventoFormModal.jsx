@@ -100,6 +100,7 @@ const EventoFormModal = ({ evento, onClose, onSave }) => {
               value={form.fecha_fin}
               onChange={handleChange}
               className={styles.input}
+              required
             />
             {errores.fecha_fin && (
               <div className={styles.error}>{errores.fecha_fin}</div>
@@ -115,6 +116,7 @@ const EventoFormModal = ({ evento, onClose, onSave }) => {
           onChange={handleChange}
           placeholder="Ej: Parroquia San Juan"
           className={styles.input}
+          required
         />
 
         <label className={styles.label}>Enlace (URL)</label>

@@ -102,8 +102,8 @@ const NuevoCorreoModal = ({ correo, onClose, onSave }) => {
      asunto: formData.asunto,
      contenido: formData.contenido,
     //  solo_newsletter: formData.soloNewsletter,
-     provincia: formData.provincia || null,
-     ciudad: formData.ciudad || null,
+     provincia: formData.provincia || "",
+     ciudad: formData.ciudad || "",
      grupo_oracion:
        formData.grupo_oracion === "todos" || formData.grupo_oracion === ""
          ? null

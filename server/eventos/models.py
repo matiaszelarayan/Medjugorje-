@@ -6,10 +6,10 @@ class Evento(models.Model):
     titulo = models.CharField(max_length=100, unique=True)
     fecha_inicio = models.DateTimeField()
     fecha_fin = models.DateTimeField()
-    ubicacion = models.CharField(max_length=100)
-    descripcion = models.TextField(blank=True, null=True)
+    ubicacion = models.CharField(max_length=100, blank=True)
+    descripcion = models.TextField(blank=True)
     publico = models.BooleanField(default=True)
-    url = models.URLField(blank=True, null=True)
+    url = models.URLField(blank=True)
 
     creado_por = models.ForeignKey(
         settings.AUTH_USER_MODEL,

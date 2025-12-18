@@ -27,8 +27,8 @@ class CorreoMasivo(models.Model):
 
     # Filtros para seleccionar destinatarios
     # solo_newsletter = models.BooleanField("solo newsletter", default=False)
-    provincia = models.CharField("provincia", max_length=100, blank=True, null=True)
-    ciudad = models.CharField("ciudad", max_length=100, blank=True, null=True)
+    provincia = models.CharField("provincia", max_length=100, blank=True)
+    ciudad = models.CharField("ciudad", max_length=100, blank=True)
 
     grupo_oracion = models.ForeignKey(
         GrupoDeOracion,

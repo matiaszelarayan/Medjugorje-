@@ -191,13 +191,13 @@ const EnvioCorreoModal = ({ correo, destinatarios, onClose, onSend }) => {
            }
       */}
       
-      <div className={styles.simulacionBox}>
+      {/* <div className={styles.simulacionBox}>
         <span className={styles.simulacionIcon}>ⓘ</span>
         <div>
           <span className={styles.simulacionTitle}>Simulación activada:</span>
           <span className={styles.simulacionText}> El envío será simulado. Para envíos reales, configura SendGrid en el backend.</span>
         </div>
-      </div>
+      </div> */}
 
       {/* 
         FILTROS APLICADOS

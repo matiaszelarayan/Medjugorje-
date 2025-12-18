@@ -13,17 +13,17 @@ class Contacto(models.Model):
     nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
-    sexo = models.CharField(max_length=9, choices=SEXO_CHOICES, blank=True, null=True)
-    pais = models.CharField(max_length=100, blank=True, null=True)
-    provincia = models.CharField(max_length=100, blank=True, null=True)
-    ciudad = models.CharField(max_length=100, blank=True, null=True)
+    sexo = models.CharField(max_length=9, choices=SEXO_CHOICES, blank=True)
+    pais = models.CharField(max_length=100, blank=True)
+    provincia = models.CharField(max_length=100, blank=True)
+    ciudad = models.CharField(max_length=100, blank=True)
     
     fecha_registro = models.DateField(auto_now_add=True)
     fecha_nacimiento = models.DateField(null=True, blank=True)
 
-    celular = models.CharField(max_length=20, blank=True, null=True)
-    instagram = models.CharField(max_length=100, blank=True, null=True)
-    parroquia = models.CharField(max_length=100, blank=True, null=True)
+    celular = models.CharField(max_length=20, blank=True)
+    instagram = models.CharField(max_length=100, blank=True)
+    parroquia = models.CharField(max_length=100, blank=True)
     participa_grupo = models.BooleanField(default=False)
 
     grupo_oracion = models.ForeignKey(

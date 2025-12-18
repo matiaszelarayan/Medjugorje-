@@ -59,6 +59,7 @@ const GrupoFormModal = ({ grupo, onClose, onSave, users }) => {
           name="nombre_grupo"
           value={form.nombre_grupo}
           onChange={handleChange}
+          required
         />
 
         <label>Provincia</label>
