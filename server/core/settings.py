@@ -106,11 +106,7 @@ DATABASES = {
     #     "PORT": env.int("DB_PORT", "5432"),
     # }
     # para deploy
-    "default": dj_database_url.config(
-        default=env("DATABASE_URL"),
-        conn_max_age=600,
-        ssl_require=True
-    )
+    "default": env.db("DATABASE_URL")
 }
 
 
