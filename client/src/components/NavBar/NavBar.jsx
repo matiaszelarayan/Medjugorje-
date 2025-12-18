@@ -3,7 +3,7 @@ import styles from "./Navbar.module.css";
 import logo from "../../assets/logo.png";
 import { toast } from "react-toastify";
 
-const Navbar = ({ user, onLogout, darkMode, toggleDarkMode }) => {
+const NavBar = ({ user, onLogout, darkMode, toggleDarkMode }) => {
   const [showModal, setShowModal] = useState(false);
   // Solución: Retornar navbar vacío si no hay user
   if (!user) return null;
@@ -56,4 +56,4 @@ const Navbar = ({ user, onLogout, darkMode, toggleDarkMode }) => {
   );
 };
 
-export default Navbar;
+export default NavBar;
