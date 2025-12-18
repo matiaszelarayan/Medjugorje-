@@ -7,8 +7,8 @@ import { contactoPublicSchema } from "../validators/contactoPublic.schema";
 
 const API_COUNTRIES = import.meta.env.VITE_API_COUNTRIES;
 const API_URL = import.meta.env.VITE_API_URL;
-const API_PUBLIC_CONTACTO = `${API_URL}/api/contactos/public/`;
-const API_GRUPOS = `${API_URL}/api/grupo-oracion/public/`;
+const API_PUBLIC_CONTACTO = `${API_URL}api/contactos/public/`;
+const API_GRUPOS = `${API_URL}api/grupo-oracion/public/`;
 
 function FormularioInscripcionPublic() {
   const [form, setForm] = useState({
