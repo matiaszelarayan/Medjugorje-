@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ModalBase from "../common/ModalBase/ModalBase";
-import styles from "./eventos.module.css";
+import styles from "./Eventos.module.css";
 
 const defaultForm = {
   titulo: "",
