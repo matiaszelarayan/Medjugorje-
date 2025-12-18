@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styles from "./eventos.module.css";
+import styles from "./Eventos.module.css";
 import EventoFormModal from "./EventoFormModal";
 import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
 import { Pencil, Trash2 } from "lucide-react";
