@@ -1,6 +1,6 @@
 import axiosClient from "./axiosClient";
 
-const BASE_URL = "/api/correos/";
+const BASE_URL = "api/correos/";
 
 export async function getCorreos() {
   const res = await axiosClient.get(`${BASE_URL}`);

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
-const REFRESH_URL = `${BASE_URL}/auth/token/refresh/`;
+const REFRESH_URL = `${BASE_URL}auth/token/refresh/`;
 
 const axiosClient = axios.create({
   baseURL: BASE_URL,

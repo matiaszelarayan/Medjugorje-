@@ -1,6 +1,6 @@
 import axiosClient from "./axiosClient";
 
-const BASE_URL = "/api/eventos/";
+const BASE_URL = "api/eventos/";
 
 export async function getEventos() {
   const res = await axiosClient.get(`${BASE_URL}`);

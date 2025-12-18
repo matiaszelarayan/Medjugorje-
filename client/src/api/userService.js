@@ -1,6 +1,6 @@
 import axiosClient from "./axiosClient";
 
-const BASE_URL = "/api/accounts";
+const BASE_URL = "api/accounts";
 
 export async function getPerfil() {
   const res = await axiosClient.get(`${BASE_URL}/perfil/`);

@@ -1,6 +1,6 @@
 import axiosClient from "./axiosClient";
 
-const BASE_URL = "/api/grupo-oracion/";
+const BASE_URL = "api/grupo-oracion/";
 
 export async function getGrupos() {
   const res = await axiosClient.get(`${BASE_URL}`);
