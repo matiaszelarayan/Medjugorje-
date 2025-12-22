@@ -26,7 +26,7 @@ Clave: admin123
 
 Colaborador
 Email: colab@local
-Clave: Colab123
+Clave: colab123
 
 5. Levantar el servidor
 python manage.py runserver
@@ -34,3 +34,8 @@ python manage.py runserver
 Para levanta el el cliente
 
 npm run dev
+
+Para probar el proyecto en la web, ingresar a:
+https://medjugorjefront.onrender.com/
+
+Mismos usuarios y contraseñas
