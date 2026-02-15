@@ -164,7 +164,7 @@
 }
 
 .submitBtn:hover {
-  background: var(--accent-hover);
+  background: green;
 }
 
 /* Responsive */

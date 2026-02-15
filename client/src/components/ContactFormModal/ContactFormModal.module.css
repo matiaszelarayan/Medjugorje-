@@ -104,6 +104,7 @@
 .cancelBtn {
   background-color: #ccc;
   color: #363637;
+  margin-right: 1rem;
 }
 .cancelBtn:hover, .cancelBtn:focus-visible {
   background-color: #b4b5b8;

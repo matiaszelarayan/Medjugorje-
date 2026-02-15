@@ -3,6 +3,8 @@ import { useGeoArgentina } from "../hooks/useGeoArgentina";
 import axios from "axios";
 import styles from "../components/ContactFormModal/ContactFormModal.module.css";
 import { contactoPublicSchema } from "../validators/contactoPublic.schema";
+import logo from "../assets/logo.png";
+import stylesForm from "./FormularioInscripcion.module.css";
 
 
 const API_COUNTRIES = import.meta.env.VITE_API_COUNTRIES;
@@ -164,8 +166,13 @@ function FormularioInscripcionPublic() {
   };
 
   return (
-    <div style={{ maxWidth: 600, margin: "0 auto", padding: 20 }}>
-      <h2 className={styles.title}>Formulario de Inscripción</h2>
+    <div className={stylesForm.container} >
+      <div className={stylesForm.logoContainer}>
+          <img src={logo} alt="FM Logo" />
+          <h1>Fundación Centro Medjugorje Argentina</h1>
+      </div>
+
+      <h2 className={stylesForm.title}>Formulario de Inscripción</h2>
 
       <form onSubmit={handleSubmit} noValidate>
         <div className={styles.formGroup}>

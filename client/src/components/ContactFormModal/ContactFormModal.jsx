@@ -5,6 +5,10 @@ import { useGeoArgentina } from "../../hooks/useGeoArgentina";
 
 const API_COUNTRIES = import.meta.env.VITE_API_COUNTRIES;
 
+import PropTypes from "prop-types";
+
+// ... (existing imports and code)
+
 const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
   const [formData, setFormData] = useState({
     nombre: contact?.nombre || "",
@@ -208,10 +212,10 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
               )}
             </div>
             <div className={styles.formGroup}>
-              <label className={styles.label}>Ciudad / Localidad</label>
-              {formData.provincia && loadingLoc ? (
+              <label className={styles.label}>Ciudad</label>
+              {loadingLoc ? (
                 <select className={styles.select} disabled>
-                  <option>Cargando localidades...</option>
+                  <option>Cargando ciudades...</option>
                 </select>
               ) : errorLoc ? (
                 <select className={styles.select} disabled>
@@ -224,9 +228,8 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
                   onChange={handleChange}
                   required
                   className={styles.select}
-                  disabled={!formData.provincia}
                 >
-                  <option value="">Seleccione localidad...</option>
+                  <option value="">Seleccione ciudad...</option>
                   {localidades.map((l) => (
                     <option key={l.id} value={l.nombre}>{l.nombre}</option>
                   ))}
@@ -243,27 +246,24 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
                 name="provincia"
                 value={formData.provincia}
                 onChange={handleChange}
-                required
                 className={styles.input}
-                placeholder="Ingrese provincia o estado"
               />
             </div>
             <div className={styles.formGroup}>
-              <label className={styles.label}>Ciudad / Localidad</label>
+              <label className={styles.label}>Ciudad</label>
               <input
                 type="text"
                 name="ciudad"
                 value={formData.ciudad}
                 onChange={handleChange}
-                required
                 className={styles.input}
-                placeholder="Ingrese ciudad/localidad"
               />
             </div>
           </>
         )}
 
-        {/* ... El resto de tus campos opcionales igual ... */}
+        <hr className={styles.separator} />
+
         <div className={styles.formGroup}>
           <label className={styles.label}>Celular</label>
           <input
@@ -272,7 +272,6 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
             value={formData.celular}
             onChange={handleChange}
             className={styles.input}
-            required
           />
         </div>
         <div className={styles.formGroup}>
@@ -283,7 +282,6 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
             value={formData.instagram}
             onChange={handleChange}
             className={styles.input}
-            required
           />
         </div>
         <div className={styles.formGroup}>
@@ -294,19 +292,6 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
             value={formData.parroquia}
             onChange={handleChange}
             className={styles.input}
-            required
-          />
-        </div>
-        <div className={styles.formGroupCheckbox}>
-          <label className={styles.label}>
-            ¿Participa en un grupo de oración?
-          </label>
-          <input
-            type="checkbox"
-            name="participa_grupo"
-            checked={formData.participa_grupo}
-            onChange={handleChange}
-            className={styles.checkbox}
           />
         </div>
         <div className={styles.formGroup}>
@@ -320,26 +305,38 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
             required
           />
         </div>
+
         <div className={styles.formGroup}>
-          <label className={styles.label}>Grupo de Oración</label>
-          <select
-            name="grupo_oracion"
-            value={formData.grupo_oracion || ""}
+          <label className={styles.label}>Participa en Grupo de Oración</label>
+          <input
+            type="checkbox"
+            name="participa_grupo"
+            checked={formData.participa_grupo}
             onChange={handleChange}
-            className={styles.select}
-          >
-            <option value="">-- Seleccionar grupo --</option>
-            {grupos.map((g) => (
-              <option key={g.id} value={g.id}>
-                {g.nombre_grupo}
-              </option>
-            ))}
-          </select>
-          <small className={styles.helpText}>
-            Si el grupo aún no está disponible, dejá este campo vacío. El administrador lo cargará y podrás actualizarlo luego.
-          </small>
+            className={styles.checkbox}
+          />
         </div>
-        <div className={styles.actions}>
+
+        {formData.participa_grupo && (
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Grupo de Oración</label>
+            <select
+              name="grupo_oracion"
+              value={formData.grupo_oracion || ""}
+              onChange={handleChange}
+              className={styles.select}
+            >
+              <option value="">Seleccione un grupo</option>
+              {grupos.map((grupo) => (
+                <option key={grupo.id} value={grupo.id}>
+                  {grupo.nombre_grupo}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        <div className={styles.buttonContainer}>
           <button type="button" onClick={onClose} className={styles.cancelBtn}>
             Cancelar
           </button>
@@ -352,4 +349,30 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
   );
 };
 
+ContactFormModal.propTypes = {
+  contact: PropTypes.shape({
+    id: PropTypes.number,
+    nombre: PropTypes.string,
+    apellido: PropTypes.string,
+    email: PropTypes.string,
+    sexo: PropTypes.string,
+    pais: PropTypes.string,
+    provincia: PropTypes.string,
+    ciudad: PropTypes.string,
+    celular: PropTypes.string,
+    instagram: PropTypes.string,
+    parroquia: PropTypes.string,
+    participa_grupo: PropTypes.bool,
+    fecha_nacimiento: PropTypes.string,
+    grupo_oracion: PropTypes.number,
+  }),
+  onClose: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
+  grupos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      nombre_grupo: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+};
 export default ContactFormModal;

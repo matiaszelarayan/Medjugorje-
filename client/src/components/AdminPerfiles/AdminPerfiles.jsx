@@ -45,27 +45,24 @@ const AdminPerfiles = () => {
   };
 
   const handleCreateUser = async (nuevoUsuario) => {
-
     try {
-      await crearUser(nuevoUsuario);
+      const userCreated = await crearUser(nuevoUsuario);
+      setUsuarios((prev) => [...prev, userCreated]);
+      setBusqueda("");
+      setFiltroRol("Todos");
+      setPaginaActual(1);
+      setMensajeExito("Usuario creado con éxito");
+      setTimeout(() => setMensajeExito(""), 3000);
     } catch (error) {
       logger.error("Error al crear el usuario:", error);
-      logger.error(
-        "Error al crear el usuario:",
-        error.response?.data || error
-      );
     }
-    
-    setUsuarios((prev) => [...prev, nuevoUsuario]);
-    setBusqueda("");
-    setFiltroRol("Todos");
-    setPaginaActual(1);
   };
 
   const handleDeleteUser = (id) => {
 
     try {
       eliminarUser(id);
+      setPaginaActual(1);
     } catch (error) {
       logger.error("Error al eliminar el usuario:", error);
     }

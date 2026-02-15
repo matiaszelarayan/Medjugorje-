@@ -13,20 +13,40 @@ const defaultForm = {
 };
 
 
+import PropTypes from "prop-types";
+
 const EventoFormModal = ({ evento, onClose, onSave }) => {
   const [form, setForm] = useState(defaultForm);
   const [errores, setErrores] = useState({});
 
+  // Función auxiliar para formatear fecha para input datetime-local (YYYY-MM-DDTHH:MM)
+  const formatDateForInput = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    // Ajustar a hora local
+    const pad = (num) => num.toString().padStart(2, "0");
+    const year = date.getFullYear();
+    const month = pad(date.getMonth() + 1);
+    const day = pad(date.getDate());
+    const hours = pad(date.getHours());
+    const minutes = pad(date.getMinutes());
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
+
   useEffect(() => {
-    if (evento) setForm({
-      titulo: evento.titulo ?? "",
-      fecha_inicio: evento.fecha_inicio ?? "",
-      fecha_fin: evento.fecha_fin ?? "",
-      ubicacion: evento.ubicacion ?? "",
-      url: evento.url ?? "",
-      descripcion: evento.descripcion ?? "",
-      publico: evento.publico ?? true,
-    });
+    if (evento) {
+      setForm({
+        titulo: evento.titulo ?? "",
+        fecha_inicio: formatDateForInput(evento.fecha_inicio),
+        fecha_fin: formatDateForInput(evento.fecha_fin),
+        ubicacion: evento.ubicacion ?? "",
+        url: evento.url ?? "",
+        descripcion: evento.descripcion ?? "",
+        publico: evento.publico ?? true,
+      });
+    } else {
+      setForm(defaultForm);
+    }
   }, [evento]);
 
   // Validación simple: título y fecha inicio obligatorios, fecha fin >= inicio si ambas están
@@ -166,6 +186,20 @@ const EventoFormModal = ({ evento, onClose, onSave }) => {
       </form>
     </ModalBase>
   );
+};
+
+EventoFormModal.propTypes = {
+  evento: PropTypes.shape({
+    titulo: PropTypes.string,
+    fecha_inicio: PropTypes.string,
+    fecha_fin: PropTypes.string,
+    ubicacion: PropTypes.string,
+    url: PropTypes.string,
+    descripcion: PropTypes.string,
+    publico: PropTypes.bool,
+  }),
+  onClose: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
 };
 
 export default EventoFormModal;

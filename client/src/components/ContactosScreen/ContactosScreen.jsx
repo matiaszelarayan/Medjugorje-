@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import styles from "./ContactosScreen.module.css";
 import ContactFormModal from "../ContactFormModal/ContactFormModal";
 import PrintButton from "../ContactFormModal/PrintButton";
@@ -15,10 +16,17 @@ import logger from "../../utils/logger";
 
 import { getGrupos } from "../../api/grupoOracionService";
 import { useGeoArgentina } from "../../hooks/useGeoArgentina";
+import { useErrorNotification } from "../../hooks/useErrorNotification";
 
+
+import PropTypes from "prop-types";
+
+// ... (existing code)
 
 const ContactosScreen = ({ user }) => {
+  const { notifyError } = useErrorNotification();
   const [contacts, setContacts] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [selectedContact, setSelectedContact] = useState(null);
   const [viewMode, setViewMode] = useState("tabla");
@@ -43,78 +51,72 @@ const ContactosScreen = ({ user }) => {
     fetchGrupos();
   }, []);
 
-  useEffect(() => {
-      const fetchContactos = async () => {
-        try {
-          const data = await getContactos();
-          setContacts(data);
-        } catch (error) {
-          logger.error("Error al obtener los contactos:", error);
-        }
+  const fetchContactos = async () => {
+    try {
+      const params = {
+        page: currentPage,
+        search: filters.texto,
+        provincia: filters.provincia,
       };
-    fetchContactos();
-  }, []);
+      const data = await getContactos(params);
+      setContacts(data.results);
+      setTotalCount(data.count);
+      setTotalCount(data.count);
+    } catch (error) {
+      logger.error("Error al obtener los contactos:", error);
+      notifyError(error, "Error al obtener los contactos");
+    }
+  };
 
-  // 1. Filtrar
-  const filteredContacts = contacts.filter((c) => {
-    return (
-      (!filters.provincia || c.provincia === filters.provincia) &&
-      (!filters.texto ||
-        `${c.nombre} ${c.apellido} ${c.email}`.toLowerCase().includes(filters.texto.toLowerCase()))
-    );
-  });
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchContactos();
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [filters, currentPage]);
 
-  // 2. Ordenar filtrados: Apellido, luego Nombre
-  const sortedFilteredContacts = filteredContacts.slice().sort((a, b) => {
-    const ap1 = (a.apellido || "").toLowerCase();
-    const ap2 = (b.apellido || "").toLowerCase();
-    if (ap1 < ap2) return -1;
-    if (ap1 > ap2) return 1;
-    return (a.nombre || "").toLowerCase().localeCompare((b.nombre || "").toLowerCase());
-  });
+  const currentContacts = contacts;
+  const contactsPerPage = 10;
+  const totalPages = Math.ceil(totalCount / contactsPerPage);
 
-  // 3. Paginación sobre la lista ordenada
-  const contactsPerPage = 5;
-  const indexOfLast = currentPage * contactsPerPage;
-  const indexOfFirst = indexOfLast - contactsPerPage;
-  const currentContacts = sortedFilteredContacts.slice(indexOfFirst, indexOfLast);
-  const totalPages = Math.ceil(sortedFilteredContacts.length / contactsPerPage);
-
-  // HANDLERS (sin cambios)
   const handleSave = async (formData) => {
     try {
-    let saved;
+      if (formData.id) {
+        // EDITAR
+        await editarContacto(formData);
+        toast.success("Contacto actualizado correctamente");
+      } else {
+        // CREAR
+        await crearContacto(formData);
+        toast.success("Contacto creado correctamente");
+      }
 
-    if (formData.id) {
-      // EDITAR
-      saved = await editarContacto(formData);
-    } else {
-      // CREAR
-      saved = await crearContacto(formData);
+      await fetchContactos();
+
+    } catch (err) {
+      logger.error("Error guardando contacto:", err);
+      notifyError(err, "Error guardando contacto");
     }
-
-    setContacts((prev) => {
-      const exists = prev.find((c) => c.id === saved.id);
-      return exists
-        ? prev.map((c) => (c.id === saved.id ? saved : c))
-        : [...prev, saved];
-    });
-
-  } catch (err) {
-    logger.error("Error guardando contacto:", err);
-  }
   };
   const openDeleteModal = (contact) => setDeleteTarget(contact);
 
- const confirmDelete = async (id) => {
-   try {
-     await eliminarContacto(id);
-     setContacts((prev) => prev.filter((c) => c.id !== id));
-   } catch (err) {
-     logger.error("Error eliminando contacto:", err);
-   }
-   setDeleteTarget(null);
- };
+  const confirmDelete = async (id) => {
+    try {
+      await eliminarContacto(id);
+      toast.success("Contacto eliminado correctamente");
+      setContacts((prev) => prev.filter((c) => c.id !== id));
+
+      if (contacts.length === 1 && currentPage > 1) {
+        setCurrentPage(currentPage - 1);
+      } else {
+        fetchContactos();
+      }
+    } catch (err) {
+      logger.error("Error eliminando contacto:", err);
+      notifyError(err, "Error eliminando contacto");
+    }
+    setDeleteTarget(null);
+  };
   const closeDeleteModal = () => setDeleteTarget(null);
   const openNewContact = () => {
     setSelectedContact(null);
@@ -142,14 +144,18 @@ const ContactosScreen = ({ user }) => {
             type="text"
             placeholder="Buscar por nombre, apellido o email"
             value={filters.texto}
-            onChange={(e) => setFilters({ ...filters, texto: e.target.value })}
+            onChange={(e) => {
+              setFilters({ ...filters, texto: e.target.value });
+              setCurrentPage(1);
+            }}
             className={styles.filterInput}
           />
           <select
             value={filters.provincia}
-            onChange={(e) =>
-              setFilters({ ...filters, provincia: e.target.value })
-            }
+            onChange={(e) => {
+              setFilters({ ...filters, provincia: e.target.value });
+              setCurrentPage(1);
+            }}
             className={styles.filterSelect}
             disabled={loadingProv}
           >
@@ -161,7 +167,7 @@ const ContactosScreen = ({ user }) => {
               </option>
             ))}
           </select>
-          <PrintButton data={filteredContacts} title="Listado de Contactos" />
+          <PrintButton data={contacts} title="Listado de Contactos" />
         </div>
 
         <div className={styles.actionsBar}>
@@ -303,6 +309,10 @@ const ContactosScreen = ({ user }) => {
       </div>
     </div>
   );
+};
+
+ContactosScreen.propTypes = {
+  user: PropTypes.object,
 };
 
 export default ContactosScreen;

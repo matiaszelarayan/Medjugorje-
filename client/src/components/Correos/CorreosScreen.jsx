@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import styles from "./CorreosScreen.module.css";
 import { Pencil, Send, Trash2 } from "lucide-react";
 import NuevoCorreoModal from "./NuevoCorreoModal";
@@ -11,8 +12,14 @@ import {
   eliminarCorreo,
   enviarCorreo,
 } from "../../api/correoService";
+import { useErrorNotification } from "../../hooks/useErrorNotification";
+
+import PropTypes from "prop-types";
+
+// ... (existing code)
 
 const CorreosScreen = ({ user }) => {
+  const { notifyError } = useErrorNotification();
 
   const [correos, setCorreos] = useState([]);
   const [modalAbierto, setModalAbierto] = useState(false);
@@ -28,6 +35,7 @@ const CorreosScreen = ({ user }) => {
       })
       .catch((error) => {
         console.error("Error al obtener los correos:", error);
+        notifyError(error, "Error al obtener los correos");
       });
   }, []);
 
@@ -57,12 +65,15 @@ const CorreosScreen = ({ user }) => {
         setCorreos((prev) =>
           prev.map((c) => (c.id === actualizado.id ? actualizado : c))
         );
+        toast.success("Correo actualizado correctamente");
       } else {
         const creado = await crearCorreo(formData);
         setCorreos((prev) => [creado, ...prev]);
+        toast.success("Correo creado correctamente");
       }
     } catch (err) {
       console.error("Error guardando correo:", err);
+      notifyError(err, "Error guardando correo");
     }
 
     setCorreoEditando(null);
@@ -73,28 +84,30 @@ const CorreosScreen = ({ user }) => {
     setModalEnvioAbierto(true);
   };
 
- const handleConfirmarEnvio = async () => {
-   try {
-     const data = await enviarCorreo(correoSeleccionado.id);
+  const handleConfirmarEnvio = async () => {
+    try {
+      const data = await enviarCorreo(correoSeleccionado.id);
 
-     setCorreos((prev) =>
-       prev.map((c) =>
-         c.id === correoSeleccionado.id
-           ? {
-               ...c,
-               estado: data.estado, 
-               fecha_envio: data.fecha_envio, 
-             }
-           : c
-       )
-     );
-   } catch (error) {
-     console.error("Error enviando correo:", error);
-   }
+      setCorreos((prev) =>
+        prev.map((c) =>
+          c.id === correoSeleccionado.id
+            ? {
+              ...c,
+              estado: data.estado,
+              fecha_envio: data.fecha_envio,
+            }
+            : c
+        )
+      );
+      toast.success("Correo enviado correctamente");
+    } catch (error) {
+      console.error("Error enviando correo:", error);
+      notifyError(error, "Error enviando correo");
+    }
 
-   setModalEnvioAbierto(false);
-   setCorreoSeleccionado(null);
- };
+    setModalEnvioAbierto(false);
+    setCorreoSeleccionado(null);
+  };
 
 
   // ---- ELIMINACIÓN ----
@@ -106,8 +119,10 @@ const CorreosScreen = ({ user }) => {
     try {
       await eliminarCorreo(id);
       setCorreos((prev) => prev.filter((c) => c.id !== id));
+      toast.success("Correo eliminado correctamente");
     } catch (err) {
       console.error("Error eliminando correo:", err);
+      notifyError(err, "Error eliminando correo");
     }
 
     setCorreoAEliminar(null);
@@ -215,6 +230,12 @@ const CorreosScreen = ({ user }) => {
       </div>
     </div>
   );
+};
+
+CorreosScreen.propTypes = {
+  user: PropTypes.shape({
+    role: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default CorreosScreen;

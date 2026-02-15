@@ -2,6 +2,8 @@ import React from "react";
 import styles from "./Sidebar.module.css";
 import { Home, Users, Calendar, HeartHandshake, UserCog, Mail, FileText } from "lucide-react";
 
+import PropTypes from "prop-types";
+
 const Sidebar = ({ active, setScreen, user }) => {
   // Solución defensiva contra user undefined/null:
   if (!user) return null; // o puedes usar: return <></>; o un loader si prefieres
@@ -11,9 +13,8 @@ const Sidebar = ({ active, setScreen, user }) => {
       <div className={styles.sidebarTitle}>Menú Principal</div>
 
       <div
-        className={`${styles.sidebarItem} ${
-          active === "dashboard" ? styles.active : ""
-        }`}
+        className={`${styles.sidebarItem} ${active === "dashboard" ? styles.active : ""
+          }`}
         onClick={() => setScreen("dashboard")}
         title="Ir al panel principal"
       >
@@ -22,9 +23,8 @@ const Sidebar = ({ active, setScreen, user }) => {
       </div>
 
       <div
-        className={`${styles.sidebarItem} ${
-          active === "contactos" ? styles.active : ""
-        }`}
+        className={`${styles.sidebarItem} ${active === "contactos" ? styles.active : ""
+          }`}
         onClick={() => setScreen("contactos")}
         title="Gestionar personas vinculadas"
       >
@@ -34,9 +34,8 @@ const Sidebar = ({ active, setScreen, user }) => {
 
       {user.role === "administrador" && (
         <div
-          className={`${styles.sidebarItem} ${
-            active === "grupos-oracion" ? styles.active : ""
-          }`}
+          className={`${styles.sidebarItem} ${active === "grupos-oracion" ? styles.active : ""
+            }`}
           onClick={() => setScreen("grupos-oracion")}
           title="Administrar grupos de oración"
         >
@@ -47,9 +46,8 @@ const Sidebar = ({ active, setScreen, user }) => {
 
       {(user.role === "administrador" || user.role === "colaborador") && (
         <div
-          className={`${styles.sidebarItem} ${
-            active === "correos" ? styles.active : ""
-          }`}
+          className={`${styles.sidebarItem} ${active === "correos" ? styles.active : ""
+            }`}
           onClick={() => setScreen("correos")}
           title="Correos masivos y newsletter"
         >
@@ -72,9 +70,8 @@ const Sidebar = ({ active, setScreen, user }) => {
       )} */}
 
       <div
-        className={`${styles.sidebarItem} ${
-          active === "agenda" ? styles.active : ""
-        }`}
+        className={`${styles.sidebarItem} ${active === "agenda" ? styles.active : ""
+          }`}
         onClick={() => setScreen("agenda")}
         title="Gestión de eventos y actividades"
       >
@@ -84,9 +81,8 @@ const Sidebar = ({ active, setScreen, user }) => {
 
       {user.role === "colaborador" && (
         <div
-          className={`${styles.sidebarItem} ${
-            active === "perfil" ? styles.active : ""
-          }`}
+          className={`${styles.sidebarItem} ${active === "perfil" ? styles.active : ""
+            }`}
           onClick={() => setScreen("perfil")}
           title="Ver o editar mi perfil"
         >
@@ -97,9 +93,8 @@ const Sidebar = ({ active, setScreen, user }) => {
 
       {user.role === "administrador" && (
         <div
-          className={`${styles.sidebarItem} ${
-            active === "admin-perfiles" ? styles.active : ""
-          }`}
+          className={`${styles.sidebarItem} ${active === "admin-perfiles" ? styles.active : ""
+            }`}
           onClick={() => setScreen("admin-perfiles")}
           title="Administrar perfiles de usuario"
         >
@@ -109,6 +104,14 @@ const Sidebar = ({ active, setScreen, user }) => {
       )}
     </aside>
   );
+};
+
+Sidebar.propTypes = {
+  active: PropTypes.string.isRequired,
+  setScreen: PropTypes.func.isRequired,
+  user: PropTypes.shape({
+    role: PropTypes.string.isRequired,
+  }),
 };
 
 export default Sidebar;

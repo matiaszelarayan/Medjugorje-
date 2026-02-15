@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     # Terceros
     'rest_framework',
     'corsheaders',
+    'django_filters',
 
     # Apps propias
     'accounts',
@@ -97,16 +98,16 @@ DATABASES = {
     #     default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
     # )
     # Para desarrollo
-    # "default": {
-    #     "ENGINE": "django.db.backends.postgresql",
-    #     "NAME": env("DB_NAME"),
-    #     "USER": env("DB_USER"),
-    #     "PASSWORD": env("DB_PASSWORD"),
-    #     "HOST": env("DB_HOST"),
-    #     "PORT": env.int("DB_PORT", "5432"),
-    # }
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": env("DB_NAME"),
+        "USER": env("DB_USER"),
+        "PASSWORD": env("DB_PASSWORD"),
+        "HOST": env("DB_HOST"),
+        "PORT": env.int("DB_PORT", "5432"),
+    }
     # para deploy
-    "default": env.db("DATABASE_URL")
+    # "default": env.db("DATABASE_URL")
 }
 
 
@@ -139,7 +140,8 @@ REST_FRAMEWORK = {
     ),
     "EXCEPTION_HANDLER": (
       "core.exceptions.custom_exception_handler"
-    )
+    ),
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
 }
 
 APPEND_SLASH = False

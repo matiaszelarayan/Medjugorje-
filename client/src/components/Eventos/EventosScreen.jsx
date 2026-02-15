@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import styles from "./Eventos.module.css";
 import EventoFormModal from "./EventoFormModal";
 import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
@@ -10,10 +11,16 @@ import {
   eliminarEvento,
 } from "../../api/eventosService";
 import logger from "../../utils/logger";
+import { useErrorNotification } from "../../hooks/useErrorNotification";
 
 
+
+import PropTypes from "prop-types";
+
+// ... (existing code)
 
 const EventosScreen = ({ user }) => {
+  const { notifyError } = useErrorNotification();
   const [eventos, setEventos] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [eventoEditando, setEventoEditando] = useState(null);
@@ -26,6 +33,7 @@ const EventosScreen = ({ user }) => {
         setEventos(data);
       } catch (error) {
         logger.error("Error al obtener los eventos:", error);
+        notifyError(error, "Error al obtener los eventos");
       }
     };
     fetchEventos();
@@ -49,16 +57,19 @@ const EventosScreen = ({ user }) => {
         });
 
         setEventos((prev) => prev.map((ev) => (ev.id === data.id ? data : ev)));
+        toast.success("Evento actualizado correctamente");
       } else {
         data = await crearEvento(evento);
         logger.log("Evento creado:", data);
         setEventos((prev) => [...prev, data]);
+        toast.success("Evento creado correctamente");
       }
 
       setShowModal(false);
       setEventoEditando(null);
     } catch (error) {
       logger.error("Error guardando evento", error);
+      notifyError(error, "Error guardando evento");
     }
   };
 
@@ -67,9 +78,11 @@ const EventosScreen = ({ user }) => {
     try {
       await eliminarEvento(eventoAEliminar.id);
       setEventos((prev) => prev.filter((ev) => ev.id !== eventoAEliminar.id));
+      toast.success("Evento eliminado correctamente");
       setEventoAEliminar(null);
     } catch (err) {
       logger.error("Error eliminando evento", err);
+      notifyError(err, "Error eliminando evento");
     }
   };
   const handleEdit = (evento) => {
@@ -109,12 +122,12 @@ const EventosScreen = ({ user }) => {
               <td>
                 {ev.fecha_inicio
                   ? new Date(ev.fecha_inicio).toLocaleString("es-AR", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit"
-                    })
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit"
+                  })
                   : ""}
               </td>
               <td>{ev.ubicacion}</td>
@@ -157,6 +170,12 @@ const EventosScreen = ({ user }) => {
       )}
     </div>
   );
+};
+
+EventosScreen.propTypes = {
+  user: PropTypes.shape({
+    role: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default EventosScreen;

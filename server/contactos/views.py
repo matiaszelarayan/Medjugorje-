@@ -8,10 +8,23 @@ from .serializers import ContactoSerializer
 
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.filters import SearchFilter, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
+
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 100
 
 class ContactoViewSet(viewsets.ModelViewSet):
     queryset = Contacto.objects.all().order_by('-created_at')
     serializer_class = ContactoSerializer
+    pagination_class = StandardResultsSetPagination
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    search_fields = ['nombre', 'apellido', 'email']
+    filterset_fields = ['provincia', 'grupo_oracion']
+    ordering_fields = ['apellido', 'nombre', 'created_at']
 
     def get_permissions(self):
 

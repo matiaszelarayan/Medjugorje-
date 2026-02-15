@@ -3,6 +3,8 @@ import styles from "./NavBar.module.css";
 import logo from "../../assets/logo.png";
 import { toast } from "react-toastify";
 
+import PropTypes from "prop-types";
+
 const NavBar = ({ user, onLogout, darkMode, toggleDarkMode }) => {
   const [showModal, setShowModal] = useState(false);
   // Solución: Retornar navbar vacío si no hay user
@@ -54,6 +56,18 @@ const NavBar = ({ user, onLogout, darkMode, toggleDarkMode }) => {
       )}
     </nav>
   );
+};
+
+NavBar.propTypes = {
+  user: PropTypes.shape({
+    nombre: PropTypes.string,
+    apellido: PropTypes.string,
+    role: PropTypes.string,
+    foto_perfil: PropTypes.string,
+  }),
+  onLogout: PropTypes.func.isRequired,
+  darkMode: PropTypes.bool.isRequired,
+  toggleDarkMode: PropTypes.func.isRequired,
 };
 
 export default NavBar;

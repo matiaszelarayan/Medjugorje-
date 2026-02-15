@@ -2,8 +2,8 @@ import axiosClient from "./axiosClient";
 
 const BASE_URL = "api/contactos/";
 
-export async function getContactos() {
-  const res = await axiosClient.get(`${BASE_URL}`);
+export async function getContactos(params = {}) {
+  const res = await axiosClient.get(`${BASE_URL}`, { params });
   return res.data;
 }
 

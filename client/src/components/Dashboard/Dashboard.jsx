@@ -38,6 +38,10 @@ const Card = ({ icon: Icon, title, value, color, onClick }) => {
   );
 };
 
+import PropTypes from "prop-types";
+
+// ... (Card component remains unchanged, you can add propTypes to it too if you like)
+
 const Dashboard = ({ user, setScreen }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -92,6 +96,13 @@ const Dashboard = ({ user, setScreen }) => {
       </div>
     </div>
   );
+};
+
+Dashboard.propTypes = {
+  user: PropTypes.shape({
+    nombre: PropTypes.string,
+  }).isRequired,
+  setScreen: PropTypes.func.isRequired,
 };
 
 export default Dashboard;

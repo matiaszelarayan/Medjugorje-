@@ -43,11 +43,13 @@ axiosClient.interceptors.response.use(
         axiosClient.defaults.headers.Authorization = `Bearer ${res.data.access}`;
 
         return axiosClient(originalRequest);
-      // eslint-disable-next-line no-unused-vars
+        // eslint-disable-next-line no-unused-vars
       } catch (err) {
         console.error("REFRESH TOKEN EXPIRADO");
         localStorage.removeItem("access");
         localStorage.removeItem("refresh");
+        window.dispatchEvent(new Event("auth:logout"));
+        return Promise.reject(err);
       }
     }
 
@@ -58,4 +60,3 @@ axiosClient.interceptors.response.use(
 export default axiosClient;
 
 
- 

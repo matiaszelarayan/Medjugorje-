@@ -3,6 +3,8 @@ import styles from "./Login.module.css";
 import { ArrowRight } from "lucide-react";
 import logo from "../../assets/logo.png";
 
+import PropTypes from "prop-types";
+
 const Login = ({ onLogin }) => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
@@ -57,6 +59,10 @@ const Login = ({ onLogin }) => {
       </div>
     </div>
   );
+};
+
+Login.propTypes = {
+  onLogin: PropTypes.func.isRequired,
 };
 
 export default Login;

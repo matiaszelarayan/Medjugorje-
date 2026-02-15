@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import styles from "./GruposScreen.module.css";
 import GrupoFormModal from "./GrupoFormModal";
 import GrupoPrintButton from "./GrupoPrintButton";
@@ -7,9 +8,15 @@ import { Pencil, Trash2 } from "lucide-react";
 import { getGrupos, crearGrupo, editarGrupo, eliminarGrupo } from "../../api/grupoOracionService";
 import { getUsers } from "../../api/userService";
 import logger from "../../utils/logger";
+import { useErrorNotification } from "../../hooks/useErrorNotification";
 
+
+import PropTypes from "prop-types";
+
+// ... (existing code)
 
 const GruposScreen = ({ user }) => {
+  const { notifyError } = useErrorNotification();
   const [grupos, setGrupos] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedGrupo, setSelectedGrupo] = useState(null);
@@ -25,6 +32,7 @@ const GruposScreen = ({ user }) => {
         setGrupos(data);
       } catch (error) {
         logger.error("Error al obtener los grupos:", error);
+        notifyError(error, "Error al obtener los grupos");
       }
     };
     fetchGrupos();
@@ -37,6 +45,7 @@ const GruposScreen = ({ user }) => {
         setUsers(users);
       } catch (error) {
         logger.error("Error al obtener los usuarios:", error);
+        notifyError(error, "Error al obtener los usuarios");
       }
     };
     fetchUsers();
@@ -60,17 +69,20 @@ const GruposScreen = ({ user }) => {
         setGrupos((prev) =>
           prev.map((g) => (g.id === grupo.id ? savedGrupo : g))
         );
+        toast.success("Grupo actualizado correctamente");
       } else {
         // CREAR
         savedGrupo = await crearGrupo(grupo);
 
         setGrupos((prev) => [...prev, savedGrupo]);
+        toast.success("Grupo creado correctamente");
       }
 
       setShowModal(false);
       setSelectedGrupo(null);
     } catch (error) {
       logger.error("Error al guardar grupo:", error);
+      notifyError(error, "Error al guardar grupo");
     }
   };
 
@@ -80,16 +92,18 @@ const GruposScreen = ({ user }) => {
     setShowModal(true);
   };
   const openDeleteModal = (grupo) => setDeleteTarget(grupo);
- const confirmDelete = async (id) => {
-   try {
-     await eliminarGrupo(id);
+  const confirmDelete = async (id) => {
+    try {
+      await eliminarGrupo(id);
 
-     setGrupos((prev) => prev.filter((g) => g.id !== id));
-     setDeleteTarget(null);
-   } catch (error) {
-     logger.error("Error al eliminar grupo:", error);
-   }
- };
+      setGrupos((prev) => prev.filter((g) => g.id !== id));
+      toast.success("Grupo eliminado correctamente");
+      setDeleteTarget(null);
+    } catch (error) {
+      logger.error("Error al eliminar grupo:", error);
+      notifyError(error, "Error al eliminar grupo");
+    }
+  };
 
   const closeDeleteModal = () => setDeleteTarget(null);
   const openNewGrupo = () => {
@@ -175,6 +189,12 @@ const GruposScreen = ({ user }) => {
       </div>
     </div>
   );
+};
+
+GruposScreen.propTypes = {
+  user: PropTypes.shape({
+    role: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default GruposScreen;

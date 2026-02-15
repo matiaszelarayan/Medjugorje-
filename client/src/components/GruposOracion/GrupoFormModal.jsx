@@ -3,6 +3,10 @@ import ModalBase from "../common/ModalBase/ModalBase";
 import styles from "./GrupoFormModal.module.css";
 import { useGeoArgentina } from "../../hooks/useGeoArgentina";
 
+import PropTypes from "prop-types";
+
+// ... (existing imports and code)
+
 const GrupoFormModal = ({ grupo, onClose, onSave, users }) => {
   const [form, setForm] = useState({
     nombre_grupo: "",
@@ -25,17 +29,17 @@ const GrupoFormModal = ({ grupo, onClose, onSave, users }) => {
     if (grupo) setForm(grupo);
   }, [grupo]);
 
- const handleChange = (e) => {
-   const { name, value } = e.target;
+  const handleChange = (e) => {
+    const { name, value } = e.target;
 
-   if (name === "provincia") {
-     setForm({ ...form, provincia: value, localidad: "" });
-   } else if (name === "responsable") {
-     setForm({ ...form, responsable: Number(value) });
-   } else {
-     setForm({ ...form, [name]: value });
-   }
- };
+    if (name === "provincia") {
+      setForm({ ...form, provincia: value, localidad: "" });
+    } else if (name === "responsable") {
+      setForm({ ...form, responsable: Number(value) });
+    } else {
+      setForm({ ...form, [name]: value });
+    }
+  };
 
 
   const handleSubmit = (e) => {
@@ -143,5 +147,24 @@ const GrupoFormModal = ({ grupo, onClose, onSave, users }) => {
     </ModalBase>
   );
 };
+
+GrupoFormModal.propTypes = {
+  grupo: PropTypes.shape({
+    id: PropTypes.number,
+    nombre_grupo: PropTypes.string,
+    provincia: PropTypes.string,
+    localidad: PropTypes.string,
+    responsable: PropTypes.number,
+  }),
+  onClose: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
+  users: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      nombre: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+};
+
 
 export default GrupoFormModal;

@@ -15,6 +15,10 @@ const getDisplayName = (entity) => {
   return "";
 };
 
+import PropTypes from "prop-types";
+
+// ... (existing imports and getDisplayName)
+
 const ConfirmDeleteModal = ({ user, onConfirm, onCancel }) => {
   return (
     <ModalBase onClose={onCancel}>
@@ -37,6 +41,19 @@ const ConfirmDeleteModal = ({ user, onConfirm, onCancel }) => {
       </div>
     </ModalBase>
   );
+};
+
+ConfirmDeleteModal.propTypes = {
+  user: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    titulo: PropTypes.string,
+    asunto: PropTypes.string,
+    nombre: PropTypes.string,
+    apellido: PropTypes.string,
+    nombre_grupo: PropTypes.string,
+  }).isRequired,
+  onConfirm: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
 };
 
 export default ConfirmDeleteModal;

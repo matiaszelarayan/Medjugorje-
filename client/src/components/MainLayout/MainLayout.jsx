@@ -3,6 +3,8 @@ import Navbar from "../NavBar/NavBar";
 import Sidebar from "../Sidebar/Sidebar";
 import styles from "./MainLayout.module.css";
 
+import PropTypes from "prop-types";
+
 const MainLayout = ({
   user,
   currentScreen,
@@ -10,7 +12,7 @@ const MainLayout = ({
   onLogout,
   children,
   darkMode,
-  toggleDarkMode, // ✅ asegurate de recibir esta prop
+  toggleDarkMode,
 }) => {
   const wrapperClass = darkMode
     ? `${styles.appWrapper} ${styles.modoOscuro}`
@@ -23,13 +25,23 @@ const MainLayout = ({
         <Navbar
           user={user}
           onLogout={onLogout}
-          darkMode={darkMode}           // ✅ pasamos el estado
-          toggleDarkMode={toggleDarkMode} // ✅ pasamos la función
+          darkMode={darkMode}
+          toggleDarkMode={toggleDarkMode}
         />
         <main className={styles.appContent}>{children}</main>
       </div>
     </div>
   );
+};
+
+MainLayout.propTypes = {
+  user: PropTypes.object,
+  currentScreen: PropTypes.string.isRequired,
+  setScreen: PropTypes.func.isRequired,
+  onLogout: PropTypes.func.isRequired,
+  children: PropTypes.node,
+  darkMode: PropTypes.bool.isRequired,
+  toggleDarkMode: PropTypes.func.isRequired,
 };
 
 export default MainLayout;

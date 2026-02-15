@@ -4,6 +4,10 @@ import styles from "./NuevoCorreoModal.module.css";
 import { useGeoArgentina } from "../../hooks/useGeoArgentina";
 import { getGrupos } from "../../api/grupoOracionService";
 
+import PropTypes from "prop-types";
+
+// ... (existing imports and code)
+
 const NuevoCorreoModal = ({ correo, onClose, onSave }) => {
   const [formData, setFormData] = useState({
     asunto: "",
@@ -16,11 +20,11 @@ const NuevoCorreoModal = ({ correo, onClose, onSave }) => {
 
   const [grupos, setGrupos] = useState([]);
 
-   useEffect(() => {
-     getGrupos()
-       .then(setGrupos)
-       .catch((e) => console.error("Error grupos:", e));
-   }, []);
+  useEffect(() => {
+    getGrupos()
+      .then(setGrupos)
+      .catch((e) => console.error("Error grupos:", e));
+  }, []);
 
   // Carga inicial para edición
   useEffect(() => {
@@ -65,9 +69,8 @@ const NuevoCorreoModal = ({ correo, onClose, onSave }) => {
     }
   };
 
-  
   // resolver despues
-  
+
   // Contactos por grupo (con filtros activos)
   // const grupoContactCount = gruposOracion.map(grupo => ({
   //   ...grupo,
@@ -94,24 +97,24 @@ const NuevoCorreoModal = ({ correo, onClose, onSave }) => {
   //   link.click();
   // };
 
- const handleSubmit = (e) => {
-   e.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-   const payload = {
-     titulo: formData.asunto,
-     asunto: formData.asunto,
-     contenido: formData.contenido,
-    //  solo_newsletter: formData.soloNewsletter,
-     provincia: formData.provincia || "",
-     ciudad: formData.ciudad || "",
-     grupo_oracion:
-       formData.grupo_oracion === "todos" || formData.grupo_oracion === ""
-         ? null
-         : Number(formData.grupo_oracion),
-   };
+    const payload = {
+      titulo: formData.asunto,
+      asunto: formData.asunto,
+      contenido: formData.contenido,
+      //  solo_newsletter: formData.soloNewsletter,
+      provincia: formData.provincia || "",
+      ciudad: formData.ciudad || "",
+      grupo_oracion:
+        formData.grupo_oracion === "todos" || formData.grupo_oracion === ""
+          ? null
+          : Number(formData.grupo_oracion),
+    };
 
-   onSave(payload);
- };
+    onSave(payload);
+  };
 
   return (
     <ModalBase onClose={onClose}>
@@ -223,19 +226,7 @@ const NuevoCorreoModal = ({ correo, onClose, onSave }) => {
             ))}
           </select>
         </div>
-        {/* <div className={styles.exportWrapper}>
-          <p className={styles.destinatarios}>
-            Destinatarios: {destinatarios} contactos
-          </p>
-          <button
-            type="button"
-            className={styles.exportBtn}
-            onClick={handleExport}
-            disabled={destinatarios === 0}
-          >
-            Exportar contactos
-          </button>
-        </div> */}
+
         <div className={styles.actions}>
           <button
             type="button"
@@ -247,10 +238,24 @@ const NuevoCorreoModal = ({ correo, onClose, onSave }) => {
           <button type="submit" className={styles.submitBtn}>
             Guardar Borrador
           </button>
-        </div>
+        </div>        
       </form>
     </ModalBase>
   );
+};
+
+NuevoCorreoModal.propTypes = {
+  correo: PropTypes.shape({
+    id: PropTypes.number,
+    asunto: PropTypes.string,
+    contenido: PropTypes.string,
+    provincia: PropTypes.string,
+    ciudad: PropTypes.string,
+    grupo: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    titulo: PropTypes.string, // a veces viene como titulo
+  }),
+  onClose: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
 };
 
 export default NuevoCorreoModal;

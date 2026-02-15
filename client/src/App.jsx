@@ -16,10 +16,12 @@ import FormularioBuilderScreen from "./components/Formularios/FormularioBuilderS
 
 import { login as loginAPI, logout as logoutAPI } from "./api/authService";
 import { getPerfil } from "./api/userService";
-import  logger  from "./utils/logger"
+import logger from "./utils/logger"
+import { useErrorNotification } from "./hooks/useErrorNotification";
 
 
 export default function App() {
+  const { notifyError } = useErrorNotification();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [currentScreen, setScreen] = useState("dashboard");
@@ -55,7 +57,7 @@ export default function App() {
   const handleLogin = async ({ email, password }) => {
     try {
       await loginAPI(email, password);
-      
+
       // Con token válido obtener perfil
       const user = await getPerfil();
       setCurrentUser(user);
@@ -63,16 +65,23 @@ export default function App() {
       return true;
     } catch (err) {
       logger.error(err);
+      notifyError(err, "Error al iniciar sesión");
       return false;
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     logoutAPI();
     setIsAuthenticated(false);
     setCurrentUser(null);
     setScreen("dashboard");
-  };
+  }, []);
+
+  useEffect(() => {
+    const onLogout = () => handleLogout();
+    window.addEventListener("auth:logout", onLogout);
+    return () => window.removeEventListener("auth:logout", onLogout);
+  }, [handleLogout]);
 
   const renderScreen = useCallback(() => {
     switch (currentScreen) {
