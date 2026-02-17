@@ -2,6 +2,7 @@ from django.conf import settings
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 import logging
+from .email_template import crear_plantilla_email
 
 logger = logging.getLogger(__name__)
 
@@ -18,11 +19,14 @@ def enviar_multiples_correos(destinatarios, asunto, contenido_html):
     errores = []
 
     for email in destinatarios:
+        # Envolver el contenido en la plantilla HTML profesional
+        contenido_formateado = crear_plantilla_email(contenido_html, asunto)
+        
         message = Mail(
             from_email=settings.SENDGRID_FROM_EMAIL,
             to_emails=email,
             subject=asunto,
-            html_content=contenido_html,
+            html_content=contenido_formateado,
         )
 
         try:
@@ -47,5 +51,6 @@ def enviar_multiples_correos(destinatarios, asunto, contenido_html):
         "total": len(destinatarios),
         "enviados": len(enviados),
         "errores": len(errores),
+        "enviados_exitosos": enviados,  # Lista de emails enviados exitosamente
         "detalle_errores": errores,
     }

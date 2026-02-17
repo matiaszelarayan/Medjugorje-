@@ -142,6 +142,15 @@ REST_FRAMEWORK = {
       "core.exceptions.custom_exception_handler"
     ),
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
+
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.AnonRateThrottle",
+        "rest_framework.throttling.UserRateThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": "10/minute",      # Usuarios anónimos: 10 peticiones por minuto
+        "user": "100/minute",     # Usuarios autenticados: 100 peticiones por minuto
+    },
 }
 
 APPEND_SLASH = False

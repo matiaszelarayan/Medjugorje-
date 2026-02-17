@@ -129,7 +129,7 @@ const AdminPerfiles = () => {
       <table className={styles.adminTable}>
         <thead>
           <tr>
-            <th>Foto</th>
+            {/* <th>Foto</th> */}
             <th>Nombre</th>
             <th>Email</th>
             <th>Rol</th>
@@ -139,7 +139,7 @@ const AdminPerfiles = () => {
         <tbody>
           {usuariosPagina.map((u) => (
             <tr key={u.id}>
-              <td>
+              {/* <td>
                 {u.foto_perfil ? (
                   <img
                     src={u.foto_perfil}
@@ -149,7 +149,7 @@ const AdminPerfiles = () => {
                 ) : (
                   <span className={styles.noFoto}>Sin foto</span>
                 )}
-              </td>
+              </td> */}
               <td>
                 {u.nombre} {u.apellido}
               </td>

@@ -97,7 +97,7 @@ const PerfilScreen = ({ user }) => {
         <p><strong>Rol:</strong> {user.role}</p>
       </div>
 
-      <div className={styles.perfilSection}>
+      {/* <div className={styles.perfilSection}>
         <label>Foto de perfil (.jpg o .png):</label>
         <input type="file" accept=".jpg,.png" onChange={handleImageChange} />
         {imagePreview && (
@@ -105,7 +105,7 @@ const PerfilScreen = ({ user }) => {
             <img src={imagePreview} alt="Preview" />
           </div>
         )}
-      </div>
+      </div> */}
 
       <div className={styles.perfilSection}>
         <label>Nueva contraseña:</label>

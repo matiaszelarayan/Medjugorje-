@@ -44,6 +44,11 @@ class CorreoMasivoSerializer(serializers.ModelSerializer):
         read_only_fields = ["creado_por", "fecha_creacion", "fecha_envio"]
     
     def get_cantidad_destinatarios(self, obj):
+        # Si ya está enviado, contar desde destinatarios existentes
+        if obj.estado == CorreoMasivo.ESTADO_ENVIADO:
+            return obj.destinatarios.count()
+        
+        # Si es borrador, calcular dinámicamente
         _, cantidad = obtener_contactos_para_correo(obj)
         return cantidad
 

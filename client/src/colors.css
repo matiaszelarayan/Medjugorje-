@@ -17,6 +17,7 @@
   --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   --card-radius: 1rem;
 }
+
 /* 🌙 MODO OSCURO */
 .modoOscuro {
   --primary-color: #f0f0f0;

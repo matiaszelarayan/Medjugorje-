@@ -11,11 +11,14 @@ from .utils import obtener_contactos_para_correo
 from accounts.permissions import IsAdministrador, IsAdminOrColaborador
 
 
+# from core.pagination import StandardResultsSetPagination
+
 #  Crear y listar correos masivos (solo borradores)
 class CorreoMasivoListCreateView(generics.ListCreateAPIView):
-    queryset = CorreoMasivo.objects.all().order_by("-fecha_creacion")
+    queryset = CorreoMasivo.objects.select_related('grupo_oracion', 'creado_por').all().order_by("-fecha_creacion")
     serializer_class = CorreoMasivoSerializer
     permission_classes = [IsAdminOrColaborador]
+    # pagination_class = StandardResultsSetPagination
 
 
     def create(self, request, *args, **kwargs):
@@ -78,21 +81,45 @@ class EnviarCorreoMasivoView(APIView):
         # enviar correos
         emails_destinatarios = [c.email for c in contactos]
 
-        enviar_multiples_correos(
+        resultado = enviar_multiples_correos(
             destinatarios=emails_destinatarios,
             asunto=correo.asunto,
             contenido_html=correo.contenido
         )
 
-        correo.estado = CorreoMasivo.ESTADO_ENVIADO
-        correo.fecha_envio = timezone.now()
-        correo.save()
+        # Actualizar destinatarios con el resultado del envío
+        for destinatario in DestinatarioCorreo.objects.filter(correo=correo):
+            # Verificar si el email fue enviado exitosamente
+            if destinatario.email in resultado.get('enviados_exitosos', []):
+                destinatario.enviado = True
+                destinatario.fecha_envio = timezone.now()
+                destinatario.error = ""
+            else:
+                # Buscar el error específico
+                error_info = next(
+                    (e for e in resultado.get('detalle_errores', []) if e['email'] == destinatario.email),
+                    None
+                )
+                if error_info:
+                    destinatario.enviado = False
+                    destinatario.error = error_info['error']
+            
+            destinatario.save()
+
+        # Solo marcar como enviado si al menos algunos se enviaron
+        if resultado['enviados'] > 0:
+            correo.estado = CorreoMasivo.ESTADO_ENVIADO
+            correo.fecha_envio = timezone.now()
+            correo.save()
 
         return Response({
-            "mensaje": "Enviado correctamente",
-            "cantidad_destinatarios": cantidad,
+            "mensaje": f"Proceso completado: {resultado['enviados']} enviados, {resultado['errores']} fallidos",
+            "total_destinatarios": resultado['total'],
+            "enviados_exitosos": resultado['enviados'],
+            "fallidos": resultado['errores'],
             "correo_id": correo.id,
             "destinatarios": destinatarios_creados,
             "fecha_envio": correo.fecha_envio,
-            "estado": correo.estado
+            "estado": correo.estado,
+            "detalle_errores": resultado['detalle_errores']
         })

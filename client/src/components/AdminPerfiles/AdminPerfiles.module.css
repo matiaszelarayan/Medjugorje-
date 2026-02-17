@@ -32,13 +32,15 @@
   border-radius: 50%;
   object-fit: cover;
 }
+
 .noFoto {
   font-size: 0.875rem;
   color: #888;
 }
 
 /* === BOTONES ACCION CON ICONO === */
-.editButton, .deleteButton {
+.editButton,
+.deleteButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -53,7 +55,9 @@
   outline: none;
   transition: background 0.2s, box-shadow 0.2s;
 }
-.editButton svg, .deleteButton svg {
+
+.editButton svg,
+.deleteButton svg {
   display: block;
   margin: 0 auto;
 }
@@ -63,6 +67,7 @@
   background-color: var(--accent-color, #199871);
   color: #fff;
 }
+
 .editButton:hover,
 .editButton:focus-visible {
   background-color: var(--primary-color, #136252);
@@ -74,6 +79,7 @@
   background-color: #d9534f;
   color: #fff;
 }
+
 .deleteButton:hover,
 .deleteButton:focus-visible {
   background-color: #c9302c;
@@ -99,15 +105,18 @@
   margin-bottom: 1rem;
   transition: background 0.23s;
 }
+
 .createButton:hover {
   background-color: var(--primary-color, #136252);
 }
+
 .filtrosContainer {
   display: flex;
   gap: 1rem;
   margin-bottom: 1rem;
   align-items: center;
 }
+
 .filtrosContainer select,
 .filtrosContainer input {
   padding: 0.5rem;
@@ -135,6 +144,7 @@
   gap: 1rem;
   margin-top: 1.5rem;
 }
+
 .paginacion button {
   padding: 0.4rem 0.8rem;
   font-size: 0.875rem;
@@ -144,6 +154,7 @@
   color: white;
   cursor: pointer;
 }
+
 .paginacion button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
@@ -158,49 +169,60 @@
   color: #f0f0f0;
   box-shadow: 0 4px 12px rgba(255, 255, 255, 0.05);
 }
+
 .modoOscuro .title {
   color: #f0f0f0;
 }
+
 .modoOscuro .adminTable th,
 .modoOscuro .adminTable td {
   border-bottom: 1px solid #444;
   color: #ddd;
 }
+
 .modoOscuro .noFoto {
   color: #aaa;
 }
+
 .modoOscuro .filtrosContainer select,
 .modoOscuro .filtrosContainer input {
   background-color: #2a2a2a;
   color: #f0f0f0;
   border: 1px solid #555;
 }
+
 .modoOscuro .successAlert {
   background-color: #2d4f2d;
   color: #c3e6cb;
   border: 1px solid #3c6e3c;
 }
+
 .modoOscuro .paginacion button {
   background-color: #444;
   color: #f0f0f0;
 }
+
 .modoOscuro .paginacion button:disabled {
   background-color: #666;
   color: #ccc;
 }
+
 .modoOscuro .editButton,
 .modoOscuro .createButton {
   background-color: #444 !important;
   color: #f0f0f0 !important;
 }
+
 .modoOscuro .editButton:hover,
 .modoOscuro .createButton:hover {
   background-color: #666 !important;
 }
+
 .modoOscuro .deleteButton {
   background-color: #a94442;
   color: #fff;
 }
+
 .modoOscuro .deleteButton:hover {
   background-color: #922d2b;
 }

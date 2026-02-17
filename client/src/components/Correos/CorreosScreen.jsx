@@ -99,7 +99,19 @@ const CorreosScreen = ({ user }) => {
             : c
         )
       );
-      toast.success("Correo enviado correctamente");
+
+      // Mostrar mensaje detallado según el resultado
+      if (data.fallidos === 0) {
+        toast.success(`✅ Correo enviado exitosamente a ${data.enviados_exitosos} destinatarios`);
+      } else if (data.enviados_exitosos > 0) {
+        toast.warning(
+          `⚠️ Enviado parcialmente: ${data.enviados_exitosos} exitosos, ${data.fallidos} fallidos. Revisa los detalles en la consola.`
+        );
+        console.warn("Errores de envío:", data.detalle_errores);
+      } else {
+        toast.error(`❌ Error: No se pudo enviar ningún correo. ${data.fallidos} fallidos.`);
+        console.error("Errores de envío:", data.detalle_errores);
+      }
     } catch (error) {
       console.error("Error enviando correo:", error);
       notifyError(error, "Error enviando correo");

@@ -10,11 +10,13 @@
   font-weight: 800;
   color: var(--primary-color);
 }
+
 .contactosSubtitle {
   margin-top: 0.5rem;
   font-size: 1.125rem;
   color: var(--text-muted);
 }
+
 .actionsBar {
   display: flex;
   justify-content: space-between;
@@ -29,6 +31,7 @@
   border-collapse: collapse;
   margin-bottom: 2rem;
 }
+
 .contactTable th,
 .contactTable td {
   padding: 0.75rem;
@@ -36,13 +39,15 @@
   border-bottom: 1px solid #ddd;
   font-size: 0.95rem;
 }
+
 .contactTable th {
   background-color: #f5f5f5;
   color: var(--text-main);
 }
 
 /* --- Botones de acción modernos con icono --- */
-.editBtn, .deleteBtn {
+.editBtn,
+.deleteBtn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -58,7 +63,9 @@
   transition: background 0.2s, color 0.2s, box-shadow 0.16s;
   background-clip: padding-box;
 }
-.editBtn svg, .deleteBtn svg {
+
+.editBtn svg,
+.deleteBtn svg {
   display: block;
   margin: 0 auto;
 }
@@ -68,17 +75,20 @@
   background: var(--accent-color, #199871);
   color: #fff;
 }
+
 .editBtn:hover,
 .editBtn:focus-visible {
   background: var(--primary-color, #136252);
   color: #fff;
   box-shadow: 0 0 0 2px #e0f8ee;
 }
+
 /* Botón eliminar */
 .deleteBtn {
   background: #d9534f;
   color: #fff;
 }
+
 .deleteBtn:hover,
 .deleteBtn:focus-visible {
   background: #c9302c;
@@ -93,31 +103,36 @@
   grid-template-columns: repeat(1, 1fr);
   gap: 1.5rem;
 }
+
 @media (min-width: 768px) {
   .contactosList {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
 @media (min-width: 1024px) {
   .contactosList {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
 .contactoCard {
   background-color: #ffffff;
   border-radius: var(--card-radius, 8px);
-  box-shadow: var(--card-shadow, 0 4px 10px rgba(40,60,100,.10));
+  box-shadow: var(--card-shadow, 0 4px 10px rgba(40, 60, 100, .10));
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   border-left: 4px solid var(--accent-color);
 }
+
 .contactoNombre {
   font-size: 1.125rem;
   font-weight: 600;
   color: var(--text-main);
 }
+
 .contactoEmail,
 .contactoProvincia,
 .contactoGrupo,
@@ -125,6 +140,7 @@
   font-size: 0.95rem;
   color: var(--text-muted);
 }
+
 .cardActions {
   margin-top: 0.5rem;
   display: flex;
@@ -138,6 +154,7 @@
   gap: 1rem;
   margin-bottom: 1rem;
 }
+
 .filterInput,
 .filterSelect {
   padding: 0.5rem;
@@ -153,6 +170,7 @@
   gap: 0.5rem;
   margin-top: 1rem;
 }
+
 .pageBtn,
 .pageActive {
   padding: 0.4rem 0.8rem;
@@ -163,6 +181,7 @@
   cursor: pointer;
   font-size: 0.9rem;
 }
+
 .pageActive {
   background-color: var(--accent-color);
   color: white;
@@ -181,22 +200,27 @@
   background-color: #1e1e1e;
   color: #f0f0f0;
 }
+
 .modoOscuro .contactosContainer h2 {
   color: #f0f0f0;
 }
+
 .modoOscuro .contactTable th {
   background-color: #2a2a2a;
   color: #eee;
 }
+
 .modoOscuro .contactTable td {
   border-color: #444;
   color: #ccc;
 }
+
 .modoOscuro .contactoCard {
   border-color: #444;
   background-color: #2a2a2a;
   color: #eee;
 }
+
 .modoOscuro .pageBtn,
 .modoOscuro .pageActive {
   background-color: #2a2a2a;
@@ -209,13 +233,16 @@
   background: #249871;
   color: #eee;
 }
+
 .modoOscuro .editBtn:hover {
   background: #1a6f54;
 }
+
 .modoOscuro .deleteBtn {
   background: #a94442;
   color: #f0f0f0;
 }
+
 .modoOscuro .deleteBtn:hover {
   background: #922d2b;
 }

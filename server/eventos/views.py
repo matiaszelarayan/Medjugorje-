@@ -3,10 +3,12 @@ from .serializers import EventoSerializer
 from .models import Evento
 from rest_framework import permissions
 from accounts.permissions import IsAdminOrColaborador, IsAdministrador
+# from core.pagination import StandardResultsSetPagination
 
 class EventoViewSet(viewsets.ModelViewSet):
-    queryset = Evento.objects.all().order_by('-created_at')
+    queryset = Evento.objects.select_related('creado_por').all().order_by('-created_at')
     serializer_class = EventoSerializer
+    # pagination_class = StandardResultsSetPagination
 
     def get_permissions(self):
 
