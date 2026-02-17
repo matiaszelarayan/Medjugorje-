@@ -98,16 +98,16 @@ DATABASES = {
     #     default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
     # )
     # Para desarrollo
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": env("DB_NAME"),
-        "USER": env("DB_USER"),
-        "PASSWORD": env("DB_PASSWORD"),
-        "HOST": env("DB_HOST"),
-        "PORT": env.int("DB_PORT", "5432"),
-    }
+    # "default": {
+    #     "ENGINE": "django.db.backends.postgresql",
+    #     "NAME": env("DB_NAME"),
+    #     "USER": env("DB_USER"),
+    #     "PASSWORD": env("DB_PASSWORD"),
+    #     "HOST": env("DB_HOST"),
+    #     "PORT": env.int("DB_PORT", "5432"),
+    # }
     # para deploy
-    # "default": env.db("DATABASE_URL")
+    "default": env.db("DATABASE_URL")
 }
 
 
