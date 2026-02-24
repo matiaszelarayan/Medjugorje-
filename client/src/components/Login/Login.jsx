@@ -26,7 +26,7 @@ const Login = ({ onLogin }) => {
     <div className={styles["login-wrapper"]}>
       <div className={styles["login-box"]}>
         <img src={logo} alt="Logo" className={styles["login-logo"]} />
-        <h2>Fundación Centro Medjugorje Argentina</h2>
+        <h2>Asociación Centro Medjugorje Argentina</h2>
         <p>Plataforma Institucional</p>
 
         {error && <div className={styles.error}>{error}</div>}
