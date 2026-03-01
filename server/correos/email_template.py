@@ -23,7 +23,7 @@ def crear_plantilla_email(contenido, asunto=""):
                         <tr>
                             <td style="background: linear-gradient(135deg, #2179bb 0%, #1a5a8a 100%); padding: 30px 40px; text-align: center;">
                                 <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 600;">
-                                    Fundación Medjugorje
+                                    AAsociación Centro Medjugorje Argentina
                                 </h1>
                                 <p style="margin: 8px 0 0 0; color: #e8f4f8; font-size: 14px;">
                                     Paz y Bien

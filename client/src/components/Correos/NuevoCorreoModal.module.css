@@ -4,7 +4,8 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0,0,0,0.65); /* más oscuro */
+  background-color: rgba(0, 0, 0, 0.65);
+  /* más oscuro */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -13,20 +14,29 @@
 }
 
 .modal {
-  background: #fff;
+  background: var(--background-card);
+  color: var(--text-main);
   border-radius: 8px;
   padding: 2rem;
-  max-width: 700px; /* ancho cómodo */
+  max-width: 700px;
+  /* ancho cómodo */
   width: 95%;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.22);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.22);
   animation: fadeIn 0.3s ease;
 }
 
 @keyframes fadeIn {
-  from { transform: translateY(-20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .title {
@@ -60,12 +70,13 @@
 .select {
   width: 100%;
   padding: 0.6rem 0.8rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   font-size: 0.95rem;
+  color: var(--text-main);
+  background: var(--background-main);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   box-sizing: border-box;
-  background: #fafbfc;
 }
 
 .input:focus,
@@ -164,13 +175,27 @@
 }
 
 .submitBtn:hover {
-  background: green;
+  background: #136252;
 }
 
 /* Responsive */
 @media (max-width: 600px) {
-  .modal { padding: 1rem; max-width: 98vw; }
-  .title { font-size: 1.18rem; }
-  .actions { flex-direction: column; gap: 0.7rem; }
-  .exportWrapper { flex-direction: column; gap: 0.7rem;}
+  .modal {
+    padding: 1rem;
+    max-width: 98vw;
+  }
+
+  .title {
+    font-size: 1.18rem;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .exportWrapper {
+    flex-direction: column;
+    gap: 0.7rem;
+  }
 }

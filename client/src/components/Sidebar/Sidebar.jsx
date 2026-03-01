@@ -32,7 +32,7 @@ const Sidebar = ({ active, setScreen, user }) => {
         <span>Contactos</span>
       </div>
 
-      {user.role === "administrador" && (
+      {(user.role === "administrador" || user.role === "colaborador") && (
         <div
           className={`${styles.sidebarItem} ${active === "grupos-oracion" ? styles.active : ""
             }`}
@@ -43,6 +43,7 @@ const Sidebar = ({ active, setScreen, user }) => {
           <span>Grupos de Oración</span>
         </div>
       )}
+
 
       {(user.role === "administrador" || user.role === "colaborador") && (
         <div

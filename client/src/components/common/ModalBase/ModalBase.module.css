@@ -10,7 +10,8 @@
 
 
 .modalContent {
-  background: #fff;
+  background: var(--background-card);
+  color: var(--text-main);
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(44, 61, 93, 0.28);
   width: 100%;
@@ -20,6 +21,8 @@
   font-family: 'Segoe UI', sans-serif;
 
   /* 👇 nuevas reglas para scroll */
-  max-height: 90vh;       /* no excede el alto de la ventana */
-  overflow-y: auto;       /* activa scroll vertical si se necesita */
+  max-height: 90vh;
+  /* no excede el alto de la ventana */
+  overflow-y: auto;
+  /* activa scroll vertical si se necesita */
 }

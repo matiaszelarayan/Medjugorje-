@@ -8,27 +8,61 @@
   --warning-color: #f5a623;
   --danger-color: #d0021b;
 
-  /* Fondo y texto */
-  --background-light: #f5f5f5;
-  --text-main: #222222;
+  /* Fondos Estructurales */
+  --background-main: #f5f5f5;
+  --background-card: #ffffff;
+  --navbar-bg: var(--primary-color);
+  --sidebar-bg: var(--primary-color);
+  --sidebar-hover: var(--secondary-color);
+  --sidebar-active: var(--accent-color);
+  --border-color: #e0e0e0;
+  --text-main: #333333;
   --text-muted: #666666;
+
 
   /* Tarjetas */
   --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   --card-radius: 1rem;
+
+  /* Dashboard Icons */
+  --dash-icon-blue-bg: #e0f0ff;
+  --dash-icon-blue-color: #2a6fb0;
+  --dash-icon-green-bg: #dff5e1;
+  --dash-icon-green-color: #2f7d4f;
+  --dash-icon-purple-bg: #f0e8ff;
+  --dash-icon-purple-color: #6b4ca3;
+  --dash-icon-indigo-bg: #e8ebff;
+  --dash-icon-indigo-color: #3f51b5;
 }
 
 /* 🌙 MODO OSCURO */
-.modoOscuro {
+body.dark-mode {
   --primary-color: #f0f0f0;
   --secondary-color: #5dade2;
   --accent-color: #50c878;
   --warning-color: #f5a623;
   --danger-color: #ff4d4d;
 
-  --background-light: #1e1e1e;
+  /* Fondo y texto */
+  --background-main: #121212;
+  --background-card: #1e1e1e;
+  --navbar-bg: #1e1e1e;
+  --sidebar-bg: #1e1e1e;
+  --sidebar-hover: #333333;
+  --sidebar-active: var(--accent-color);
   --text-main: #f0f0f0;
   --text-muted: #aaaaaa;
+  --border-color: #444444;
 
   --card-shadow: 0 4px 12px rgba(255, 255, 255, 0.05);
+
+  /* Dashboard Icons Oscuro */
+  --dash-icon-blue-bg: rgba(42, 111, 176, 0.2);
+  --dash-icon-blue-color: #5dade2;
+  --dash-icon-green-bg: rgba(47, 125, 79, 0.2);
+  --dash-icon-green-color: #50c878;
+  --dash-icon-purple-bg: rgba(107, 76, 163, 0.2);
+  --dash-icon-purple-color: #a78bfa;
+  --dash-icon-indigo-bg: rgba(63, 81, 181, 0.2);
+  --dash-icon-indigo-color: #818cf8;
 }

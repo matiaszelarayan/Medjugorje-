@@ -1,9 +1,15 @@
 .contactosContainer {
-  background-color: #fff;
-  border-radius: 8px;
-  padding: 2rem;
+  /* Aligerar contenedor para evitar paddings dobles con el layout principal */
+  background-color: var(--background-card);
+  border-radius: 12px;
+  padding: 1.5rem;
   box-shadow: var(--shadow-light);
+  border: 1px solid var(--border-color);
+  max-width: 100%;
+  box-sizing: border-box;
 }
+
+
 
 .contactosTitle {
   font-size: 2rem;
@@ -41,7 +47,7 @@
 }
 
 .contactTable th {
-  background-color: #f5f5f5;
+  background-color: var(--background-main);
   color: var(--text-main);
 }
 
@@ -78,9 +84,9 @@
 
 .editBtn:hover,
 .editBtn:focus-visible {
-  background: var(--primary-color, #136252);
+  background: #136252;
   color: #fff;
-  box-shadow: 0 0 0 2px #e0f8ee;
+  box-shadow: 0 0 0 2px rgba(25, 152, 113, 0.3);
 }
 
 /* Botón eliminar */
@@ -93,7 +99,7 @@
 .deleteBtn:focus-visible {
   background: #c9302c;
   color: #fff;
-  box-shadow: 0 0 0 2px #f8dfdf;
+  box-shadow: 0 0 0 2px rgba(217, 83, 79, 0.3);
 }
 
 /* Vista tarjetas */
@@ -117,7 +123,7 @@
 }
 
 .contactoCard {
-  background-color: #ffffff;
+  background-color: var(--background-card);
   border-radius: var(--card-radius, 8px);
   box-shadow: var(--card-shadow, 0 4px 10px rgba(40, 60, 100, .10));
   padding: 1.5rem;
@@ -159,9 +165,19 @@
 .filterSelect {
   padding: 0.5rem;
   font-size: 0.95rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   border-radius: 4px;
+  background-color: var(--background-main);
+  color: var(--text-main);
+  outline: none;
 }
+
+.filterInput:focus,
+.filterSelect:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(80, 200, 120, 0.2);
+}
+
 
 /* Paginación */
 .pagination {
@@ -175,8 +191,8 @@
 .pageActive {
   padding: 0.4rem 0.8rem;
   border: 1px solid var(--accent-color);
-  background-color: white;
-  color: var(--accent-color);
+  background-color: var(--background-card);
+  color: var(--text-main);
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.9rem;
@@ -189,60 +205,14 @@
 
 /* Vista general */
 .screenWrapper {
-  background-color: white;
-  padding: 2rem;
+  /* Si usamos screenWrapperGlobal, este padding puede estar de más */
+  padding: 0;
   border-radius: 8px;
-  box-shadow: var(--shadow-light);
 }
 
-/* 🌙 Modo oscuro uniforme */
-.modoOscuro .contactosContainer {
-  background-color: #1e1e1e;
-  color: #f0f0f0;
-}
-
-.modoOscuro .contactosContainer h2 {
-  color: #f0f0f0;
-}
-
-.modoOscuro .contactTable th {
-  background-color: #2a2a2a;
-  color: #eee;
-}
-
-.modoOscuro .contactTable td {
-  border-color: #444;
-  color: #ccc;
-}
-
-.modoOscuro .contactoCard {
-  border-color: #444;
-  background-color: #2a2a2a;
-  color: #eee;
-}
-
-.modoOscuro .pageBtn,
-.modoOscuro .pageActive {
-  background-color: #2a2a2a;
-  color: #eee;
-  border-color: #666;
-}
-
-/* Uniformidad de botones en modo oscuro */
-.modoOscuro .editBtn {
-  background: #249871;
-  color: #eee;
-}
-
-.modoOscuro .editBtn:hover {
-  background: #1a6f54;
-}
-
-.modoOscuro .deleteBtn {
-  background: #a94442;
-  color: #f0f0f0;
-}
-
-.modoOscuro .deleteBtn:hover {
-  background: #922d2b;
+.tableResponsive {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 8px;
+  margin-bottom: 2rem;
 }

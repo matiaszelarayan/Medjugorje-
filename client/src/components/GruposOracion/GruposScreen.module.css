@@ -1,5 +1,5 @@
 .gruposContainer {
-  background-color: #fff;
+  background-color: var(--background-card);
   border-radius: 8px;
   padding: 2rem;
   box-shadow: var(--shadow-light);
@@ -27,7 +27,7 @@
 .gruposTable th,
 .gruposTable td {
   padding: 0.75rem;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid var(--border-color);
   text-align: left;
 }
 
@@ -64,9 +64,9 @@
 
 .editBtn:hover,
 .editBtn:focus-visible {
-  background: var(--primary-color, #136252);
+  background: #136252;
   color: #fff;
-  box-shadow: 0 0 0 2px #e0f8ee;
+  box-shadow: 0 0 0 2px rgba(25, 152, 113, 0.3);
 }
 
 /* Eliminar */
@@ -79,47 +79,13 @@
 .deleteBtn:focus-visible {
   background: #c9302c;
   color: #fff;
-  box-shadow: 0 0 0 2px #f8dfdf;
+  box-shadow: 0 0 0 2px rgba(217, 83, 79, 0.3);
 }
 
 /* Vista general */
 .screenWrapper {
-  background-color: white;
+  background-color: var(--background-card);
   padding: 2rem;
   border-radius: 8px;
   box-shadow: var(--shadow-light);
-}
-
-/* 🌙 Modo oscuro de grupos */
-.modoOscuro .gruposContainer {
-  background-color: #1e1e1e;
-  color: #f0f0f0;
-}
-
-.modoOscuro .gruposTitle {
-  color: #f0f0f0;
-}
-
-.modoOscuro .gruposTable th,
-.modoOscuro .gruposTable td {
-  border-bottom: 1px solid #444;
-  color: #ddd;
-}
-
-.modoOscuro .editBtn {
-  background: #249871;
-  color: #eee;
-}
-
-.modoOscuro .editBtn:hover {
-  background: #1a6f54;
-}
-
-.modoOscuro .deleteBtn {
-  background: #a94442;
-  color: #f0f0f0;
-}
-
-.modoOscuro .deleteBtn:hover {
-  background: #922d2b;
 }

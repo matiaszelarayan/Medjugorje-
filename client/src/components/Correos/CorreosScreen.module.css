@@ -1,5 +1,5 @@
 .correosContainer {
-  background-color: #fff;
+  background-color: var(--background-card);
   border-radius: 8px;
   padding: 2rem;
   box-shadow: var(--shadow-light);
@@ -36,12 +36,12 @@
 .correosTable td {
   padding: 0.75rem;
   text-align: left;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--border-color);
   font-size: 0.95rem;
 }
 
 .correosTable th {
-  background-color: #f5f5f5;
+  background-color: var(--background-main);
   color: var(--text-main);
 }
 
@@ -80,9 +80,9 @@
 
 .editBtn:hover,
 .editBtn:focus-visible {
-  background: var(--primary-color, #136252);
+  background: #136252;
   color: #fff;
-  box-shadow: 0 0 0 2px #e0f8ee;
+  box-shadow: 0 0 0 2px rgba(25, 152, 113, 0.3);
 }
 
 /* Enviar */
@@ -95,7 +95,7 @@
 .sendBtn:focus-visible {
   background: #155bab;
   color: #fff;
-  box-shadow: 0 0 0 2px #dbeafe;
+  box-shadow: 0 0 0 2px rgba(36, 121, 225, 0.3);
 }
 
 /* Eliminar */
@@ -108,7 +108,7 @@
 .deleteBtn:focus-visible {
   background: #c9302c;
   color: #fff;
-  box-shadow: 0 0 0 2px #f8dfdf;
+  box-shadow: 0 0 0 2px rgba(217, 83, 79, 0.3);
 }
 
 /* Botón nuevo correo - igual al sistema general */
@@ -137,58 +137,4 @@
 .screenWrapper {
   min-height: 100vh;
   padding: 2rem;
-}
-
-/* 🌙 Modo oscuro */
-.modoOscuro .correosContainer {
-  background-color: #1e1e1e;
-  color: #f0f0f0;
-}
-
-.modoOscuro .correosContainer h2 {
-  color: #f0f0f0;
-}
-
-.modoOscuro .correosTable th {
-  background-color: #2a2a2a;
-  color: #eee;
-}
-
-.modoOscuro .correosTable td {
-  border-color: #444;
-  color: #ccc;
-}
-
-.modoOscuro .screenWrapper {
-  background-color: #1e1e1e;
-}
-
-.modoOscuro .editBtn,
-.modoOscuro .sendBtn,
-.modoOscuro .deleteBtn {
-  color: #f0f0f0 !important;
-}
-
-.modoOscuro .editBtn {
-  background: #249871;
-}
-
-.modoOscuro .editBtn:hover {
-  background: #1a6f54;
-}
-
-.modoOscuro .sendBtn {
-  background: #25599a;
-}
-
-.modoOscuro .sendBtn:hover {
-  background: #1a3a5a;
-}
-
-.modoOscuro .deleteBtn {
-  background: #a94442;
-}
-
-.modoOscuro .deleteBtn:hover {
-  background: #922d2b;
 }

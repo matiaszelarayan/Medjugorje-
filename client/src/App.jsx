@@ -25,17 +25,20 @@ export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [currentScreen, setScreen] = useState("dashboard");
-  const [darkMode, setDarkMode] = useState(false);
-
-  // Persistencia del modo oscuro
-  useEffect(() => {
+  const [darkMode, setDarkMode] = useState(() => {
     const saved = localStorage.getItem("darkMode");
-    if (saved) setDarkMode(JSON.parse(saved));
-  }, []);
+    return saved ? JSON.parse(saved) : false;
+  });
 
   useEffect(() => {
     localStorage.setItem("darkMode", JSON.stringify(darkMode));
-  }, [darkMode]);
+    if (darkMode && isAuthenticated) {
+      document.body.classList.add("dark-mode");
+    } else {
+      document.body.classList.remove("dark-mode");
+    }
+  }, [darkMode, isAuthenticated]);
+
 
 
   // Cargar la  sesión si hay tokens

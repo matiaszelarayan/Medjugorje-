@@ -39,27 +39,13 @@
 
 /* Confirmar */
 .confirmBtn {
-  background-color: #d9534f; /* rojo más claro */
+  background-color: #d9534f;
+  /* rojo más claro */
   color: white;
   font-weight: 600;
-  box-shadow: 0 2px 6px rgba(217,83,79,0.25);
+  box-shadow: 0 2px 6px rgba(217, 83, 79, 0.25);
 }
 
 .confirmBtn:hover {
   background-color: #c9302c;
-}
-
-/* 🌙 Modo oscuro */
-.modoOscuro .message {
-  color: #ccc;
-}
-
-.modoOscuro .cancelBtn {
-  background-color: #444;
-  color: #eee;
-}
-
-.modoOscuro .confirmBtn {
-  background-color: #a94442;
-  color: #fff;
 }

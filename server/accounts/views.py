@@ -4,7 +4,7 @@ from rest_framework import status
 from django.shortcuts import get_object_or_404
 
 from .serializers import UserSerializer, CreateUserSerializer, UpdateUserSerializer, PerfilColaboradorSerializer
-from .permissions import IsAdministrador, IsColaborador
+from .permissions import IsAdministrador, IsColaborador, IsAdminOrColaborador
 from .models import User
 from core.responses import success_response
 from core.messages import Messages
@@ -40,7 +40,7 @@ def crear_usuario_view(request):
     )
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated, IsAdministrador])
+@permission_classes([IsAuthenticated, IsAdminOrColaborador])
 def lista_usuarios_view(request):
     usuarios = User.objects.all()
     data = UserSerializer(usuarios, many=True).data

@@ -5,24 +5,24 @@ import { getDashboard } from "../../api/dashboardService";
 import logger from "../../utils/logger";
 
 const Card = ({ icon: Icon, title, value, color, onClick }) => {
-  const borderColor = {
-    blue: "#2a6fb0",
-    green: "#2f7d4f",
-    purple: "#6b4ca3",
-    indigo: "#3f51b5",
+  const iconColor = {
+    blue: "var(--dash-icon-blue-color)",
+    green: "var(--dash-icon-green-color)",
+    purple: "var(--dash-icon-purple-color)",
+    indigo: "var(--dash-icon-indigo-color)",
   }[color];
 
   const bgColor = {
-    blue: "#e0f0ff",
-    green: "#dff5e1",
-    purple: "#f0e8ff",
-    indigo: "#e8ebff",
+    blue: "var(--dash-icon-blue-bg)",
+    green: "var(--dash-icon-green-bg)",
+    purple: "var(--dash-icon-purple-bg)",
+    indigo: "var(--dash-icon-indigo-bg)",
   }[color];
 
   return (
     <div
       className={styles.card}
-      style={{ "--card-border-color": borderColor }}
+      style={{ "--card-border-color": iconColor }}
       onClick={onClick}
       role={onClick ? "button" : "presentation"}
       tabIndex={onClick ? 0 : -1}
@@ -31,7 +31,7 @@ const Card = ({ icon: Icon, title, value, color, onClick }) => {
         <p className={styles.cardTitle}>{title}</p>
         <p className={styles.cardValue}>{value ?? "—"}</p>
       </div>
-      <div className={styles.cardIcon} style={{ "--card-bg-color": bgColor }}>
+      <div className={styles.cardIcon} style={{ "--card-bg-color": bgColor, "--card-icon-color": iconColor }}>
         {Icon && <Icon className="w-6 h-6" />}
       </div>
     </div>

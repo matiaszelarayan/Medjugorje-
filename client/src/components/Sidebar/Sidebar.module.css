@@ -1,6 +1,6 @@
 .sidebar {
   width: 240px;
-  background-color: var(--primary-color);
+  background-color: var(--sidebar-bg);
   color: white;
   padding: 2rem 1rem;
   display: flex;
@@ -28,11 +28,11 @@
 }
 
 .sidebarItem:hover {
-  background-color: var(--secondary-color);
+  background-color: var(--sidebar-hover);
 }
 
 .active {
-  background-color: var(--accent-color);
+  background-color: var(--sidebar-active);
 }
 
 .active::before {
@@ -49,18 +49,4 @@
 
 .sidebarIcon {
   transition: transform 0.2s ease;
-}
-
-/* 🌙 Modo oscuro */
-.modoOscuro .sidebar {
-  background-color: #1e1e1e;
-  color: #f0f0f0;
-}
-
-.modoOscuro .sidebarItem {
-  color: #ddd;
-}
-
-.modoOscuro .sidebarItem:hover {
-  background-color: #333;
 }

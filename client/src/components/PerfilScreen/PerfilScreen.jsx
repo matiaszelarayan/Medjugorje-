@@ -8,7 +8,7 @@ const PerfilScreen = ({ user }) => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [imagePreview, setImagePreview] = useState(user.foto_perfil || null);
+  // const [imagePreview, setImagePreview] = useState(user.foto_perfil || null);
   const [successMessage, setSuccessMessage] = useState("");
 
   const validatePassword = (password) => {
@@ -18,17 +18,17 @@ const PerfilScreen = ({ user }) => {
     return hasMinLength && hasLetter && hasUppercase;
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file && (file.type === "image/jpeg" || file.type === "image/png")) {
-      setImagePreview(URL.createObjectURL(file));
-      setPasswordError("");
-    } else {
-      setImagePreview(user.foto_perfil || null);
-      setSuccessMessage("");
-      setPasswordError("La imagen debe ser .jpg o .png");
-    }
-  };
+  // const handleImageChange = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file && (file.type === "image/jpeg" || file.type === "image/png")) {
+  //     setImagePreview(URL.createObjectURL(file));
+  //     setPasswordError("");
+  //   } else {
+  //     setImagePreview(user.foto_perfil || null);
+  //     setSuccessMessage("");
+  //     setPasswordError("La imagen debe ser .jpg o .png");
+  //   }
+  // };
 
   const handleSave = () => {
     setPasswordError("");
@@ -68,6 +68,11 @@ const PerfilScreen = ({ user }) => {
     setSuccessMessage("Cambios guardados correctamente");
     setNewPassword("");
     setConfirmPassword("");
+
+    setTimeout(() => {
+      setSuccessMessage("");
+      setPasswordError("");
+    }, 3000);
   };
 
   return (

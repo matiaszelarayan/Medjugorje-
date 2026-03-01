@@ -186,55 +186,58 @@ const ContactosScreen = ({ user }) => {
         </div>
 
         {viewMode === "tabla" ? (
-          <table className={styles.contactTable}>
-            <thead>
-              <tr>
-                <th>Apellido</th>
-                <th>Nombre</th>
-                <th>Email</th>
-                <th>Provincia</th>
-                <th>Ciudad</th>
-                <th>Grupo</th>
-                <th>Participa</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentContacts.map((contact) => (
-                <tr key={contact.id}>
-                  <td>{contact.apellido}</td>
-                  <td>{contact.nombre}</td>
-                  <td>{contact.email}</td>
-                  <td>{contact.provincia}</td>
-                  <td>{contact.ciudad}</td>
-                  <td>
-                    {grupos.find((g) => g.id === Number(contact.grupo_oracion))
-                      ?.nombre_grupo || "—"}
-                  </td>
-                  <td>{contact.participa_grupo ? "✅" : "❌"}</td>
-                  <td>
-                    <button
-                      onClick={() => openEditContact(contact)}
-                      className={styles.editBtn}
-                      title="Editar"
-                    >
-                      <Pencil size={16} />
-                    </button>
-                    {user.role === "administrador" && (
-                      <button
-                        onClick={() => openDeleteModal(contact)}
-                        className={styles.deleteBtn}
-                        title="Eliminar"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    )}
-                  </td>
+          <div className={styles.tableResponsive}>
+            <table className={styles.contactTable}>
+              <thead>
+                <tr>
+                  <th>Apellido</th>
+                  <th>Nombre</th>
+                  <th>Email</th>
+                  <th>Provincia</th>
+                  <th>Ciudad</th>
+                  <th>Grupo</th>
+                  <th>Participa</th>
+                  <th>Acciones</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {currentContacts.map((contact) => (
+                  <tr key={contact.id}>
+                    <td>{contact.apellido}</td>
+                    <td>{contact.nombre}</td>
+                    <td>{contact.email}</td>
+                    <td>{contact.provincia}</td>
+                    <td>{contact.ciudad}</td>
+                    <td>
+                      {grupos.find((g) => g.id === Number(contact.grupo_oracion))
+                        ?.nombre_grupo || "—"}
+                    </td>
+                    <td>{contact.participa_grupo ? "✅" : "❌"}</td>
+                    <td>
+                      <button
+                        onClick={() => openEditContact(contact)}
+                        className={styles.editBtn}
+                        title="Editar"
+                      >
+                        <Pencil size={16} />
+                      </button>
+                      {user.role === "administrador" && (
+                        <button
+                          onClick={() => openDeleteModal(contact)}
+                          className={styles.deleteBtn}
+                          title="Eliminar"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         ) : (
+
           <div className={styles.contactosList}>
             {currentContacts.map((contact) => (
               <div key={contact.id} className={styles.contactoCard}>

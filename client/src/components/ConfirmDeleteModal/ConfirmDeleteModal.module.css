@@ -42,7 +42,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  box-shadow: 0 2px 6px rgba(217,83,79,0.25);
+  box-shadow: 0 2px 6px rgba(217, 83, 79, 0.25);
 }
 
 .deleteBtn:hover {
@@ -64,22 +64,4 @@
 
 .cancelBtn:hover {
   background-color: #c2ccda;
-}
-
-/* 🌙 Modo oscuro */
-.modoOscuro .message {
-  color: #ccc;
-}
-
-.modoOscuro .warning {
-  color: #ff7b72;
-}
-
-.modoOscuro .deleteBtn {
-  background-color: #a94442;
-}
-
-.modoOscuro .cancelBtn {
-  background-color: #444;
-  color: #eee;
 }

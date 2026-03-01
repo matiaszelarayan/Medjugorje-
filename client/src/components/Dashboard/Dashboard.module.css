@@ -38,7 +38,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem;
-  background-color: #ffffff;
+  background-color: var(--background-card);
   border-radius: var(--card-radius);
   box-shadow: var(--card-shadow);
   border-left: 4px solid var(--card-border-color, var(--primary-color));
@@ -82,7 +82,7 @@
 .infoSection {
   margin-top: 2.5rem;
   padding: 1.5rem;
-  background: #f7f9fb;
+  background: var(--background-main);
   border-radius: 8px;
   border-left: 4px solid var(--primary-color);
 }
@@ -97,39 +97,6 @@
 .sectionText {
   font-size: 1rem;
   color: var(--text-muted);
-}
-
-/* MODO OSCURO */
-.modoOscuro .dashboardContainer {
-  background-color: #1e1e1e;
-  color: #f0f0f0;
-}
-
-.modoOscuro .dashboardTitle {
-  color: #f0f0f0;
-}
-
-.modoOscuro .dashboardSubtitle {
-  color: #aaa;
-}
-
-.modoOscuro .card {
-  background-color: #2a2a2a;
-  color: #eee;
-  border-color: #444;
-}
-
-.modoOscuro .infoSection {
-  background: #252525;
-  border-left-color: var(--accent-color);
-}
-
-.modoOscuro .sectionTitle {
-  color: #f0f0f0;
-}
-
-.modoOscuro .sectionText {
-  color: #bbb;
 }
 
 /* ACCESIBILIDAD: Las tarjetas son clickeables */

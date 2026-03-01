@@ -3,7 +3,7 @@
 /* 🌐 Tipografía base */
 body {
   font-family: "Segoe UI", sans-serif;
-  background-color: var(--background-light);
+  background-color: var(--background-main);
   color: var(--text-main);
   margin: 0;
   padding: 0;
@@ -71,31 +71,10 @@ body {
 
 /* 🧱 Contenedor visual principal */
 .screenWrapperGlobal {
-  background-color: var(--background-light);
+  background-color: var(--background-card);
   color: var(--text-main);
   padding: 2rem;
   border-radius: 8px;
-  box-shadow: var(--card-shadow);
-}
-
-/* 🌙 MODO OSCURO */
-.modoOscuro {
-  --primary-color: #f0f0f0;
-  --secondary-color: #5dade2;
-  --accent-color: #50c878;
-  --warning-color: #f5a623;
-  --danger-color: #ff4d4d;
-
-  --background-light: #1e1e1e;
-  --text-main: #f0f0f0;
-  --text-muted: #aaaaaa;
-
-  --card-shadow: 0 4px 12px rgba(255, 255, 255, 0.05);
-}
-
-.modoOscuro .screenWrapperGlobal {
-  background-color: var(--background-light);
-  color: var(--text-main);
   box-shadow: var(--card-shadow);
 }
 
@@ -112,5 +91,39 @@ body {
 }
 
 .actionButtonGlobal:hover {
-  background-color: var(--primary-color);
+  background-color: #136252;
+}
+
+/* 🎨 Placeholders globales */
+::placeholder {
+  color: var(--text-muted) !important;
+  opacity: 0.7;
+}
+
+/* 🔧 Fix Chrome autofill background en modo oscuro */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus,
+select:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px var(--background-main) inset !important;
+  -webkit-text-fill-color: var(--text-main) !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* 🚀 Forzar Modo Oscuro en todos los inputs */
+body.dark-mode input:not([type="checkbox"]):not([type="radio"]):not([type="button"]):not([type="submit"]),
+body.dark-mode select,
+body.dark-mode textarea {
+  background-color: var(--background-main) !important;
+  color: var(--text-main) !important;
+  border-color: var(--border-color) !important;
+}
+
+body.dark-mode select option {
+  background-color: var(--background-card);
+  color: var(--text-main);
 }

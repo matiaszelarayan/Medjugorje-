@@ -169,7 +169,7 @@ function FormularioInscripcionPublic() {
     <div className={stylesForm.container} >
       <div className={stylesForm.logoContainer}>
           <img src={logo} alt="FM Logo" />
-          <h1>Fundación Centro Medjugorje Argentina</h1>
+          <h1>Asociación Centro Medjugorje Argentina</h1>
       </div>
 
       <h2 className={stylesForm.title}>Formulario de Inscripción</h2>

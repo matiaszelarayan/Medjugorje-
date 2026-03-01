@@ -1,5 +1,5 @@
 .printButton {
-  background-color: var(--primary-color);
+  background-color: var(--accent-color, #199871);
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -11,5 +11,5 @@
 }
 
 .printButton:hover {
-  background-color: var(--accent-color);
+  background-color: #136252;
 }

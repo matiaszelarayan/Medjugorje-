@@ -9,11 +9,12 @@ class GrupoDeOracionViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
 
-        if self.action in ["create", "update", "partial_update", "destroy"]:
+        if self.action in ["create", "destroy"]:
             return [IsAdministrador()]
 
-        if self.action in ["list", "retrieve"]:
+        if self.action in ["list", "retrieve", "update", "partial_update"]:
             return [IsAdminOrColaborador()]
+
 
         return [permissions.IsAuthenticated()]
 

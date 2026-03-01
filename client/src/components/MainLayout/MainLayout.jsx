@@ -14,12 +14,8 @@ const MainLayout = ({
   darkMode,
   toggleDarkMode,
 }) => {
-  const wrapperClass = darkMode
-    ? `${styles.appWrapper} ${styles.modoOscuro}`
-    : styles.appWrapper;
-
   return (
-    <div className={wrapperClass}>
+    <div className={styles.appWrapper}>
       <Sidebar active={currentScreen} setScreen={setScreen} user={user} />
       <div className={styles.mainColumn}>
         <Navbar

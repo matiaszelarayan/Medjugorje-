@@ -12,7 +12,7 @@ label {
   display: block;
   margin-top: 1rem;
   font-weight: 600;
-  color: #444;
+  color: var(--text-main);
 }
 
 /* 🔹 Inputs y selects */
@@ -21,8 +21,10 @@ select {
   width: 100%;
   padding: 0.55rem 0.8rem;
   margin-top: 0.3rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   border-radius: 6px;
+  background-color: var(--background-card);
+  color: var(--text-main);
   font-size: 0.95rem;
   box-sizing: border-box;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -92,25 +94,4 @@ select:focus {
 
 .cancelBtn:hover {
   background-color: #b5b5b5;
-}
-
-/* 🌙 Modo oscuro */
-.modoOscuro {
-  color: #f0f0f0;
-}
-
-.modoOscuro label {
-  color: #ccc;
-}
-
-.modoOscuro input,
-.modoOscuro select {
-  background-color: #2a2a2a;
-  color: #f0f0f0;
-  border: 1px solid #555;
-}
-
-.modoOscuro .cancelBtn {
-  background-color: #444;
-  color: #eee;
 }

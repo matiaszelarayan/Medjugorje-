@@ -150,13 +150,16 @@ const GruposScreen = ({ user }) => {
                     ?.nombre || "—"}
                 </td>
                 <td>
-                  <button
-                    onClick={() => handleEdit(grupo)}
-                    className={styles.editBtn}
-                    title="Editar"
-                  >
-                    <Pencil size={16} />
-                  </button>
+                  {(user.role === "administrador" || user.role === "colaborador") && (
+                    <button
+                      onClick={() => handleEdit(grupo)}
+                      className={styles.editBtn}
+                      title="Editar"
+                    >
+                      <Pencil size={16} />
+                    </button>
+                  )}
+
                   {user.role === "administrador" && (
                     <button
                       onClick={() => openDeleteModal(grupo)}

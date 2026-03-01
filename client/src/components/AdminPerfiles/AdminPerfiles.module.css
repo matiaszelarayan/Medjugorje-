@@ -2,7 +2,7 @@
   max-width: 800px;
   margin: 2rem auto;
   padding: 2rem;
-  background-color: #fff;
+  background-color: var(--background-card);
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
@@ -21,7 +21,7 @@
 .adminTable th,
 .adminTable td {
   padding: 0.75rem;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--border-color);
   text-align: left;
 }
 
@@ -70,8 +70,8 @@
 
 .editButton:hover,
 .editButton:focus-visible {
-  background-color: var(--primary-color, #136252);
-  box-shadow: 0 0 0 2px #e0f8ee;
+  background-color: #136252;
+  box-shadow: 0 0 0 2px rgba(25, 152, 113, 0.3);
 }
 
 /* ELIMINAR */
@@ -83,7 +83,7 @@
 .deleteButton:hover,
 .deleteButton:focus-visible {
   background-color: #c9302c;
-  box-shadow: 0 0 0 2px #f8dfdf;
+  box-shadow: 0 0 0 2px rgba(217, 83, 79, 0.3);
 }
 
 /* BARRAS Y BOTONES EXTRA */
@@ -107,7 +107,7 @@
 }
 
 .createButton:hover {
-  background-color: var(--primary-color, #136252);
+  background-color: #136252;
 }
 
 .filtrosContainer {
@@ -121,8 +121,10 @@
 .filtrosContainer input {
   padding: 0.5rem;
   font-size: 0.875rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   border-radius: 4px;
+  background-color: var(--background-card);
+  color: var(--text-main);
 }
 
 .successAlert {
@@ -158,71 +160,4 @@
 .paginacion button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
-}
-
-/* ============================= */
-/*         🌙 MODO OSCURO         */
-/* ============================= */
-
-.modoOscuro .adminContainer {
-  background-color: #1e1e1e;
-  color: #f0f0f0;
-  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.05);
-}
-
-.modoOscuro .title {
-  color: #f0f0f0;
-}
-
-.modoOscuro .adminTable th,
-.modoOscuro .adminTable td {
-  border-bottom: 1px solid #444;
-  color: #ddd;
-}
-
-.modoOscuro .noFoto {
-  color: #aaa;
-}
-
-.modoOscuro .filtrosContainer select,
-.modoOscuro .filtrosContainer input {
-  background-color: #2a2a2a;
-  color: #f0f0f0;
-  border: 1px solid #555;
-}
-
-.modoOscuro .successAlert {
-  background-color: #2d4f2d;
-  color: #c3e6cb;
-  border: 1px solid #3c6e3c;
-}
-
-.modoOscuro .paginacion button {
-  background-color: #444;
-  color: #f0f0f0;
-}
-
-.modoOscuro .paginacion button:disabled {
-  background-color: #666;
-  color: #ccc;
-}
-
-.modoOscuro .editButton,
-.modoOscuro .createButton {
-  background-color: #444 !important;
-  color: #f0f0f0 !important;
-}
-
-.modoOscuro .editButton:hover,
-.modoOscuro .createButton:hover {
-  background-color: #666 !important;
-}
-
-.modoOscuro .deleteButton {
-  background-color: #a94442;
-  color: #fff;
-}
-
-.modoOscuro .deleteButton:hover {
-  background-color: #922d2b;
 }
