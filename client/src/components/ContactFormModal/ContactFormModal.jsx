@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import ModalBase from "../common/ModalBase/ModalBase";
 import styles from "./ContactFormModal.module.css";
 import { useGeoArgentina } from "../../hooks/useGeoArgentina";
-
-const API_COUNTRIES = import.meta.env.VITE_API_COUNTRIES;
+import countries from "../../data/countries";
 
 import PropTypes from "prop-types";
 
@@ -25,29 +24,6 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
     fecha_nacimiento: contact?.fecha_nacimiento || "",
     grupo_oracion: contact?.grupo_oracion || null,
   });
-
-  // --- Países ---
-  const [countries, setCountries] = useState([]);
-  const [loadingCountries, setLoadingCountries] = useState(true);
-  const [errorCountries, setErrorCountries] = useState(null);
-
-  useEffect(() => {
-    fetch(API_COUNTRIES)
-      .then((res) => res.json())
-      .then((data) => {
-        let countryList = data.map((c) => c.name.common).filter(Boolean);
-        countryList = [
-          "Argentina",
-          ...countryList.filter((p) => p !== "Argentina").sort((a, b) => a.localeCompare(b)),
-        ];
-        setCountries(countryList);
-        setLoadingCountries(false);
-      })
-      .catch(() => {
-        setErrorCountries("Error cargando países");
-        setLoadingCountries(false);
-      });
-  }, []);
 
   // --- Hook provincias/localidades centralizado ---
   const {
@@ -98,7 +74,6 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
     onSave(payload);
     onClose();
   };
-
 
   return (
     <ModalBase onClose={onClose}>
@@ -159,28 +134,20 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
 
         <div className={styles.formGroup}>
           <label className={styles.label}>País</label>
-          {loadingCountries ? (
-            <select className={styles.select} disabled>
-              <option>Cargando países...</option>
-            </select>
-          ) : errorCountries ? (
-            <select className={styles.select} disabled>
-              <option>{errorCountries}</option>
-            </select>
-          ) : (
-            <select
-              name="pais"
-              value={formData.pais}
-              onChange={handleChange}
-              required
-              className={styles.select}
-            >
-              <option value="">Seleccione país...</option>
-              {countries.map((p) => (
-                <option key={p} value={p}>{p}</option>
-              ))}
-            </select>
-          )}
+          <select
+            name="pais"
+            value={formData.pais}
+            onChange={handleChange}
+            required
+            className={styles.select}
+          >
+            <option value="">Seleccione país...</option>
+            {countries.map((country) => (
+              <option key={country} value={country}>
+                {country}
+              </option>
+            ))}
+          </select>
         </div>
 
         {/* Provincias y localidades SOLO si país Argentina */}
@@ -206,7 +173,9 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
                 >
                   <option value="">Seleccione provincia...</option>
                   {provincias.map((p) => (
-                    <option key={p.id} value={p.nombre}>{p.nombre}</option>
+                    <option key={p.id} value={p.nombre}>
+                      {p.nombre}
+                    </option>
                   ))}
                 </select>
               )}
@@ -231,7 +200,9 @@ const ContactFormModal = ({ contact, onClose, onSave, grupos }) => {
                 >
                   <option value="">Seleccione ciudad...</option>
                   {localidades.map((l) => (
-                    <option key={l.id} value={l.nombre}>{l.nombre}</option>
+                    <option key={l.id} value={l.nombre}>
+                      {l.nombre}
+                    </option>
                   ))}
                 </select>
               )}
@@ -372,7 +343,7 @@ ContactFormModal.propTypes = {
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       nombre_grupo: PropTypes.string.isRequired,
-    })
+    }),
   ).isRequired,
 };
 export default ContactFormModal;

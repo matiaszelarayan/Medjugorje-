@@ -5,9 +5,8 @@ import styles from "../components/ContactFormModal/ContactFormModal.module.css";
 import { contactoPublicSchema } from "../validators/contactoPublic.schema";
 import logo from "../assets/logo.png";
 import stylesForm from "./FormularioInscripcion.module.css";
+import countries from "../data/countries";
 
-
-const API_COUNTRIES = import.meta.env.VITE_API_COUNTRIES;
 const API_URL = import.meta.env.VITE_API_URL;
 const API_PUBLIC_CONTACTO = `${API_URL}api/contactos/public/`;
 const API_GRUPOS = `${API_URL}api/grupo-oracion/public/`;
@@ -29,14 +28,9 @@ function FormularioInscripcionPublic() {
     grupo_oracion: null,
   });
 
-  const [countries, setCountries] = useState([]);
-  const [loadingCountries, setLoadingCountries] = useState(true);
-  const [errorCountries, setErrorCountries] = useState(null);
   const [grupos, setGrupos] = useState([]);
   const [mensaje, setMensaje] = useState(null);
   const [errores, setErrores] = useState({});
-  
-
 
   useEffect(() => {
     const fetchGrupos = async () => {
@@ -48,27 +42,6 @@ function FormularioInscripcionPublic() {
       }
     };
     fetchGrupos();
-  }, []);
-
-  // --- CARGA DE PAÍSES ---
-  useEffect(() => {
-    fetch(API_COUNTRIES)
-      .then((res) => res.json())
-      .then((data) => {
-        let list = data.map((c) => c.name.common).filter(Boolean);
-        list = [
-          "Argentina",
-          ...list
-            .filter((p) => p !== "Argentina")
-            .sort((a, b) => a.localeCompare(b)),
-        ];
-        setCountries(list);
-        setLoadingCountries(false);
-      })
-      .catch(() => {
-        setErrorCountries("Error cargando países");
-        setLoadingCountries(false);
-      });
   }, []);
 
   useEffect(() => {
@@ -132,9 +105,9 @@ function FormularioInscripcionPublic() {
 
     if (!result.success) {
       const fieldErrors = {};
-       result.error.issues.forEach((err) => {
-         fieldErrors[err.path[0]] = err.message;
-       });
+      result.error.issues.forEach((err) => {
+        fieldErrors[err.path[0]] = err.message;
+      });
       setErrores(fieldErrors);
       return;
     }
@@ -166,10 +139,10 @@ function FormularioInscripcionPublic() {
   };
 
   return (
-    <div className={stylesForm.container} >
+    <div className={stylesForm.container}>
       <div className={stylesForm.logoContainer}>
-          <img src={logo} alt="FM Logo" />
-          <h1>Asociación Centro Medjugorje Argentina</h1>
+        <img src={logo} alt="FM Logo" />
+        <h1>Asociación Centro Medjugorje Argentina</h1>
       </div>
 
       <h2 className={stylesForm.title}>Formulario de Inscripción</h2>
@@ -238,29 +211,21 @@ function FormularioInscripcionPublic() {
 
         <div className={styles.formGroup}>
           <label className={styles.label}>País</label>
-          {loadingCountries ? (
-            <select className={styles.select} disabled>
-              <option>Cargando países...</option>
-            </select>
-          ) : errorCountries ? (
-            <select className={styles.select} disabled>
-              <option>{errorCountries}</option>
-            </select>
-          ) : (
-            <select
-              className={styles.select}
-              name="pais"
-              value={form.pais}
-              onChange={handleChange}
-            >
-              <option value="">Seleccione país…</option>
-              {countries.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
-          )}
+
+          <select
+            className={styles.select}
+            name="pais"
+            value={form.pais}
+            onChange={handleChange}
+          >
+            <option value="">Seleccione país...</option>
+            {countries.map((country) => (
+              <option key={country} value={country}>
+                {country}
+              </option>
+            ))}
+          </select>
+
           {errores.pais && (
             <div className={styles.errorText}>{errores.pais}</div>
           )}

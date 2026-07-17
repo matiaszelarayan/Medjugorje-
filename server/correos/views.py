@@ -6,7 +6,7 @@ from django.utils import timezone
 from .models import CorreoMasivo, DestinatarioCorreo
 from .serializers import CorreoMasivoSerializer
 
-from .sendgrid_service import enviar_multiples_correos
+from .brevo_service import enviar_multiples_correos
 from .utils import obtener_contactos_para_correo
 from accounts.permissions import IsAdministrador, IsAdminOrColaborador
 
